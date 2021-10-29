@@ -58,10 +58,30 @@
 			}
 				
 		}    ,{
-                    "path" : "sendComment/sendComment",
+			"path" : "sendComment/sendComment",
+			"style" :                                                                                    
+		{
+			"navigationBarTitleText": "发表评论",
+			"enablePullDownRefresh": false
+		}
+		
+		}
+		]
+	},
+	{
+		"root":"pages/gayCircle",
+		"pages":[{
+			"path" : "sendPosts/sendPosts",
+			"style" :                                                                                    
+			{
+			    "navigationBarTitleText": "发帖子",
+			    "enablePullDownRefresh": false
+			}
+		}    ,{
+                    "path" : "circle/circle",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "发表评论",
+                    "navigationBarTitleText": "选择一个圈子",
                     "enablePullDownRefresh": false
                 }
                 

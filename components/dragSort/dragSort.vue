@@ -1,14 +1,14 @@
 <template>
 	<view>
 		<view class="dragSortBox">
-			<view class="dragSortBox-btns">
+			<!-- <view class="dragSortBox-btns">
 				<template v-if="isEdit">
 					<text class="dragSortBox-btn" @click="toggleEdit('finish')">完成</text>
 					<text class="dragSortBox-btn" @click="toggleEdit('cancel')">取消</text>
 					
 				</template>
 				<text v-else class="dragSortBox-btn" @click="toggleEdit('edit')">编辑</text>
-			</view>
+			</view> -->
 			<movable-area id="dragSortArea" class="dragSort-area" :style="{height: boxHeight + 'px'}">
 				<block v-for="(item,index) in cloneList" :key="item.id">
 					<movable-view class="dragSort-view" direction="all"
@@ -52,7 +52,7 @@
 				yMoveUnit: 0, //沿y轴移动时的单位距离，单位px
 				clearT: '', //onChange事件中使用
 				clearF: '', //点击“完成”文字按钮时使用
-				isEdit: false, //是否在编辑状态
+				// isEdit: false, //是否在编辑状态
 			}
 		},
 		props: { //props里属性Number的单位都为rpx，在操作的时候需要用rpxTopx进行转换
@@ -91,6 +91,10 @@
 			zIndex: { //可移动项的默认z-index
 				type: Number,
 				default: 100
+			},
+			isEdit:{
+				type:Boolean,
+				default: false
 			}
 		},
 		computed: {
@@ -117,15 +121,18 @@
 			 */
 			toggleEdit(type) {
 				if(type == 'finish') { //点击“完成”
-					this.isEdit = false;
+					// this.isEdit = false;
+					this.$emit('changeEdit',false);
 					console.log(this.getSortedIdArr(), 'sortedIdArr')
 					
 				}else if(type == 'cancel'){ //点击“取消”，将数据恢复到最近一次编辑时的状态
-					this.isEdit = false;
+					// this.isEdit = false;
+					this.$emit('changeEdit',false);
 					this.updateList(this.cacheList);
 					
 				}else if(type == 'edit'){ //点击“编辑”
-					this.isEdit = true;
+					// this.isEdit = true;
+					this.$emit('changeEdit',true);
 					this.cacheList = JSON.parse(JSON.stringify(this.list));
 					
 				}

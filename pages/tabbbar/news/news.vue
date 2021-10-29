@@ -84,7 +84,7 @@
 						  <span v-if="isEdit" class="complete" @click="handleComplete">完成</span>
 					  </view>
 				  </view>
-				  <view class="columns">
+				 <!-- <view class="columns">
 					  <div :style="'left:'+moveX[index]+'rpx;top:'+moveY[index]+'rpx'" @touchend="(e)=>{isEdit&&handleTouchend(e,index)}" @longpress="(e)=>{isEdit&&drag_start(e,index)}" @touchmove.prevent="(e)=>{isEdit&&dragMove(e,index)}" class="name" v-for="(item,index) in myChannel" :key="index">
 						<span>
 							{{item.name}}
@@ -95,6 +95,9 @@
 					  </div>
 					  <view class="fack_item"></view>
 					  <view class="fack_item"></view>
+				  </view> -->
+				  <view>  
+					<dragSort ref='childDrag' @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
 				  </view>
 			  </view>
 			  <view class="panel">
@@ -105,7 +108,7 @@
 					  </view>
 				  </view>
 				  <view class="columns">
-					  <view class="name" v-for="(item,index) in recommendChannel" :key="index">
+					  <view class="name" @click="handleAddChannel(item,index)" :style="{width: columnWidth+'px'}" v-for="(item,index) in recommendChannel" :key="index">
 						  <i class="add_icon">
 							  <tui-icon name='plus' size='10'></tui-icon>
 						  </i>
@@ -123,7 +126,11 @@
 </template>
 
 <script>
+	import dragSort from '@/components/dragSort/dragSort.vue'
 	export default {
+		components:{
+			dragSort
+		},
 		computed: {
 			count() {
 				return this.newsList.length - 1
@@ -267,66 +274,65 @@
 				currentIdx:0,
 				scrollLeft:0,
 				isVisible:false,
-				myChannel:[
-					{
-						name:'推荐',
-						id:'',
-						disabled:1
-					},
-					{
-						name:'要闻',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'新思想',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'北京',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'综合',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'实播中国',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'青春中国',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'推荐',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'推荐',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'推荐',
-						id:'',
-						disabled:0
-					},
-					{
-						name:'推荐',
-						id:'',
-						disabled:0
-					}
-				],
+				myChannel: [{
+					"name": "推荐",
+					"id": 'id_1'
+				}, {
+					"name": "要闻",
+					"id": 'id_2'
+				}, {
+					"name": "新思想",
+					"id": 'id_3'
+				}, {
+					"name": "北京",
+					"id": 'id_4'
+				}, {
+					"name": "综合",
+					"id": 'id_5'
+				}, {
+					"name": "实播中国",
+					"id": 'id_6'
+				}, {
+					"name": "青春中国",
+					"id": 'id_7'
+				}, {
+					"name": "北京",
+					"id": 'id_8'
+				}, {
+					"name": "青春中国",
+					"id": 'id_9'
+				}, {
+					"name": "旅游",
+					"id": 'id_10'
+				}, {
+					"name": "娱乐",
+					"id": 'id_11'
+				}, {
+					"name": "体育",
+					"id": 'id_12'
+				}, {
+					"name": "其他",
+					"id": 'id_13'
+				}, {
+					"name": "其他",
+					"id": 'id_18'
+				}],
 				recommendChannel:[
 					{
-						name:'产品'
+						name:'产品',
+						"id": 'id_14'
+					},
+					{
+						name:'产品',
+						"id": 'id_15'
+					},
+					{
+						name:'产品',
+						"id": 'id_16'
+					},
+					{
+						name:'产品',
+						"id": 'id_17'
 					}
 				],
 				isEdit:false, // 是否编辑
@@ -335,7 +341,8 @@
 				moveX:[],
 				windowWidth:'',
 				windowHeight:'',
-				isDrag: false // 激活拖拽
+				isDrag: false, // 激活拖拽
+				columnWidth:0
 			}
 		},
 		onLoad: function(options) {
@@ -343,6 +350,13 @@
 			const { windowWidth, windowHeight } = uni.getSystemInfoSync();  
 			this.windowWidth = windowWidth
 			this.windowHeight = windowHeight
+		},
+		mounted(){
+			this.$nextTick(function(){
+				setTimeout(()=>{
+					this.columnWidth = this.$refs.childDrag.columnWidth;
+				},500)
+			})
 		},
 		methods: {
 			clear:function(){},
@@ -364,17 +378,22 @@
 			},
 			handleOpenModal(){
 				uni.hideTabBar()
+				this.isEdit = false;
 				this.isVisible = true;
 			},
 			closeDrawer(){
+				this.$refs.childDrag.toggleEdit('cancel');
 				this.isVisible = false
 				uni.showTabBar()
 			},
 			handleEditChannel(){
+				this.$refs.childDrag.handleListData();
 				this.isEdit = true;
+				this.$refs.childDrag.toggleEdit('edit');
 			},
 			handleComplete(){
 				this.isEdit = false;
+				this.$refs.childDrag.toggleEdit('finish');
 			},
 			detail(e) {
 				let index = e.index;
@@ -419,6 +438,17 @@
 			},
 			handleTouchend(e,index){
 				this.isDrag = false;
+			},
+			setEdit(e){
+				this.isEdit = e;
+			},
+			// 推荐频道添加到我的频道
+			handleAddChannel(item,index){
+				this.myChannel.push(item);
+				this.recommendChannel.splice(index,1)
+			},
+			update(arr){
+				this.myChannel = arr;
 			}
 		},
 		//页面相关事件处理函数--监听用户下拉动作
@@ -506,12 +536,14 @@
 		min-height: 100vh;
 		background: #FFFFFF;
 		.panel{
-			padding: 20rpx;
+			padding: 20rpx 0;
 			.row{
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				margin: 20rpx 0;
+				padding: 0 20rpx;
+				box-sizing: border-box;
 				.name{
 					font-size: 28rpx;
 					color: #333333;
@@ -538,10 +570,18 @@
 					}
 				}
 			}
+			.dragSort-view__btn-del .tui-icon{
+				border: none!important;
+				background: transparent!important;
+				padding: 0!important;
+				border-radius: 0!important;
+			}
 			.columns{
 				display: flex;
 				flex-wrap: wrap;
 				justify-content: space-between;
+				padding: 0 20rpx;
+				box-sizing: border-box;
 				.name{
 					width: 150rpx;
 					height: 60rpx;

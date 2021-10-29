@@ -63,22 +63,23 @@
 				</view>
 				<view class="operation">
 					<view class="btn">
-						<tui-icon name="share" :size="24" ></tui-icon>
 						<span>
-						转发
-						</span>
-					</view>
-					<view class="btn">
-						<tui-icon name="message" :size="24" ></tui-icon>
-						<span>
-						评论
+						99999阅读
 						</span>
 					</view>
 					<view class="btn">
 						<tui-icon name="agree" :size="24" ></tui-icon>
-						<span>
+						<!-- <span>
 						点赞
-						</span>
+						</span> -->
+						24
+					</view>
+					<view class="btn">
+						<tui-icon name="message" :size="24" ></tui-icon>
+						<!-- <span>
+						评论
+						</span> -->
+						8
 					</view>
 				</view>
 			</view>
@@ -89,6 +90,9 @@
 		  @click="handleItem" 
 		  @cancel="closeActionSheet">
 		</tui-actionsheet>
+		<view class="add_template" @click="handleHref">
+			<tui-icon name='plus' size='24' color="#fff"></tui-icon>
+		</view>
 	</view>
 </template>
 
@@ -148,6 +152,11 @@
 						this.$tui.toast('删除动态') 
 						break;
 				}
+			},
+			handleHref(){
+				uni.navigateTo({
+					url:"/pages/gayCircle/sendPosts/sendPosts"
+				})
 			}
 		}
 	}
@@ -282,7 +291,7 @@
 			}
 			.operation{
 				display: flex;
-				justify-content: space-around;
+				justify-content: space-between;
 				align-items: center;
 				color: #999999;
 				margin-top: 20rpx;
@@ -295,6 +304,17 @@
 				}
 			}
 		}
+	}
+	.add_template{
+		width: 100rpx;
+		height: 100rpx;
+		line-height: 100rpx;
+		text-align: center;
+		background: #C70C15;
+		border-radius: 50%;
+		position: fixed;
+		bottom: 20rpx;
+		right: 20rpx;
 	}
 }
 </style>

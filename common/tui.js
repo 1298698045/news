@@ -38,6 +38,16 @@ const tui = {
 				}
 			}
 		})
+	},
+	isPhoneX: function() {
+		const res = uni.getSystemInfoSync();
+		console.log(res)
+		let iphonex = false;
+		if (res.safeArea.top > 20 && res.model.search('iPhone')!=-1) { //x及以上的异形屏top为44，非异形屏为20
+			// 可以将结果存到globalData：
+			iphonex = true;
+		}
+		return iphonex;
 	}
 }
 export default tui;
