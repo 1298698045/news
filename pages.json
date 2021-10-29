@@ -1,0 +1,119 @@
+{
+	"pages": [ 
+		{
+			"path": "pages/tabbbar/index/index",
+			"style": {
+				"navigationBarTitleText": "党建"
+			}
+		},
+		{
+			"path" : "pages/tabbbar/gayCircle/gayCircle",
+			"style" :                                                                                    
+			{
+				"navigationBarTitleText": "同志圈",
+				"enablePullDownRefresh": false
+			}
+			
+		},
+		{
+            "path" : "pages/tabbbar/news/news",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "新闻",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tabbbar/my/my",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"subPackages": [{
+		"root":"pages/news",
+		"pages": [{
+			"path":"newsDetail",
+			"style":{
+				"navigationBarTitleText": "新闻详情",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path":"newsVideo",
+			"style":{
+				"navigationBarTitleText": "新闻视频详情",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path" : "reply/reply",
+			"style" :                                                                                    
+			{
+				"navigationBarTitleText": "回复",
+				"enablePullDownRefresh": false
+			}
+				
+		}    ,{
+                    "path" : "sendComment/sendComment",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "发表评论",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "#ffffff",
+		"navigationBarTitleText": "党建工作",
+		"navigationBarBackgroundColor": "#C70C15",
+		"backgroundColor": "#ffffff",
+		"usingComponents":{
+			"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
+			"van-button": "/wxcomponents/vant/button/index",
+			"van-icon":"/wxcomponents/vant/icon/index",
+			"van-search":"/wxcomponents/vant/search/index",
+			"van-popup":"/wxcomponents/vant/popup/index",
+			"van-tab":"/wxcomponents/vant/tab/index",
+			"van-tabs":"/wxcomponents/vant/tabs/index"
+		}
+	},
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue"
+		}
+	},
+	"tabBar": {
+	    "color": "#7A7E83",
+	    "selectedColor": "#C70C15",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/tabbbar/index/index",
+	        "iconPath": "static/images/tabs/my.png",
+	        "selectedIconPath": "./static/images/tabs/my_active.png",
+	        "text": "首页"
+	    },{
+			"pagePath": "pages/tabbbar/gayCircle/gayCircle",
+			"iconPath": "static/images/tabs/my.png",
+			"selectedIconPath": "./static/images/tabs/my_active.png",
+			"text": "同志圈"
+		},{
+	        "pagePath": "pages/tabbbar/news/news",
+	        "iconPath": "static/images/tabs/my.png",
+	        "selectedIconPath": "static/images/tabs/my_active.png",
+	        "text": "新闻"
+	    },{
+			"pagePath": "pages/tabbbar/my/my",
+			"iconPath": "static/images/tabs/my.png",
+			"selectedIconPath": "static/images/tabs/my_active.png",
+			"text": "我的"
+		}]
+	}
+}
