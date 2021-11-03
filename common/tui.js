@@ -22,7 +22,7 @@ const tui = {
 			}
 		})
 	},
-	modal:function(title, content, showCancel, callback, confirmColor, confirmText){
+	modal:function(title, content, showCancel, callback, confirmColor, confirmText, cancelColor, cancelText){
 		uni.showModal({
 			title: title || '提示',
 			content: content,
@@ -30,6 +30,7 @@ const tui = {
 			cancelColor: "#555",
 			confirmColor: confirmColor || "#5677fc",
 			confirmText: confirmText || "确定",
+			cancelText: cancelText || '取消',
 			success(res) {
 				if (res.confirm) {
 					callback && callback(true)
@@ -48,6 +49,14 @@ const tui = {
 			iphonex = true;
 		}
 		return iphonex;
+	},
+	isIphone:function(){
+		const res = uni.getSystemInfoSync();
+		let iphone = false;
+		if(res.model.search('iPhone')!=-1){
+			return true;
+		}
+		return iphone;
 	}
 }
 export default tui;

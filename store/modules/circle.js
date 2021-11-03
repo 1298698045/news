@@ -1,9 +1,11 @@
 const circle = {
 	state:{
-		circle:'圈子'
+		circle:''
 	},
 	mutations:{
-		
+		setCircle(state,params){
+			state.circle = params
+		}
 	},
 	actions:{
 		

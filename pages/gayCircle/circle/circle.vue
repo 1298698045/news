@@ -18,7 +18,7 @@
 					</div>
 					<block v-for="(row,idx) in item.children" :key="idx">					
 						<div class="content" v-if="item.children!=''">
-							<div class="row">
+							<div class="row" @click="handleChoice(item,row)">
 								<div class="radius">
 									
 								</div>
@@ -193,6 +193,12 @@
 		methods: {
 			handleTab(item,index){
 				this.currIdx = index;
+			},
+			handleChoice(item,row){
+				this.$store.commit('setCircle',row.name)
+				uni.navigateBack({
+					delta:1
+				})
 			}
 		}
 	}

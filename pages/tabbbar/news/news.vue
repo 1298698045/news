@@ -382,7 +382,7 @@
 				this.isVisible = true;
 			},
 			closeDrawer(){
-				this.$refs.childDrag.toggleEdit('cancel');
+				// this.$refs.childDrag.toggleEdit('cancel');
 				this.isVisible = false
 				uni.showTabBar()
 			},
@@ -509,6 +509,7 @@
 				span{
 					padding-bottom: 16rpx;
 					border-bottom: 5rpx solid transparent;
+					font-size: 32rpx;
 				}
 			}
 			.tab.active{
@@ -516,7 +517,7 @@
 				font-weight: bold;
 			}
 			.tab.active span{
-				border-bottom: 3rpx solid #C70C15;
+				border-bottom: 5rpx solid #C70C15;
 			}
 		}
 		.more{

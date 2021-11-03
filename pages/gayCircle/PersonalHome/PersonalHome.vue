@@ -1,5 +1,33 @@
 <template>
 	<view class="wrapper" v-cloak>
+		<tui-navigation-bar splitLine @init="initNavigation" @change="opacityChange" :scrollTop="scrollTop" backgroundColor="#fff" color="#333">
+			<view class="tui-header-icon" :style="{ marginTop: top + 'rpx' }">
+			  <tui-icon name="arrowleft" :color="opacity > 0.85 ? '#333' : '#fff'" @click="back"></tui-icon>
+			  <span class="title">个人主页</span>
+			</view>
+		</tui-navigation-bar>
+		<div class="header">
+			<div class="cover"></div>
+			<div class="infoWrap">
+				<div class="avatar"></div>
+				<div class="operation">
+					<div class="box">
+						<p class="btn follow" :class="{'active':isFollow}" @click="handleFoloow">+ 关注</p>
+						<button open-type="share" class="btn">分享</button>
+					</div>
+				</div>
+				<div class="info">
+					<h3 class="name">昵称</h3>
+					<p class="autograph">梦想还是要有的，万一实现了呢</p>
+					<div class="nums">
+						<span class="num">
+							20000
+						</span>
+						获赞
+					</div>
+				</div>
+			</div>
+		</div>
 		<view class="container">
 			<view class="panelBox" v-for="(item,index) in list" :key="index" @click="handleDetail">
 				<view class="head">
@@ -87,15 +115,12 @@
 				</view>
 			</view>
 		</view>
-		<tui-actionsheet  
+		<tui-actionsheet
 		  :show="showActionSheet" 
 		  :item-list="itemList" 
 		  @click="handleItem" 
 		  @cancel="closeActionSheet">
 		</tui-actionsheet>
-		<view class="add_template" @click="handleHref">
-			<tui-icon name='plus' size='24' color="#fff"></tui-icon>
-		</view>
 	</view>
 </template>
 
@@ -103,6 +128,9 @@
 	export default {
 		data() {
 			return {
+				top:16,
+				scrollTop: '',
+				opacity:'',
 				showActionSheet: false,
 				itemList: [{
 					text: "收藏",
@@ -172,10 +200,20 @@
 						commentNum:100,
 						location:'山西长治党建'
 					}
-				]
+				],
+				isFollow:false
 			}
 		},
 		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
+			initNavigation(e){
+				console.log('1231231', e)
+				// this.top = e.top;
+			},
 			hanldeMore(){
 				this.showActionSheet = true
 			},
@@ -207,11 +245,6 @@
 						break;
 				}
 			},
-			handleHref(){
-				uni.navigateTo({
-					url:"/pages/gayCircle/sendPosts/sendPosts"
-				})
-			},
 			handleDetail(){
 				uni.navigateTo({
 					url:'/pages/gayCircle/detail/detail'
@@ -230,15 +263,113 @@
 				uni.navigateTo({
 					url:'/pages/gayCircle/PersonalHome/PersonalHome'
 				})
+			},
+			handleFoloow(){
+				if(this.isFollow){
+					var that = this;
+					const callback = function (res){
+						if(res){
+							that.isFollow = false;
+						}else {
+							that.isFollow = true;
+						}
+					}
+					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#C70C15')
+				}else {
+					this.isFollow = !this.isFollow;
+				}
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
-.wrapper{
-	font-size: 24rpx;
+	
+	.tui-header-icon {
+		min-width: 120rpx;
+		display: flex;
+		align-items: center;
+	}
+	.tui-header-icon .title{
+		color: #FFFFFF;
+		text-align: center;
+		padding-right: 32px;
+		flex: 1;
+	}
+	.header{		
+		.cover{
+			width: 100%;
+			height: 200px;
+			background: url(../../../static/images/news/banner_3.jpg) no-repeat;
+			background-size: cover;
+		}
+		.infoWrap{
+			width: 100%;
+			background: #FFFFFF;
+			position: relative;
+			.avatar{
+				width: 100rpx;
+				height: 100rpx;
+				border-radius: 50%;
+				background: #C70C15;
+				position: absolute;
+				top: -50rpx;
+				left: 30rpx;
+			}
+			.operation{
+				position: absolute;
+				right: 30rpx;
+				top: -30rpx;
+				.box{
+					display: flex;
+					.btn{
+						width: 100rpx;
+						height: 50rpx;
+						line-height: 50rpx;
+						text-align: center;
+						font-size: 24rpx;
+						color: #FFFFFF;
+						background: #C70C15;
+						border-radius: 50rpx;
+						padding: 0;
+					}
+					.btn.follow{
+						margin-right: 20rpx;
+					}
+					.follow.active{
+						background: #e2e3e5;
+						color: #333333;
+					}
+				}
+			}
+			.info{
+				padding-top: 60rpx;
+				padding: 60rpx 30rpx 30rpx 30rpx;
+				box-sizing: border-box;
+				.name{
+					font-weight: bold;
+					font-size: 32rpx;
+					color: #333333;
+				}
+				.autograph{
+					font-size: 24rpx;
+					color: #999999;
+				}
+				.nums{
+					padding-top: 30rpx;
+					font-size: 28rpx;
+					color: #333333;
+					.num{
+						color: #C70C15;
+						padding-right: 10rpx;
+						font-weight: bold;
+					}
+				}
+			}
+		}
+	}
 	.container{
+		font-size: 24rpx;
 		.panelBox{
 			background: #fff;
 			padding: 20rpx;
@@ -385,16 +516,4 @@
 			}
 		}
 	}
-	.add_template{
-		width: 100rpx;
-		height: 100rpx;
-		line-height: 100rpx;
-		text-align: center;
-		background: #C70C15;
-		border-radius: 50%;
-		position: fixed;
-		bottom: 20rpx;
-		right: 20rpx;
-	}
-}
 </style>

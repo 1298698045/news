@@ -77,11 +77,61 @@
 			    "navigationBarTitleText": "发帖子",
 			    "enablePullDownRefresh": false
 			}
-		}    ,{
-                    "path" : "circle/circle",
+			},{
+				"path" : "circle/circle",
+				"style" :                                                                                    
+				{
+					"navigationBarTitleText": "选择一个圈子",
+					"enablePullDownRefresh": false
+				}
+				
+			},
+			{
+				"path" : "detail/detail",
+				"style" :                                                                                    
+				{
+				    "navigationBarTitleText": "",
+				    "enablePullDownRefresh": false
+				}
+			}
+		    ,{
+                    "path" : "PersonalHome/PersonalHome",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "选择一个圈子",
+                    "navigationBarTitleText": "个人主页",
+                    "enablePullDownRefresh": false,
+					"navigationStyle": "custom"
+                }
+                
+                }
+            ]
+	},
+	{
+		"root":"pages/examination",
+		"pages":[
+			{
+			    "path" : "examination",
+			    "style" :                                                                                    
+			    {
+			        "navigationBarTitleText": "在线考试",
+			        "enablePullDownRefresh": false
+			    }
+			    
+			}
+		    ,{
+                    "path" : "introduce/introduce",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "在线考试",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "subject/subject",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "科目考试",
                     "enablePullDownRefresh": false
                 }
                 

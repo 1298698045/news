@@ -13,13 +13,13 @@
 				<tui-upload :value="imgs" :serverUrl="serverUrl" :limit="limit" @complete="uploadResult" @remove="removeImg"></tui-upload>
 			</div>
 			<tui-list-view color="#777">
-				<tui-list-cell class="cell" arrow>
+				<tui-list-cell class="cell" arrow @click="handleChoiceCircle">
 					<view class="text">
 						<view class="label">
 							归属圈子
 						</view>
-						<view class="value" @click="handleChoiceCircle">
-							请选择
+						<view class="value">
+							{{circle || '请选择'}}
 						</view>
 					</view>
 				</tui-list-cell>
@@ -79,6 +79,11 @@
 		},
 		onLoad(){
 			
+		},
+		computed:{
+			circle(){
+				return this.$store.state.circle.circle;
+			}
 		},
 		methods: {
 			// 上传完成
