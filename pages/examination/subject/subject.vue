@@ -380,7 +380,7 @@
 						})
 					}
 				}
-				this.$tui.modal('','考试时间已到',false,callback)
+				this.$tui.modal('','考试时间已到,请点击确认交卷！',false,callback,'#C70C15','确认交卷')
 			},
 			showCardModal: function(e) {
 				this.modalCard = e.currentTarget.dataset.target
@@ -486,6 +486,10 @@
 		}
 	}
 </script>
+<style>
+	@import "../../../colorui/main.css";
+	@import "../../../colorui/icon.css";
+</style>
 <style lang="scss">
 	page{
 		background: #FFFFFF;

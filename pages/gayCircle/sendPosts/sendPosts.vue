@@ -193,7 +193,7 @@ page{
 				color: #FFFFFF;
 			}
 			.btn.active{
-				padding-bottom: 50rpx;
+				padding-bottom: 30rpx;
 			}
 		}
 	}

@@ -1,15 +1,19 @@
 <template>
 	<view class="wrapper">
-		<div class="columns">
+		<div class="column">
 			<div class="box" @click="handleHref(1)">
-				考试
+				<div class="icon"></div>
+				<p class="text">考试</p>
 			</div>
-			<div class="box">
-				学习
+			<div class="box" @click="handleHref(2)">
+				<div class="icon"></div>
+				<p class="text">学习</p>
 			</div>
-			<input class="inp" type="text" @input="handleInput">
-			<p v-for="item in copyArr">{{item.name}}</p>
+			<div class="fake_item"></div>
+			<div class="fake_item"></div>
 		</div>
+<!-- 		<input class="inp" type="text" @input="handleInput">
+		<p v-for="item in copyArr">{{item.name}}</p> -->
 	</view>
 </template>
 
@@ -68,11 +72,29 @@
 			}
 		},
 		onLoad() {
-			console.log(this.arr,this.arr.length)
-			const copyArr = this.recursionFun(this.arr);
-			console.log(copyArr,copyArr.length)
+			console.log(this.arr)
+			// console.log(this.arr,this.arr.length)
+			// const copyArr = this.recursionFun(this.arr);
+			// console.log(copyArr,copyArr.length)
 		},
 		methods: {
+			recursionFun(data,value){
+		      var rule = false
+		      for(var i=0;i<data.length;i++){
+			    data[i].show=false
+		        if(data[i].children){
+		          if(this.recursionFun(data[i].children)){
+		            data[i].show=true
+		            rule = true
+		          }
+		        }
+		        if(data[i].name.indexOf(value)!=-1||data[i].show){
+		          data[i].show=true
+		          rule = true
+		        }
+		      }
+		      return rule
+		    },
 			handleHref(i){
 				switch(i){
 					case 1:
@@ -80,6 +102,10 @@
 							url:'../../examination/examination'
 						})
 						break;
+					case 2:
+						uni.navigateTo({
+							url:'../../study/home'
+						})
 					default:
 						return
 				}
@@ -96,40 +122,84 @@
 			  return arr;
 			},
 			recursionFun(arr,name){
-				// const temp = this.temp;
-				// arr.forEach(item=>{
-				// 	this.temp.push(item);
-				// 	if(item.children && item.children.length>0){
-				// 		this.recursionFun(item.children);
-				// 	}
-				// })
-				// const data = temp.filter(item=> RegExp(name).test(item.name));
-				// return this.unique(data);
-				var that = this;
-				let data=arr.filter(item=> RegExp(name).test(item.name)).map((item)=>{
-					item=Object.assign({},item)
-					if(item.children){
-						//递归循环
-						item.children=that.recursionFun(item.children,name)
+				const temp = this.temp;
+				arr.forEach(item=>{
+					this.temp.push(item);
+					if(item.children && item.children.length>0){
+						this.recursionFun(item.children);
 					}
-					return item
 				})
-				return data
+				const data = temp.filter(item=> RegExp(name).test(item.name));
+				return this.toTree(this.unique(data));
+			},
+			toTree(data) {
+			  let treeData = [];
+			  if (!Array.isArray(data)) return treeData;
+			
+			  data.forEach(item => {
+			    delete item.children;  //删除item下的children，以防多次调用
+			  });
+			
+			  let map = {};
+			  data.forEach(item => {
+			    map[item.id] = item;
+				console.log(map[item.id])
+			  });
+			
+			  data.forEach(item => {
+			    let parent = map[item.parentId];  //判断item的parentId是否是否存在map中
+			    if (parent) {  //如果存在则表示item不是最顶层的数据
+			      (parent.children || (parent.children = [])).push(item)
+			    }
+			    else {
+			      treeData.push(item)  // 如果不存在 则是顶层数据
+			    }
+			  });
+			  return treeData;
 			},
 			handleInput(e){
 				this.searchName = e.detail.value;
-				this.copyArr = this.recursionFun(this.arr,this.searchName);
-				console.log(this.copyArr)
+				// this.copyArr = this.recursionFun(this.arr,this.searchName);
+				this.formdata(this.arr,this.searchName)
+				console.log(this.arr)
 			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 .inp{
 	width: 100px;
 	height: 30px;
 	border: 1px solid #ccc;
 	background: #FFFFFF;
+}
+.wrapper{
+	.column{
+		display: flex;
+		background: #FFFFFF;
+		font-size: 28rpx;
+		justify-content: space-between;
+		padding:30rpx 0;
+		flex-wrap: wrap;
+		.box{
+			width: 33%;
+			text-align: center;
+			.icon{
+				width: 80rpx;
+				height: 80rpx;
+				border-radius: 50%;
+				background: #CCCCCC;
+				margin: 0 auto;
+			}
+			.text{
+				padding-bottom: 10rpx;
+			}
+		}
+		.fake_item{
+			flex: 0 0 33%;
+			height: 0;
+		}
+	}
 }
 </style>
