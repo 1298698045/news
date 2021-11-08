@@ -1,6 +1,6 @@
 <template>
 	<div class="curriculum">
-		<div class="box" v-for="(item,index) in list" :key="index">
+		<div class="box" v-for="(item,index) in list" :key="index" @click="handleClick(item,index)">
 			<div class="left_cover">
 				
 			</div>
@@ -51,6 +51,11 @@
 		data(){
 			return {
 				
+			}
+		},
+		methods:{
+			handleClick(item,index){
+				this.$emit('clickIn',item,index);
 			}
 		}
 	}

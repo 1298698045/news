@@ -15,7 +15,7 @@
 					<div class="name">
 						课程
 					</div>
-					<CourseBox :list="recommendList" :desc="'desc1'" />
+					<CourseBox :list="recommendList" :desc="'desc1'" @clickIn="handleClickIn" />
 				</div>
 			</div>
 		</div>
@@ -90,6 +90,11 @@
 		},
 		methods: {
 			bannerDetail(){
+				uni.navigateTo({
+					url:'study'
+				})
+			},
+			handleClickIn(item,index){
 				uni.navigateTo({
 					url:'study'
 				})
