@@ -117,7 +117,7 @@ export default {
 		},
 		btnCmt: function() {
 			uni.navigateTo({
-				url: '../comment/comment'
+				url: '../sendComment/sendComment'
 			});
 		}
 	},

@@ -16,6 +16,7 @@
 						:x="item.x" :y="item.y"
 						:damping="40"
 						:disabled="!isEdit"
+						@click="onClick($event,item)"
 						@change="onChange($event, item)"
 						@touchstart="onTouchstart(item)"
 						@touchend="onTouchend(item, index)"
@@ -227,7 +228,9 @@
 				this.startSort(this.curTouchPostionIndex, 'onTouchend'); //再次调用并传参数‘onTouchend’，使拖动后且没有找到目标位置的滑块归位
 				
 			},
-			
+			onClick(e,obj){
+				this.$emit('clickSelect', obj)
+			},
 			/* 移动过程中触发的事件（所有移动块只要一有移动都会触发） */
 			onChange(e, obj) {
 				if(!this.isEdit) {

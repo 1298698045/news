@@ -20,7 +20,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "新闻",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
             
         }
@@ -62,6 +62,51 @@
         }
         ,{
             "path" : "pages/study/home",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/study/reply/sendReply",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/integral/integral",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "学习积分",
+                "enablePullDownRefresh": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/leavingMessage/leavingMessage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我要留言",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/integral/tips",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/integral/explain",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

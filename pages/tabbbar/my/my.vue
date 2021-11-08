@@ -52,6 +52,18 @@
 						在线客服
 					</view>
 				</tui-list-cell>
+				<tui-list-cell class="cell" arrow @click="handleIntegral">
+					<tui-icon name="kefu" color="#C70C15" size="24"></tui-icon>
+					<view class="text">
+						学习积分
+					</view>
+				</tui-list-cell>
+				<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
+					<tui-icon name="kefu" color="#C70C15" size="24"></tui-icon>
+					<view class="text">
+						我要留言
+					</view>
+				</tui-list-cell>
 			</tui-list-view>
 		</div>
 	</view>
@@ -96,6 +108,16 @@
 					that.userInfo.avatarUrl = JSON.parse(res.rawData).avatarUrl;
 				  }
 				});
+			},
+			handleIntegral(){
+				uni.navigateTo({
+					url:'../../integral/integral'
+				})
+			},
+			handleLeavingMessage(){
+				uni.navigateTo({
+					url:'../../my/leavingMessage/leavingMessage'
+				})
 			}
 		}
 	}

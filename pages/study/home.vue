@@ -15,36 +15,18 @@
 					<div class="name">
 						课程
 					</div>
-					<div class="curriculum">
-						<div class="box" v-for="(item,index) in recommendList" :key="index" @click="bannerDetail">
-							<div class="left_cover">
-								
-							</div>
-							<div class="right_info">
-								<h3 class="title">
-									{{item.name}}
-								</h3>
-								<div class="position">
-									<span class="tag">{{item.post}}</span>
-									<span class="tag">{{item.duty}}</span>
-								</div>
-								<div class="nums">
-									<span class="color">58</span>讲 | &nbsp;&nbsp;<span class="color">20000</span> 人已学习
-								</div>
-								<div class="desc">
-									{{item.desc}}
-								</div>
-							</div>
-						</div>
-					</div>
+					<CourseBox :list="recommendList" :desc="'desc1'" />
 				</div>
 			</div>
 		</div>
 	</view>
 </template>
-
 <script>
+	import CourseBox from '@/components/study/courseBox.vue';
 	export default {
+		components:{
+			CourseBox
+		},
 		data() {
 			return {
 				banner: [{
@@ -63,7 +45,7 @@
 						post:'架构师',
 						duty:'前百度研发部负责人',
 						imgUrl:'',
-						desc:`
+						desc1:`
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					},
@@ -72,7 +54,7 @@
 						post:'架构师',
 						duty:'前百度研发部负责人',
 						imgUrl:'',
-						desc:`
+						desc1:`
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					},
@@ -81,7 +63,7 @@
 						post:'架构师',
 						duty:'前百度研发部负责人',
 						imgUrl:'',
-						desc:`
+						desc1:`
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					},
@@ -90,7 +72,7 @@
 						post:'架构师',
 						duty:'前百度研发部负责人',
 						imgUrl:'',
-						desc:`
+						desc1:`
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					},
@@ -99,7 +81,7 @@
 						post:'架构师',
 						duty:'前百度研发部负责人',
 						imgUrl:'',
-						desc:`
+						desc1:`
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					}

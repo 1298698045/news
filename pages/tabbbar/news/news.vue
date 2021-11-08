@@ -97,7 +97,7 @@
 					  <view class="fack_item"></view>
 				  </view> -->
 				  <view>  
-					<dragSort ref='childDrag' @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
+					<dragSort ref='childDrag' @clickSelect="handleSelect" @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
 				  </view>
 			  </view>
 			  <view class="panel">
@@ -370,6 +370,16 @@
 					url: '/pages/news/newsDetail'
 				})
 			},
+			handleSelect(obj){
+				this.currentIdx = this.tabs.findIndex(item=>item.name==obj.name);
+				if(this.currentIdx>=4){
+					this.scrollLeft = this.currentIdx * 50
+				}else {
+					this.scrollLeft = 0;
+				}
+				this.isVisible = false;
+				uni.showTabBar()
+			},
 			scroll(e){
 				console.log(e);
 			},
@@ -521,9 +531,9 @@
 			}
 		}
 		.more{
-			width: 80rpx;
-			height: 80rpx;
-			line-height: 80rpx;
+			width: 82rpx;
+			height: 82rpx;
+			line-height: 82rpx;
 			text-align: center;
 			background: rgba(0,0,0,.3);
 			box-shadow: 1rpx 0 0 0 rgba(0,0,0,.5);
