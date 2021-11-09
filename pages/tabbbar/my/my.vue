@@ -53,18 +53,21 @@
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow @click="handleIntegral">
-					<tui-icon name="kefu" color="#C70C15" size="24"></tui-icon>
+					<tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon>
 					<view class="text">
 						学习积分
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
-					<tui-icon name="kefu" color="#C70C15" size="24"></tui-icon>
+					<tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon>
 					<view class="text">
 						我要留言
 					</view>
 				</tui-list-cell>
 			</tui-list-view>
+		</div>
+		<div class="outBtn">
+			<van-button type="default" :block="true" :round="true" color="#C70C15" @click.stop="handleOut">退出登录</van-button>
 		</div>
 	</view>
 </template>
@@ -118,6 +121,18 @@
 				uni.navigateTo({
 					url:'../../my/leavingMessage/leavingMessage'
 				})
+			},
+			handleOut(){
+				const callback = (e)=>{
+					console.log(e);
+					if(e){
+						uni.removeStorageSync('timeStamp');
+						uni.reLaunch({
+							url:'../../login/login'
+						})
+					}
+				}
+				this.$tui.modal('','确定要退出登录吗？',true,callback,'#C70C15')
 			}
 		}
 	}
@@ -175,6 +190,11 @@
 				padding-left: 20rpx;
 			}
 		}
+	}
+	.outBtn{
+		margin-top: 100rpx;
+		padding: 0 30rpx;
+		box-sizing: border-box;
 	}
 }
 </style>

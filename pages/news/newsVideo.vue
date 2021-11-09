@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
-		<video class="tui-video" src="https://thorui.cn/video/2.mp4" :danmu-list="danmuList" enable-danmu danmu-btn controls
-		 autoplay objectFit="fill" >
+		<video class="tui-video" src="https://thorui.cn/video/2.mp4" :autoplay="true" initial-time="10.396" :danmu-list="danmuList" :show-mute-btn="true" enable-danmu danmu-btn controls
+		 autoplay objectFit="fill" @pause="handlePause">
 			<!-- <cover-view class="tui-back-bg" @tap="goBack"></cover-view>
 			<cover-image @tap="goBack" class="tui-video-back" src="/static/images/news/icon_back.png"></cover-image> -->
 		</video>
@@ -204,7 +204,8 @@
 				],
 				pageIndex: 1,
 				loadding: false,
-				pullUpOn: true
+				pullUpOn: true,
+				history:''
 			};
 		},
 		computed: {
@@ -278,6 +279,11 @@
 			},
 			goBack(){
 				uni.navigateBack()
+			},
+			// 暂停视频
+			handlePause(e){
+				console.log(e);
+				this.history = e.mp.timeStamp;
 			}
 		},
 		onReachBottom: function() {

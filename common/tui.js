@@ -2,7 +2,7 @@ const tui = {
 	toast: function(options={}) {
 		let text,icon, duration,deltaTime,success;
 		text = options.text;
-		icon = options.icon;
+		icon = options.icon || 'none';
 		duration = options.duration || 2000
 		success = options.success;
 		deltaTime = options.deltaTime || 1
