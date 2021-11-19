@@ -1,17 +1,17 @@
 <template>
 	<view class="wrapper" v-cloak>
 		<view class="container">
-			<view class="panelBox" v-for="(item,index) in list" :key="index" @click="handleDetail">
+			<view class="panelBox" v-for="(item,index) in listData" :key="index" @click="handleDetail">
 				<view class="head">
 					<view class="avatar" @click="handlePersonalHome">
-						{{item.name}}
+						{{item.buidingName || ''}}
 					</view>
 					<view class="info">
-						<p class="name">{{item.name}}</p>
+						<p class="name">{{item.buidingName || ''}}</p>
 						<p class="depart">
 							描述
 							<span class="time">
-								{{item.time}}
+								{{item.modifiedOn || ''}}
 							</span>
 						</p>
 					</view>
@@ -21,7 +21,7 @@
 				</view>
 				<view class="content">
 					<view class="desc">
-						{{item.desc}}
+						{{item.description || ''}}
 					</view>
 					<view class="imgTemplate">
 						<!-- <div class="max_img">
@@ -172,10 +172,40 @@
 						commentNum:100,
 						location:'山西长治党建'
 					}
-				]
+				],
+				isBook:false,
+				page:{
+					pageNum:1,
+					pageSize:5
+				},
+				listData:[]
 			}
 		},
+		computed:{
+			token(){
+				return uni.getStorageSync('wechatAuthToken');
+			}
+		},
+		onLoad(){
+			this.getQuery();
+		},
 		methods: {
+			getQuery(){
+				this.$http.getGayCircleList({
+					token:this.token,
+					pagenum:this.page.pageNum,
+					pagesize:this.page.pageSize
+				}).then(res=>{
+					// this.listData = res.returnValue;
+					let temp = [];
+					if(this.page.pageNum==1){
+						temp = res.returnValue;
+					}else {
+						temp = this.listData.concat(res.returnValue);
+					}
+					this.listData = temp;
+				})
+			},
 			hanldeMore(){
 				this.showActionSheet = true
 			},
@@ -231,6 +261,15 @@
 					url:'/pages/gayCircle/PersonalHome/PersonalHome'
 				})
 			}
+		},
+		onPullDownRefresh(){
+			this.page.pageNum = 1;
+			this.getQuery();
+			uni.stopPullDownRefresh();
+		},
+		onReachBottom() {
+			this.page.pageNum++;
+			this.getQuery();
 		}
 	}
 </script>

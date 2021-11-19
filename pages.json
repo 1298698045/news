@@ -20,7 +20,7 @@
 			"style" :                                                                                    
 			{
 				"navigationBarTitleText": "同志圈",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 			
 		},

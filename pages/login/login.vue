@@ -38,7 +38,12 @@
 		data() {
 			return {
 				userNumber:'',
-				password:''
+				password:'',
+				userInfo:{
+					avatarUrl:'',
+					nickName: ''
+				},
+				code:''
 			}
 		},
 		computed:{
@@ -73,11 +78,42 @@
 				this.password = e.detail;
 			},
 			handleLogin(){
-				let timeStamp = new Date().getTime();
-				uni.setStorageSync('timeStamp',timeStamp);
-				uni.switchTab({
-					url:'../tabbbar/index/index'
+				var that = this;
+				uni.login({
+					provider:'weixin',
+					success:res=>{		
+						console.log(res.code,'code')
+						that.code = res.code;
+					}
 				})
+				uni.getUserProfile({
+				  desc: '登录',
+				  success: function (res) {
+					console.log('用户昵称为：', res);
+					uni.setStorageSync('userInfo',JSON.stringify(res));
+					that.userInfo = res.userInfo;
+					that.userInfo.avatarUrl = JSON.parse(res.rawData).avatarUrl;
+					that.$http.getLogin({
+						js_code:that.code,
+						nickName: that.userInfo.nickName
+					}).then(reponse=>{
+						console.log(reponse);
+						const {wechatAuthToken} = reponse.returnValue;
+						uni.setStorageSync('wechatAuthToken', wechatAuthToken)
+						let timeStamp = new Date().getTime();
+						uni.setStorageSync('timeStamp',timeStamp);
+						uni.switchTab({
+							url:'../tabbbar/index/index'
+						})
+					})
+				  }
+				});
+				
+				// let timeStamp = new Date().getTime();
+				// uni.setStorageSync('timeStamp',timeStamp);
+				// uni.switchTab({
+				// 	url:'../tabbbar/index/index'
+				// })
 			}
 		}
 	}

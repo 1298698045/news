@@ -12,6 +12,9 @@
 			<div class="fake_item"></div>
 			<div class="fake_item"></div>
 		</div>
+		<button @click="getLogin()">获取code</button>
+		<h1 class="code">{{code}}</h1>
+		<span class="tag" @click="handleCopyCode">复制</span>
 <!-- 		<input class="inp" type="text" @input="handleInput">
 		<p v-for="item in copyArr">{{item.name}}</p> -->
 	</view>
@@ -68,7 +71,8 @@
 				} */],
 				arr:fakeData.data,
 				temp:[],
-				copyArr:[]
+				copyArr:[],
+				code:''
 			}
 		},
 		onLoad() {
@@ -78,6 +82,33 @@
 			// console.log(copyArr,copyArr.length)
 		},
 		methods: {
+			getLogin(){
+				var that = this;
+				uni.login({
+					success(res) {
+						console.log(res)
+						that.code = res.code;
+					}
+				})
+			},
+			handleCopyCode(){
+				var code = this.code;
+				uni.setClipboardData({
+					data:code,
+					success:res=>{
+						uni.getClipboardData({
+							success:res=>{
+								console.log('复制：', res);
+								uni.showToast({
+									title:'code已复制',
+									icon:'success',
+									duration:2000
+								})
+							}
+						})
+					}
+				})
+			},
 			recursionFun(data,value){
 		      var rule = false
 		      for(var i=0;i<data.length;i++){

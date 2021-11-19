@@ -134,6 +134,9 @@
 		computed: {
 			count() {
 				return this.newsList.length - 1
+			},
+			token(){
+				return uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		data() {
@@ -350,6 +353,7 @@
 			const { windowWidth, windowHeight } = uni.getSystemInfoSync();  
 			this.windowWidth = windowWidth
 			this.windowHeight = windowHeight
+			this.getQueryColumn();
 		},
 		mounted(){
 			this.$nextTick(function(){
@@ -359,6 +363,13 @@
 			})
 		},
 		methods: {
+			getQueryColumn(){
+				this.$http.getNewsColumn({
+					Token:this.token
+				}).then(res=>{
+					console.log(res);
+				})
+			},
 			clear:function(){},
 			search: function() {
 				uni.navigateTo({
