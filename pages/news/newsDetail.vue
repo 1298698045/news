@@ -1,15 +1,16 @@
 <template>
 	<view class="container">
-		<view class="tui-news-title">我们充分尊重联赛新政，武汉队战术多变训练有素</view>
+		<view class="tui-news-title">{{detail.title || ''}}</view>
 		<view class="tui-sub-info">
 			<view class="tui-sub-left">
 				<text class="tui-author">早安君</text>
-				<text>昨天 17:12</text>
+				<text>{{ timeStr }}</text>
 			</view>
-			<view class="tui-sub-right">阅读 2453</view>
+			<view class="tui-sub-right">阅读 {{detail.readCount || ''}}</view>
 		</view>
 		<view class="tui-news-content">
-			<view class="tui-article">北京时间6月22日，重庆斯威队召开了赛前新闻发布会，主教练小克鲁伊夫和球员彭欣力出席。</view>
+			<rich-text :nodes="detail.contentBody"></rich-text>
+			<!-- <view class="tui-article">北京时间6月22日，重庆斯威队召开了赛前新闻发布会，主教练小克鲁伊夫和球员彭欣力出席。</view>
 			<view class="tui-article">
 				这是一场很重要的比赛，武汉卓尔在中超目前打的还是不错的，现在积分与我们一样。我们面对这个对手做了充分的准备，他们的战术变化很多，我也认为他们是一支训练有素的队伍。虽然这是一场艰难的比赛，我们也充满了动力去拿到我们想要的分数，实现我们的目标。联赛上半程还有两场比赛，我们也会竭尽全力拿到尽量多的分数。
 			</view>
@@ -21,13 +22,13 @@
 			<image src="/static/images/news/banner_1.jpg" class="tui-article-pic" mode="widthFix"></image>
 			<view class="tui-article">
 				对我而言，我还是想保持沉默，我不打算就这个问题做过多的评论。因为这个政策的变化是马上实施了，我们肯定是尊重它，然后在我们力所能及的范围上找到最好的应对的方案，我个人意见并不重要，我们尊重和遵守相关决定。
-			</view>
+			</view> -->
 		</view>
 
-		<view class="tui-news-source">消息参考来源：体坛大精汇</view>
+		<view class="tui-news-source">消息参考来源：{{detail.keyWords || ''}}</view>
 
 		<view class="tui-operate-box">
-			<tui-tag padding="26rpx 56rpx" :type="isFabulous ? 'primary' : 'gray'" shape="circle" :plain="true" @click="btnFabulous">
+			<tui-tag padding="26rpx 56rpx" :type="isFabulous ? 'primary' : 'gray'" shape="circle" :plain="true" @click="btnFabulous()">
 				<tui-icon :name="iconName(isFabulous)" :size="20" :color="iconColor"></tui-icon>
 				<text class="tui-black" :class="[isFabulous ? 'tui-primary' : '']">{{ fabulous }}赞</text>
 			</tui-tag>
@@ -39,41 +40,41 @@
 			</button>
 		</view>
 
-		<view class="tui-cmt-title">精彩评论（20）</view>
+		<view class="tui-cmt-title">精彩评论（{{ total || 0 }}）</view>
 		<view class="tui-cmtbox">
 			<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
 				<image :src="'/static/images/news/' + item.avatar" class="tui-avatar"></image>
 				<view class="tui-cmt-detail">
 					<view class="tui-header-box">
-						<view class="tui-cmt-nickname">{{ item.nickname }}</view>
-						<view class="tui-fabulous" :class="[item.isFabulous ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
-							<text>{{ item.fabulous == 0 ? '赞' : item.fabulous }}</text>
-							<tui-icon :name="iconName(item.isFabulous)" :size="15" :color="itemIconColor(item.isFabulous)"></tui-icon>
+						<view class="tui-cmt-nickname">{{ item.userName }}</view>
+						<view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
+							<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
+							<tui-icon :name="iconName(item.isPraise)" :size="15" :color="itemIconColor(item.isPraise)"></tui-icon>
 						</view>
 					</view>
-					<view class="tui-cmt-content">{{ item.content }}</view>
-					<view class="tui-reply-box" v-if="item.replayNum > 0">
+					<view class="tui-cmt-content">{{ item.comment }}</view>
+					<view class="tui-reply-box" v-if="item.contentComments.length > 0">
 						<tui-list-cell
 							backgroundColor="#f2f2f2"
 							:size="28"
-							v-for="(items, index2) in item.reply"
+							v-for="(items, index2) in item.contentComments"
 							:key="index2"
-							:unlined="item.replayNum < 2 && item.reply.length - 1 == index"
+							:unlined="item.contentComments.length < 2 && item.contentComments.length - 1 == index"
 							@tap="cmtReply"
 						>
 							<view class="tui-flex-1 tui-reply-nickname">{{ items.nickname }}</view>
 							<view class="tui-flex-1">{{ items.content }}</view>
 						</tui-list-cell>
-						<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
+						<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.contentComments.length > 2" @tap="cmtReply">
 							<view class="tui-flex-1  tui-cell-last">
-								<text>共{{ item.replayNum }}条回复</text>
+								<text>共{{ item.contentComments.length }}条回复</text>
 								<tui-icon name="arrowright" :size="22" color="#C70C15"></tui-icon>
 							</view>
 						</tui-list-cell>
 					</view>
 					<view class="tui-footer">
 						{{ item.time }}
-						<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply">回复</view>
+						<!-- <view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply">回复</view> -->
 					</view>
 				</view>
 			</view>
@@ -84,7 +85,7 @@
 			<view class="tui-operation-right tui-right-flex tui-col-5">
 				<view class="tui-operation-item" hover-class="tui-opcity" :hover-stay-time="150" @tap="cmtAll">
 					<tui-icon name="message" :size="30" color="#444"></tui-icon>
-					<tui-badge absolute type="white_primary" :scaleRatio="0.7">501</tui-badge>
+					<tui-badge absolute type="white_primary" :scaleRatio="0.7">{{ total || 0 }}</tui-badge>
 				</view>
 				<view class="tui-operation-item" @tap="collection">
 					<tui-icon :name="isCollection ? 'star-fill' : 'star'" :size="29" :color="isCollection ? '#C70C15' : '#444'"></tui-icon>
@@ -107,9 +108,9 @@
 export default {
 	data() {
 		return {
-			fabulous: 123,
-			isFabulous: false,
-			isCollection: false,
+			fabulous: 123, // 点赞数量
+			isFabulous: false, // 是否点赞
+			isCollection: false, // 是否收藏
 			cmtList: [{
 				avatar: "list_2.jpg",
 				nickname: "米兰的卡先生",
@@ -150,7 +151,15 @@ export default {
 			}],
 			pageIndex: 1,
 			loadding: false,
-			pullUpOn: true
+			pullUpOn: true,
+			id:'',
+			detail:{},
+			commentPage:{
+				isPage: false,
+				pageNum: 1,
+				pageSize: 10
+			},
+			total:''
 		}
 	},
 	computed: {
@@ -166,31 +175,150 @@ export default {
 			return function(isFabulous) {
 				return isFabulous ? 'agree-fill' : 'agree'
 			}
+		},
+		token(){
+			return uni.getStorageSync('wechatAuthToken');
+		},
+		timeStr(){
+			return this.detail.modifiedOn ? this.formDateStr(this.detail.modifiedOn) : ''
 		}
 	},
+	onLoad(options) {
+		console.log(options,'options')
+		this.id = options.id;
+		this.getDetail();
+		this.getCmtsList();
+	},
+	onShow(){
+		const curren = getCurrentPages();
+		console.log(curren,'====')
+		this.getCmtsList();
+	},
 	methods: {
-		btnFabulous: function() {
-			this.fabulous = this.isFabulous ? 123 : 124;
-			this.isFabulous = !this.isFabulous
+		// 详情
+		getDetail(){
+			this.$http.getNewsDetail({
+				Token:this.token,
+				NewsId:this.id
+			}).then(res=>{
+				this.detail = res.returnValue;
+				this.fabulous = this.detail.likeCount;
+				this.isFabulous = this.detail.isPraise;
+				this.isCollection = this.detail.isCollect;
+			})
 		},
-		cmtFabulous: function(e) {
-			let index = e.currentTarget.id;
-			let fabulousObj = this.cmtList[index];
-			let isFabulous = this.cmtList[index].isFabulous;
-			let fabulous = this.cmtList[index].fabulous;
-			let fabulousNum = isFabulous ? fabulous - 1 : fabulous + 1;
-			this.$set(fabulousObj, "fabulous", fabulousNum);
-			this.$set(fabulousObj, "isFabulous", !isFabulous);
+		// 评论列表
+		getCmtsList(){
+			this.$http.getCmtsList({
+				Token:this.token,
+				NewsId: this.id,
+				Pagesize: this.commentPage.pageSize,
+				Pagenum: this.commentPage.pageNum
+			}).then(res=>{
+				console.log(res);
+				let total = res.returnValue.total;
+				this.total = total;
+				if(this.commentPage.pageNum*this.commentPage.pageSize<total){
+					this.commentPage.isPage = true;
+				}else {
+					this.commentPage.isPage = false;
+				}
+				let temp = [];
+				if(this.commentPage.pageNum==1){
+					temp = res.returnValue.commentsList;
+				}else {
+					temp = this.cmtList.concat(res.returnValue.commentsList);
+				}
+				this.cmtList = temp;
+				if(this.cmtList){					
+					this.cmtList.map(item=>{
+						item.time = this.formDateStr(item.modifiedOn);
+						return item;
+					})
+				}
+			})
+		},
+		formDateStr(time){
+			let str = time.replace(/T/g,' ')
+			return str;
+		},
+		btnFabulous: function() {
+			// this.fabulous = this.isFabulous ? 123 : 124;
+			// this.isFabulous = !this.isFabulous
+			if(this.isFabulous){
+				this.$http.delNewsLike({
+					Token:this.token,
+					NewsId:this.id
+				}).then(res=>{
+					console.log(res);
+					this.getDetail();
+				})
+			}else {				
+				this.$http.getNewsLike({
+					Token:this.token,
+					NewsId:this.id
+				}).then(res=>{
+					console.log(res);
+					this.getDetail();
+				})
+			}
+		},
+		cmtFabulous: function(item) {
+			// let index = e.currentTarget.id;
+			// let fabulousObj = this.cmtList[index];
+			// let isFabulous = this.cmtList[index].isFabulous;
+			// let fabulous = this.cmtList[index].fabulous;
+			// let fabulousNum = isFabulous ? fabulous - 1 : fabulous + 1;
+			// this.$set(fabulousObj, "fabulous", fabulousNum);
+			// this.$set(fabulousObj, "isFabulous", !isFabulous);
+			if(!item.isPraise){
+				this.$http.commentLike({
+					Token: this.token,
+					NewsCommentId: item.commentId
+				}).then(res=>{
+					item.isPraise = true
+					item.likeQty = item.likeQty+1
+				})
+			}else {
+				this.$http.commentCancelLike({
+					Token: this.token,
+					NewsCommentId: item.commentId
+				}).then(res=>{
+					item.isPraise = false
+					item.likeQty = item.likeQty-1
+				})
+			}
 		},
 		collection: function() {
-			this.isCollection = !this.isCollection
-			if (this.isCollection) {
-				this.tui.toast("收藏成功！");
+			// this.isCollection = !this.isCollection
+			// if (this.isCollection) {
+			// 	this.tui.toast("收藏成功！");
+			// }
+			if(!this.isCollection){				
+				this.$http.setNewsCollection({
+					Token: this.token,
+					NewsId: this.id
+				}).then(res=>{
+					console.log(res);
+					this.getDetail()
+				})
+			}else{
+				this.cancelCollection();
 			}
+		},
+		// 取消收藏
+		cancelCollection(){
+			this.$http.delNewsCollection({
+				Token: this.token,
+				NewsId: this.id
+			}).then(res=>{
+				console.log(res);
+				this.getDetail()
+			})
 		},
 		btnCmt: function() {
 			uni.navigateTo({
-				url: '/pages/news/sendComment/sendComment'
+				url: '/pages/news/sendComment/sendComment?NewsId='+this.id
 			})
 		},
 		cmtAll: function() {
@@ -226,17 +354,22 @@ export default {
 	},
 	// 页面上拉触底事件的处理函数
 	onReachBottom: function() {
-		if (!this.pullUpOn) return;
+		// if (!this.pullUpOn) return;
 		this.loadding = true
-		if (this.pageIndex == 3) {
-			this.loadding = false;
-			this.pullUpOn = false
-		} else {
-			let arr = JSON.parse(JSON.stringify(this.cmtList));
-			this.cmtList = this.cmtList.concat(arr);
-			this.pageIndex = this.pageIndex + 1;
-			this.loadding = false
+		if(this.commentPage.isPage){
+			this.commentPage.pageNum++;
+			this.getCmtsList();
 		}
+		this.loadding = false;
+		// if (this.pageIndex == 3) {
+		// 	this.loadding = false;
+		// 	this.pullUpOn = false
+		// } else {
+		// 	let arr = JSON.parse(JSON.stringify(this.cmtList));
+		// 	this.cmtList = this.cmtList.concat(arr);
+		// 	this.pageIndex = this.pageIndex + 1;
+		// 	this.loadding = false
+		// }
 	}
 }
 </script>
@@ -274,6 +407,7 @@ page {
 
 .tui-news-content {
 	padding-top: 40rpx;
+	padding-bottom: 40rpx;
 }
 
 .tui-article {

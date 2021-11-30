@@ -83,6 +83,18 @@
 					}
 				]
 			}
+		},
+		mounted() {
+			this.getQuery();
+		},
+		methods:{
+			getQuery(){
+				this.$http.getStudyCsuggest({
+					
+				}).then(res=>{
+					console.log(res);
+				})
+			}
 		}
 	}
 </script>

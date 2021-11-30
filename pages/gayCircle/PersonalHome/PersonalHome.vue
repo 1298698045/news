@@ -17,11 +17,11 @@
 					</div>
 				</div>
 				<div class="info">
-					<h3 class="name">昵称</h3>
-					<p class="autograph">梦想还是要有的，万一实现了呢</p>
+					<h3 class="name">{{userDetail.nickName}}</h3>
+					<!-- <p class="autograph">梦想还是要有的，万一实现了呢</p> -->
 					<div class="nums">
 						<span class="num">
-							20000
+							{{totalLikeQty || 0}}
 						</span>
 						获赞
 					</div>
@@ -29,27 +29,27 @@
 			</div>
 		</div>
 		<view class="container">
-			<view class="panelBox" v-for="(item,index) in list" :key="index" @click="handleDetail">
+			<view class="panelBox" v-for="(item,index) in list" :key="index" @click="handleDetail(item)">
 				<view class="head">
-					<view class="avatar" @click="handlePersonalHome">
-						{{item.name}}
+					<view class="avatar">
+						{{item.userName}}
 					</view>
 					<view class="info">
-						<p class="name">{{item.name}}</p>
+						<p class="name">{{item.userName}}</p>
 						<p class="depart">
 							描述
 							<span class="time">
-								{{item.time}}
+								{{item.modifiedOn}}
 							</span>
 						</p>
 					</view>
-					<view class="arrow_icon" @click.stop="hanldeMore">
+					<view class="arrow_icon" @click.stop="hanldeMore(item)">
 						<tui-icon name="arrowdown" :size="24" ></tui-icon>
 					</view>
 				</view>
 				<view class="content">
 					<view class="desc">
-						{{item.desc}}
+						{{item.description}}
 					</view>
 					<view class="imgTemplate">
 						<!-- <div class="max_img">
@@ -59,8 +59,8 @@
 							<image class="img" src="/static/images/news/banner_1.jpg" mode="widthFix"></image>
 						</div> -->
 						<view class="list_img">
-							<view class="box" v-for="(row,idx) in item.imgs" :key="idx" @click.stop="handleOpenImg(item,row)">
-								<image class="img" :src="row" mode="widthFix"></image>
+							<view class="box" v-for="(row,idx) in item.listpic" :key="idx" @click.stop="handleOpenImg(item,idx)">
+								<image class="img" :src="pathUrl+row.path.replace(/\\/g,'/')"></image>
 							</view>
 							<view class="fake_item"></view>
 							<view class="fake_item"></view>
@@ -84,33 +84,35 @@
 							</view> -->
 						</view>
 					</view>
-					<view class="location">
+					<view class="location" v-if="item.location" @click.stop="handleOpenLocation(item)">
 						<tui-icon name="gps" :size="24" ></tui-icon>
 						<span class="gps_text">
-							山西长治党建
+							{{item.location}}
 						</span>
 					</view>
 				</view>
 				<view class="operation">
 					<view class="btn">
 						<span>
-						99999阅读
+						{{item.NumOfForward || 0}}阅读
 						</span>
 					</view>
-					<view class="btn" :class="{'active':item.isLike}" @click.stop="handleItemLike(item)">
-						<tui-icon v-if="!item.isLike" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.isLike" name="agree" :size="24" color="#C70C15" ></tui-icon>
-						<!-- <span>
+					<view class="btn" :class="{'active':item.isPraise}" @click.stop="handleItemLike(item)">
+						<tui-icon v-if="!item.isPraise" name="agree" :size="24"></tui-icon>
+						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#C70C15" ></tui-icon>
+						<span v-if="item.numOfLike==0||item.numOfLike==null">
 						点赞
-						</span> -->
-						24
+						</span>
+						<span v-else>
+							{{item.numOfLike || 0}}
+						</span>
 					</view>
 					<view class="btn" @click.stop>
 						<tui-icon name="message" :size="24" ></tui-icon>
 						<!-- <span>
 						评论
 						</span> -->
-						8
+						{{item.chatterCommentBases.length || 0}}
 					</view>
 				</view>
 			</view>
@@ -128,6 +130,7 @@
 	export default {
 		data() {
 			return {
+				pathUrl:'http://112.126.75.65:10002',
 				top:16,
 				scrollTop: '',
 				opacity:'',
@@ -201,10 +204,64 @@
 						location:'山西长治党建'
 					}
 				],
-				isFollow:false
+				isFollow:false,
+				page:{
+					isPage:false,
+					pageNum: 1,
+					pageSize: 10
+				},
+				userId: "",
+				userDetail:{},
+				totalLikeQty:""
 			}
 		},
+		onLoad(options){
+			this.userId = options.createdBy;
+			this.getQuery();
+		},
 		methods: {
+			getQuery(){
+				this.$http.getCirclePersonList({
+					UserId: this.userId,
+					Pagenum: this.page.pageNum,
+					Pagesize: this.page.pageSize
+				}).then(res=>{
+					let total = res.returnValue.historyChat.total;
+					this.totalLikeQty = res.returnValue.totalLikeQty;
+					this.userDetail = res.returnValue.systemUserBase;
+					if(this.page.pageNum*this.page.pageSize < total){
+						this.page.isPage = true;
+					}else {
+						this.page.isPage = false;
+					}
+					let temp = [];
+					if(this.page.pageNum==1){
+						temp = res.returnValue.historyChat.chatterBaseList || [];
+					}else {
+						temp = this.list.concat(res.returnValue.historyChat.chatterBaseList || []);
+					}
+					this.list = temp;
+				})
+			},
+			handleItemLike(item){
+				if(!item.isPraise){
+					this.$http.setLikeGayCircle({
+						ChatterId: item.chatterId
+					}).then(res=>{
+						console.log('点赞',res)
+						item.isPraise = true;
+						item.numOfLike = item.numOfLike+1
+					})
+				}else {
+					this.$http.cancelLikeGayCircle({
+						ChatterId: item.chatterId
+					}).then(res=>{
+						console.log('取消点赞',res)
+						item.isPraise = false;
+						item.numOfLike = item.numOfLike-1
+					})
+				}
+			},
 			back(){
 				uni.navigateBack({
 					delta:1
@@ -245,23 +302,19 @@
 						break;
 				}
 			},
-			handleDetail(){
+			handleDetail(item){
 				uni.navigateTo({
-					url:'/pages/gayCircle/detail/detail'
+					url:'/pages/gayCircle/detail/detail?id='+item.chatterId
 				})
 			},
-			handleItemLike(item){
-				item.isLike = !item.isLike;
-			},
-			handleOpenImg(item,row){
+			handleOpenImg(item,idx){
+				let imgs = [];
+				item.listpic.forEach(item=>{
+					imgs.push(this.pathUrl + item.path.replace(/\\/g,'/'));
+				})
 				wx.previewImage({
-				  current: row, // 当前显示图片的http链接
-				  urls: item.imgs // 需要预览的图片http链接列表
-				})
-			},
-			handlePersonalHome(){
-				uni.navigateTo({
-					url:'/pages/gayCircle/PersonalHome/PersonalHome'
+				  current: imgs[idx], // 当前显示图片的http链接
+				  urls: imgs // 需要预览的图片http链接列表
 				})
 			},
 			handleFoloow(){
@@ -278,6 +331,32 @@
 				}else {
 					this.isFollow = !this.isFollow;
 				}
+			},
+			handleOpenLocation(item){
+				console.log(item)
+				uni.getLocation({
+				 type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+				 success (res) {
+				   const latitude = Number(item.latitude)
+				   const longitude = Number(item.longitude)
+				   wx.openLocation({
+				     latitude,
+				     longitude,
+				     scale: 18
+				   })
+				 }
+				})
+			}
+		},
+		onPullDownRefresh(){
+			this.page.pageNum = 1;
+			this.getQuery();
+			uni.stopPullDownRefresh();
+		},
+		onReachBottom() {
+			if(this.page.isPage){
+				this.page.pageNum++;
+				this.getQuery();
 			}
 		}
 	}
@@ -445,7 +524,7 @@
 						flex-wrap: wrap;
 						.box{
 							width: 222rpx;
-							max-height: 222rpx;
+							height: 222rpx;
 							border-radius: 8rpx;
 							background: #d4d4d4;
 							margin-bottom: 10rpx;

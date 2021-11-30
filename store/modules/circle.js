@@ -1,6 +1,6 @@
 const circle = {
 	state:{
-		circle:''
+		circle: {}
 	},
 	mutations:{
 		setCircle(state,params){

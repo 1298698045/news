@@ -2,13 +2,13 @@
 	<view class="wrapper">
 		<div class="container">
 			<div class="leftNav" :style="{height:windowHeight+'px'}">
-				<div class="tab" :class="{'active':currIdx==index}" v-for="(item,index) in tabs" :key="index" @click="handleTab(item,index)">
+				<div class="tab" :class="{'active':currIdx==index}" v-for="(item,index) in listData" :key="index" @click="handleTab(item,index)">
 					{{item.name}}
 				</div>
 			</div>
 			<div class="rightContent">
-				<view v-if="currIdx==index" v-for="(item,index) in tabs" :key="index">					
-					<div class="empty" v-if="item.children==''">
+				<view v-if="currIdx==index" v-for="(item,index) in listData" :key="index">					
+					<div class="empty" v-if="item.examClassSubjectBases==''">
 						<div class="emptyImg">
 							
 						</div>
@@ -16,15 +16,15 @@
 							暂未关注任何圈子
 						</div>
 					</div>
-					<block v-for="(row,idx) in item.children" :key="idx">					
-						<div class="content" v-if="item.children!=''">
+					<block v-for="(row,idx) in item.examClassSubjectBases" :key="idx">					
+						<div class="content" v-if="item.examClassSubjectBases!=''">
 							<div class="row" @click="handleChoice(item,row)">
 								<div class="radius">
 									
 								</div>
 								<div class="info">
 									<p class="name">{{row.name}}</p>
-									<p class="fans">{{row.fansNums}}</p>
+									<!-- <p class="fans">{{row.fansNums}}</p> -->
 								</div>
 							</div>
 						</div>
@@ -171,7 +171,13 @@
 					}
 				],
 				currIdx:0,
-				windowHeight:''
+				windowHeight:'',
+				listData:[]
+			}
+		},
+		computed:{
+			token(){
+				return uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		mounted() {
@@ -190,12 +196,22 @@
 			});
 			console.log(this.$store.state.circle.circle)
 		},
+		onLoad() {
+			this.getQuery();
+		},
 		methods: {
+			getQuery(){
+				this.$http.getCircleList({
+					Token: this.token
+				}).then(res=>{
+					this.listData = res.returnValue;
+				})
+			},
 			handleTab(item,index){
 				this.currIdx = index;
 			},
 			handleChoice(item,row){
-				this.$store.commit('setCircle',row.name)
+				this.$store.commit('setCircle',row)
 				uni.navigateBack({
 					delta:1
 				})

@@ -32,10 +32,22 @@
 <script>
 	export default {
 		name:'Introduce',
-		props:[],
+		props:['courseId'],
 		data(){
 			return {
 				
+			}
+		},
+		mounted(){
+			this.getQuery();
+		},
+		methods:{
+			getQuery(){
+				this.$http.getStudyInterface({
+					CourseId:this.courseId
+				}).then(res=>{
+					console.log(res);
+				})
 			}
 		}
 	}

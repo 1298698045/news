@@ -1,18 +1,28 @@
 <template>
 	<view class="tui-container">
 		<view class="tui-searchbox">
-			<view class="tui-rolling-search">
+			<van-search
+			  :value="searchVal"
+			  placeholder="请输入搜索关键词"
+			  show-action
+			  shape="round"
+			   background="tranparent"
+			  @change="onSearch"
+			  @cancel="onCancel"
+			/>
+			<!-- <view class="tui-rolling-search">
 				<icon type="search" :size='13' color='#999'></icon>
 				<swiper vertical autoplay circular interval="8000" class="tui-swiper">
 					<swiper-item v-for="(item,index) in hotSearch" :key="index" class="tui-swiper-item" @tap="search">
 						<view class="tui-hot-item">大家正在搜：{{item}}</view>
 					</swiper-item>
 				</swiper>
-			</view>
+				
+			</view> -->
 		</view>
 		<view class="columnNav">
 			<scroll-view class="tabs" scroll-x="true" @scroll="scroll" :scroll-left="scrollLeft">
-					<view class="tab" @click="handleTab(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
+					<view class="tab" @click="getQueryList(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
 						<span>
 							{{item.name}}
 						</span>
@@ -23,41 +33,51 @@
 			</view>
 		</view>
 		<!--banner-->
-		<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
+	<!-- 	<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
 		 indicator-active-color="#C70C15" class="tui-banner-swiper">
 			<swiper-item v-for="(item,index) in banner" :key="index" @tap.stop="bannerDetail">
 				<view class="tui-banner-title">{{item.title}}</view>
 				<image :src="'/static/images/news/'+item.img" class="tui-slide-image" mode="widthFix" />
 			</swiper-item>
-		</swiper>
+		</swiper> -->
 
 		<!--新闻列表-->
 		<view class="tui-news-view">
 			<block v-for="(item,index) in newsList" :key="index">
-				<tui-list-cell :index="index" @click="detail" :unlined="count==index">
-					<view class="tui-news-flex" :class="[item.isVideo || item.imgNum>1 ?  'tui-flex-column':'tui-flex-start']">
-						<view class="tui-news-picbox" :class="[item.isVideo || item.imgNum>1?'tui-w-full':'tui-w220 tui-h165',item.imgNum>1?'tui-flex-between':'']"
-						 v-if="item.imgNum>0">
-							<block v-for="(items,index2) in item.img" :key="index2">
-								<image :src="'/static/images/news/'+items" mode="widthFix" class="tui-block" :class="[item.imgNum>1?'tui-one-third':'',item.isVideo?'tui-w-full':'']"></image>
+				<tui-list-cell :index="index" @click="detail(item)" :unlined="count==index">
+					<view class="tui-news-flex">
+						<view class="tui-news-picbox" v-if="item.coverDisplay=='LeftTitle'">
+							<block>
+								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block"></image>
 							</block>
-							<view class="tui-btm-badge" v-if="item.isVideo || item.imgNum>3">{{item.isVideo?item.time:item.imgNum+'图'}}</view>
-							<view class="tui-video" v-if="item.isVideo">
-								<tui-icon name="play" color="#fff" :size="24"></tui-icon>
-							</view>
 						</view>
-						<view class="tui-news-tbox tui-flex-column tui-flex-between" :class="[item.imgNum===1 && !item.isVideo?'tui-h165 tui-pl-20':'']">
-							<view class="tui-news-title" :class="[(!item.isVideo && item.imgNum===1)|| item.imgNum===0?'':'tui-pt20']">{{item.title}}</view>
-							<view class="tui-sub-box" :class="[!item.isVideo && item.imgNum===1?'':'tui-pt20']">
-								<view class="tui-sub-source">{{item.source}}</view>
+						<view class="tui-news-tbox tui-flex-column tui-flex-between" :class="[item.coverDisplay=='LeftTitle' && !item.isVideo?'tui-h165 tui-pl-20':'']">
+							<view class="tui-news-title" :class="[(!item.isVideo && item.coverDisplay=='LeftTitle')|| item.coverDisplay=='LeftTitle'?'':'tui-pt20']">{{item.title}}</view>
+							<!-- <view class="tui-time">{{item.modifiedOn.replace(/T/g,' ')}}</view> -->
+							<view class="tui-sub-box" :class="[!item.isVideo && item.coverDisplay=='LeftTitle'?'':'tui-pt20']">
+								<view class="tui-sub-source">{{item.keyWords}} {{item.modifiedOn.replace(/T/g,' ')}}</view>
 								<view class="tui-sub-cmt">
-									<view>{{item.cmtsNum}}评论</view>
+									<view>{{item.commentCount}}评论</view>
 									<view class="tui-scale">
 										<tui-tag padding="10rpx 24rpx" type="gray"  shape="circleRight" v-if="item.isTop">置顶</tui-tag>
 									</view>
 								</view>
 							</view>
 						</view>
+						<view class="tui-news-picbox" :class="[item.coverDisplay=='RightTitle'?'right_picbox':'']" v-if="item.coverDisplay=='RightTitle'">
+							<block>
+								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block"></image>
+							</block>
+						</view>
+					</view>
+					<view class="tui-news-picbox" v-if="item.coverDisplay=='BelowGrid'||item.coverDisplay=='Carousel'">
+						<block v-for="(items,index2) in item.imgPathList" :key="index2">
+							<image @click.stop="handlePreviewImg(item,index2)" :src="pathurl+items.path"></image>
+						</block>
+						<view v-if="item.coverDisplay=='BelowGrid'" class="fack_item"></view>
+					</view>
+					<view class="maxImg" v-if="item.coverDisplay=='BelowTitleBigImg'">
+						<image v-for="items in item.imgPathList" :src="pathurl+items.path" @click.stop="handlePreviewImg(item,index2)"></image>
 					</view>
 				</tui-list-cell>
 			</block>
@@ -66,7 +86,7 @@
 		<tui-tips ref="toast"></tui-tips>
 		<!--加载loadding-->
 		<tui-loadmore v-if="loadding" :index="3" type="primary"></tui-loadmore>
-		<tui-nomore v-if="!pullUpOn" ></tui-nomore>
+		<tui-nomore v-if="!page.isPage" ></tui-nomore>
 		<!--加载loadding-->
 		
 		<!-- 栏目编辑 -->		
@@ -97,7 +117,9 @@
 					  <view class="fack_item"></view>
 				  </view> -->
 				  <view>  
-					<dragSort ref='childDrag' @clickSelect="handleSelect" @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
+					<dragSort ref='childDrag' @clickSelect="handleSelect"
+					 @del.stop="handleIitemDel"
+					 @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
 				  </view>
 			  </view>
 			  <view class="panel">
@@ -141,6 +163,8 @@
 		},
 		data() {
 			return {
+				pathurl:"http://112.126.75.65:10002",
+				searchVal:"",
 				hotSearch: [
 					"早安D站",
 					"2019退役球星",
@@ -345,15 +369,28 @@
 				windowWidth:'',
 				windowHeight:'',
 				isDrag: false, // 激活拖拽
-				columnWidth:0
+				columnWidth:0,
+				typeId: '',
+				page:{
+					isPage:false,
+					pageNum:1,
+					pageSize:10
+				}
 			}
 		},
 		onLoad: function(options) {
-			this.newsList = this.dataSources
+			Object.assign(this.$data,this.$options.data());
+			// this.newsList = this.dataSources
 			const { windowWidth, windowHeight } = uni.getSystemInfoSync();  
 			this.windowWidth = windowWidth
 			this.windowHeight = windowHeight
-			this.getQueryColumn();
+			this.getQueryColumn().then(res=>{
+				this.getQueryList();
+			})
+			
+		},
+		onShow() {
+			this.getChannle();
 		},
 		mounted(){
 			this.$nextTick(function(){
@@ -363,11 +400,80 @@
 			})
 		},
 		methods: {
-			getQueryColumn(){
-				this.$http.getNewsColumn({
+			onSearch(e){
+				this.searchVal = e.detail;
+				this.getQueryList();
+			},
+			onCancel(){
+				this.searchVal = '';
+				this.getQueryList();
+			},
+			handlePreviewImg(item,idx){
+				console.log(item);
+				let imgs = [];
+				item.imgPathList.forEach(item=>{
+					imgs.push(this.pathurl + item.path);
+				})
+				uni.previewImage({
+				  current: imgs[idx], // 当前显示图片的http链接
+				  urls: imgs // 需要预览的图片http链接列表
+				})
+			},
+			// 栏目
+			async getQueryColumn(){
+				let response
+				await this.$http.getNewsColumn({
 					Token:this.token
 				}).then(res=>{
+					this.tabs = res.returnValue;
+					this.typeId = this.tabs[0].itemId;
+					response = res;
+				})
+				return response;
+			},
+			// 列表
+			getQueryList(item,index){
+				if(item){
+					this.typeId = item.itemId;
+					this.currentIdx = index;
+					this.page.pageNum = 1;
+				}
+				this.$http.getNewsList({
+					Token: this.token,
+					TypeId: this.typeId,
+					SearchValue: this.searchVal,
+					Pagenum: this.page.pageNum,
+					Pagesize: this.page.pageSize
+				}).then(res=>{
+					let total =  res.returnValue.total;
+					if(this.page.pageNum*this.page.pageSize<total){
+						this.page.isPage = true;
+					}else {
+						this.page.isPage = false;
+					}
+					let temp = [];
+					if(this.page.pageNum==1){
+						temp = res.returnValue.contentBaseList || [];
+					}else {
+						temp = this.newsList.concat(res.returnValue.contentBaseList)
+					}
+					this.newsList = temp;
+				})
+			},
+			// 获取我的频道
+			getChannle(){
+				this.$http.getChannle({
+					Token: this.token
+				}).then(res=>{
 					console.log(res);
+					let list = res.returnValue;
+					list = list.map(item=>{
+						item.id = item.itemId;
+						return item;
+					})
+					this.myChannel = list.filter(item=>item.isCollect==true);
+					this.recommendChannel = list.filter(item=>!item.isCollect);
+					console.log(this.myChannel,this.recommendChannel,'====');
 				})
 			},
 			clear:function(){},
@@ -388,8 +494,19 @@
 				}else {
 					this.scrollLeft = 0;
 				}
+				this.getQueryList(obj,this.currentIdx)
 				this.isVisible = false;
 				uni.showTabBar()
+			},
+			// 删除我的频道
+			handleIitemDel(item){
+				this.$http.setDelChannle({
+					Token: this.token,
+					NewTypeId: item.itemId
+				}).then(res=>{
+					console.log(res);
+					this.getChannle();
+				})
 			},
 			scroll(e){
 				console.log(e);
@@ -416,12 +533,13 @@
 				this.isEdit = false;
 				this.$refs.childDrag.toggleEdit('finish');
 			},
-			detail(e) {
-				let index = e.index;
-				let url = "/pages/news/newsDetail";
-				if (this.newsList[index].isVideo) {
-					url = "/pages/news/newsVideo";
-				}
+			detail(item) {
+				// let index = e.index;
+				// let url = "/pages/news/newsDetail";
+				// if (this.newsList[index].isVideo) {
+				// 	url = "/pages/news/newsVideo";
+				// }
+				let url = '../../news/newsDetail?id='+item.contentId
 				uni.navigateTo({
 					url: url
 				})
@@ -465,8 +583,15 @@
 			},
 			// 推荐频道添加到我的频道
 			handleAddChannel(item,index){
-				this.myChannel.push(item);
-				this.recommendChannel.splice(index,1)
+				// this.myChannel.push(item);
+				// this.recommendChannel.splice(index,1)
+				this.$http.setAddChannle({
+					Token: this.token,
+					NewTypeId: item.id
+				}).then(res=>{
+					console.log(res);
+					this.getChannle();
+				})
 			},
 			update(arr){
 				this.myChannel = arr;
@@ -474,39 +599,47 @@
 		},
 		//页面相关事件处理函数--监听用户下拉动作
 		onPullDownRefresh: function() {
-			this.newsList = this.dataSources;
-			this.pageIndex = 1;
-			this.pullUpOn = true;
-			this.loadding = false;
+			// this.newsList = this.dataSources;
+			// this.pageIndex = 1;
+			// this.pullUpOn = true;
+			// this.loadding = false;
+			// uni.stopPullDownRefresh();
+			// let options = {
+			// 	msg: "刷新成功，为你更新了10条数据",
+			// 	duration: 2000,
+			// 	type: "translucent"
+			// };
+			// setTimeout(() => {
+			// 	this.$refs.toast.showTips(options);
+			// }, 300);
+			this.page.pageNum = 1;
+			this.getQueryList();
 			uni.stopPullDownRefresh();
-			let options = {
-				msg: "刷新成功，为你更新了10条数据",
-				duration: 2000,
-				type: "translucent"
-			};
-			setTimeout(() => {
-				this.$refs.toast.showTips(options);
-			}, 300);
 		},
 
 		// 页面上拉触底事件的处理函数
 		onReachBottom: function() {
-			if (!this.pullUpOn) return;
+			// if (!this.pullUpOn) return;
 			this.loadding = true;
-			if (this.pageIndex == 3) {
-				this.loadding = false;
-				this.pullUpOn = false
-			} else {
-				let arr = JSON.parse(JSON.stringify(this.dataSources));
-				if (this.pageIndex >= 1) {
-					for (let item of arr) {
-						item.isTop = false;
-					}
-				}
-				this.newsList = this.newsList.concat(arr);
-				this.pageIndex = this.pageIndex + 1;
-				this.loadding = false
+			if(this.page.isPage){
+				this.page.pageNum++;
+				this.getQueryList();
 			}
+			this.loadding = false;
+			// if (this.pageIndex == 3) {
+			// 	this.loadding = false;
+			// 	this.pullUpOn = false
+			// } else {
+			// 	let arr = JSON.parse(JSON.stringify(this.dataSources));
+			// 	if (this.pageIndex >= 1) {
+			// 		for (let item of arr) {
+			// 			item.isTop = false;
+			// 		}
+			// 	}
+			// 	this.newsList = this.newsList.concat(arr);
+			// 	this.pageIndex = this.pageIndex + 1;
+			// 	this.loadding = false
+			// }
 		}
 	}
 </script>
@@ -642,7 +775,15 @@
 			}
 		}
 	}
-
+	.maxImg{
+		width: 100%;
+		height: 315rpx;
+		margin-top: 20rpx;
+	}
+	.maxImg image{
+		width: 100%;
+		height: 100%;
+	}
 	.tui-container {
 		display: flex;
 		flex-direction: column;
@@ -651,9 +792,9 @@
 	}
 
 	.tui-searchbox {
-		padding: 16rpx 20rpx;
+		// padding: 16rpx 20rpx;
 		box-sizing: border-box;
-		background-color: #F2F2F2;
+		// background-color: #F2F2F2;
 	}
 
 	.tui-rolling-search {
@@ -821,9 +962,23 @@
 
 	.tui-news-picbox {
 		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
 		position: relative;
+		margin-top: 20rpx;
 	}
-
+	.tui-news-picbox.right_picbox{
+		margin-left: 20rpx;
+	}
+	.tui-news-picbox image{
+		width: 110px !important;
+		height: 81px !important;
+		object-fit: contain;
+	}
+	.fack_item{
+		flex: 0 0 33%;
+		height: 0;
+	}
 	.tui-w220 {
 		width: 220rpx;
 	}
@@ -856,7 +1011,11 @@
 		-webkit-line-clamp: 2;
 		box-sizing: border-box;
 	}
-
+	.tui-time{
+		color: #999;
+		line-height: 24rpx;
+		padding-top: 20rpx;
+	}
 	.tui-pl-20 {
 		padding-left: 20rpx;
 	}

@@ -2,15 +2,16 @@
 	<view class="wrapper">
 		<div class="content">
 			<div class="title">
-				<input type="text" class="inp" placeholder-class="placeholder" placeholder="填写标题(选填)">
+				<input type="text" v-model="title" class="inp" placeholder-class="placeholder" placeholder="填写标题(选填)">
 			</div>
 			<div class="desc">
 				<textarea class="textarea" placeholder-class="textareaPlace"
 				 maxlength="1000"
+				 v-model="comment"
 				 value="" placeholder="说点什么吧~" />
 			</div>
 			<div class="photos">
-				<tui-upload :value="imgs" :serverUrl="serverUrl" :limit="limit" @complete="uploadResult" @remove="removeImg"></tui-upload>
+				<van-uploader :file-list="fileList" @afterRead="afterRead" :max-count="9" @delete="getDelete" />
 			</div>
 			<tui-list-view color="#777">
 				<tui-list-cell class="cell" arrow @click="handleChoiceCircle">
@@ -19,7 +20,17 @@
 							归属圈子
 						</view>
 						<view class="value">
-							{{circle || '请选择'}}
+							{{circle.name || '请选择'}}
+						</view>
+					</view>
+				</tui-list-cell>
+				<tui-list-cell class="cell" arrow @click="handleOpenLocation">
+					<view class="text">
+						<view class="label">
+							位置
+						</view>
+						<view class="value">
+							{{location || '请选择位置'}}
 						</view>
 					</view>
 				</tui-list-cell>
@@ -58,7 +69,7 @@
 				<div class="btn save" :class="{'active':isPhoneX}">
 					保存
 				</div>
-				<div class="btn send" :class="{'active':isPhoneX}">
+				<div class="btn send" :class="{'active':isPhoneX}" @click="handleSubmit()">
 					发布
 				</div>
 			</div>
@@ -70,11 +81,17 @@
 	export default {
 		data() {
 			return {
-				imgs:[],
 				serverUrl:'',
 				limit: 9, // 限制图片数量
 				isNotice: true,
-				isPhoneX:this.$tui.isPhoneX()
+				isPhoneX:this.$tui.isPhoneX(),
+				title:'',
+				comment: '',
+				groupId: '',
+				location:'',
+				latitude:'',
+				longitude:'',
+				fileList:[]
 			}
 		},
 		onLoad(){
@@ -83,15 +100,72 @@
 		computed:{
 			circle(){
 				return this.$store.state.circle.circle;
+			},
+			token(){
+				return uni.getStorageSync('wechatAuthToken');
 			}
 		},
 		methods: {
-			// 上传完成
-			uploadResult(e){
-				console.log(e)
+			handleOpenLocation(){
+				let that = this;
+				uni.chooseLocation({
+					success:res=>{
+						that.location = res.address;
+						that.latitude = res.latitude;
+						that.longitude = res.longitude;
+					}
+				})
 			},
-			removeImg(e){
-				console.log(e)
+			// 上传完成
+			afterRead(e){
+				console.log(e);
+				let that = this;
+				const { file } = e.mp.detail;
+				this.fileList.push({url:file.url,name:Math.floor(Math.random() * (100 - 1)) + 1});
+			},
+			getDelete(e){
+				let idx = e.mp.detail.index;
+				this.fileList.splice(idx,1);
+			},
+			uploadFile(chatId){
+				// 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+				let idx = 0;
+				let that = this;
+				for(let i=0; i < that.fileList.length; i++){
+					wx.uploadFile({
+						url: 'http://112.126.75.65:10002/api/MomentsContent/Moments/contentreleasepic',
+						filePath: that.fileList[i].url,
+						name: 'file',
+						formData: { 
+							// Token: this.token,
+							// Title: this.title,
+							// Comment: this.comment,
+							// GroupId: this.circle.itemId || '',
+							// Longitude: this.longitude,
+							// Latitude: this.latitude,
+							// Location: this.location
+							ChatId:chatId
+						},
+						success(res) {
+							console.log(res);
+							const data = JSON.parse(res.data);
+							console.log(data);
+							if(i==that.fileList.length-1 && data.returnValue){
+								const callback = () =>{
+									uni.navigateBack({
+										delta:1
+									})
+								}
+								that.$tui.toast({
+									text:'发送成功',
+									success:res=>{
+										callback();
+									}
+								})
+							}
+						}
+					});
+				}
 			},
 			handleNotice(){
 				this.isNotice = !this.isNotice;
@@ -101,6 +175,48 @@
 				uni.navigateTo({
 					url:'/pages/gayCircle/circle/circle'
 				})
+			},
+			handleSubmit(){
+				if(this.comment==''){
+					this.$tui.toast({
+						text:'请输入内容！'
+					})
+				}else {
+					// let obj = {
+					// 	Token: this.token,
+					// 	Title: this.title,
+					// 	Comment: this.comment,
+					// 	GroupId: this.circle.itemId || '',
+					// 	Longitude: this.longitude,
+					// 	Latitude: this.latitude,
+					// 	Location: this.location
+					// }
+					// let data = '';
+					// for(let key in obj){
+					// 	data+=
+					// 		'\r\nContent-Disposition: form-data; name="'+key+'"' +
+					// 		'\r\n' +
+					// 		'\r\n'+obj[key]+
+					// 		'\r\n--XXX' 
+					// }
+					// data+='--';
+					this.$http.submitGayCircleSend({
+						Token: this.token,
+						Title: this.title,
+						Comment: this.comment,
+						GroupId: this.circle.itemId || '',
+						Longitude: this.longitude,
+						Latitude: this.latitude,
+						Location: this.location
+					}).then(res=>{
+						console.log(res);
+						if(res.returnValue){
+							this.$store.commit('setCircle',{})
+							let chatId = res.returnValue;
+							this.uploadFile(chatId)
+						}
+					})
+				}
 			}
 		}
 	}

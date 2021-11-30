@@ -1,14 +1,14 @@
 <template>
 	<view class="wrapper" v-cloak>
 		<div class="header">
-			<div class="title">标题标题标题标题标题！</div>
+			<div class="title">{{detail.title || ''}}</div>
 			<div class="row">
 				<div class="radius" @click="handlePersonalHome">
 					
 				</div>
 				<div class="info">
-					<p class="name">啤酒泡沫</p>
-					<p class="time">2小时前</p>
+					<p class="name">{{detail.userName || ''}}</p>
+					<p class="time">{{detail.modifiedOn}}</p>
 				</div>
 				<div class="fllow" :class="{'active':isFllow}" @click="handleFllow">
 					<tui-icon name="plus" size="12" color="#fff" v-if="!isFllow"></tui-icon>&nbsp;&nbsp;关注
@@ -17,14 +17,14 @@
 		</div>
 		<div class="container">
 			<div class="desc">
-				描述信息 
+				{{detail.description}} 
 			</div>
 			<div class="business">
 				<div class="opreation">					
 					<div class="like" @click="handleLike">
-						<div class="like_icon" :class="{'active':isLike}">
-							<tui-icon v-if="!isLike" name="agree" size="24" color="#C70C15"></tui-icon>
-							<tui-icon v-if="isLike" name="agree" size="24" color="#FFF"></tui-icon>
+						<div class="like_icon" :class="{'active':detail.isPraise}">
+							<tui-icon v-if="!detail.isPraise" name="agree" size="24" color="#C70C15"></tui-icon>
+							<tui-icon v-if="detail.isPraise" name="agree" size="24" color="#FFF"></tui-icon>
 						</div>
 						<p class="text">
 							点赞
@@ -41,34 +41,34 @@
 				</div>
 			</div>
 			<div class="read">
-				阅读 999
+				阅读 {{detail.numOfForward||0}}
 			</div>
 		</div>
 		<div class="commentWrap">
-			<view class="tui-cmt-title">精彩评论（20）</view>
+			<view class="tui-cmt-title">精彩评论（{{commentTotal || 0}}）</view>
 			<view class="tui-cmtbox">
 				<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
 					<image :src="'/static/images/news/' + item.avatar" class="tui-avatar"></image>
 					<view class="tui-cmt-detail">
 						<view class="tui-header-box">
-							<view class="tui-cmt-nickname">{{ item.nickname }}</view>
-							<view class="tui-fabulous" :class="[item.isFabulous ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
-								<text>{{ item.fabulous == 0 ? '赞' : item.fabulous }}</text>
-								<tui-icon :name="iconName(item.isFabulous)" :size="15" :color="itemIconColor(item.isFabulous)"></tui-icon>
+							<view class="tui-cmt-nickname">{{ item.userName }}</view>
+							<view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
+								<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
+								<tui-icon :name="iconName(item.isPraise)" :size="15" :color="itemIconColor(item.isPraise)"></tui-icon>
 							</view>
 						</view>
-						<view class="tui-cmt-content">{{ item.content }}</view>
-						<view class="tui-reply-box" v-if="item.replayNum > 0">
+						<view class="tui-cmt-content">{{ item.comment }}</view>
+						<view class="tui-reply-box" v-if="item.chatterCommentBases">
 							<tui-list-cell
 								backgroundColor="#f2f2f2"
 								:size="28"
-								v-for="(items, index2) in item.reply"
+								v-for="(items, index2) in item.chatterCommentBases"
 								:key="index2"
-								:unlined="item.replayNum < 2 && item.reply.length - 1 == index"
-								@tap="cmtReply"
+								:unlined="item.replayNum < 2 && item.chatterCommentBases.length - 1 == index"
+								@tap="cmtReply(items)"
 							>
-								<view class="tui-flex-1 tui-reply-nickname">{{ items.nickname }}</view>
-								<view class="tui-flex-1">{{ items.content }}</view>
+								<view class="tui-flex-1 tui-reply-nickname">{{ items.userName }}</view>
+								<view class="tui-flex-1">{{ items.comment }}</view>
 							</tui-list-cell>
 							<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
 								<view class="tui-flex-1  tui-cell-last">
@@ -78,8 +78,8 @@
 							</tui-list-cell>
 						</view>
 						<view class="tui-footer">
-							{{ item.time }}
-							<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply">回复</view>
+							{{ item.modifiedOn }}
+							<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply(item)">回复</view>
 						</view>
 					</view>
 				</view>
@@ -87,15 +87,15 @@
 		</div>
 		<div class="footer">
 			<div class="comment" :class="{'active':isPhoneX}">
-				<div class="inp" @click="isShow = true">
+				<div class="inp" @click="handleComment">
 					我来说两句
 				</div>
 				<div class="collection">
-					<p @click="isCollection=!isCollection">
-						<tui-icon name="star" size="20" v-if="!isCollection"></tui-icon>
-						<tui-icon name="star-fill" color="#C70C15" size="20" v-if="isCollection"></tui-icon>
+					<p @click="handleCollection">
+						<tui-icon name="star" size="20" v-if="!isCollect"></tui-icon>
+						<tui-icon name="star-fill" color="#C70C15" size="20" v-if="isCollect"></tui-icon>
 					</p>
-					<p class="num" :class="{'active':isCollection}">0</p>
+					<!-- <p class="num" :class="{'active':isCollect}">{{detail.numOfForward}}</p> -->
 				</div>
 			</div>
 		</div>
@@ -125,7 +125,7 @@
 		data() {
 			return {
 				isPhoneX:this.$tui.isPhoneX(), // 判断是否是iPhoneX以上机型
-				isCollection:false, // 是否收藏
+				isCollect:false, // 是否收藏
 				isFllow: false, // 是否关注
 				isIphone:this.$tui.isIphone, // 是否为iPhone
 				shareData: {
@@ -181,7 +181,15 @@
 				pageIndex: 1,
 				loadding: false,
 				pullUpOn: true,
-				isLike:false
+				isLike:false,
+				id:'',
+				detail:{},
+				page:{
+					isPage: false,
+					pageNum: 1,
+					pageSize: 10
+				},
+				commentTotal:''
 			}
 		},
 		computed: {
@@ -204,8 +212,57 @@
 				console.log(res.height,'res');
 				this.keyboardHeight = res.height;
 			})
+			this.getCommentList();
+		},
+		onLoad(options){
+			this.id = options.id;
+			this.getDetail();
+			
 		},
 		methods: {
+			getDetail(){
+				this.$http.getCircleDetail({
+					MomentsId: this.id
+				}).then(res=>{
+					this.detail = res.returnValue;
+					this.isCollect = this.detail.isCollect;
+				})
+			},
+			handleCollection(){
+				if(!this.isCollect){
+					this.$http.getCircleCollection({
+						ChatId: this.id
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.isCollect = true;
+						}
+					})
+				}else {
+					this.$http.getCircleCancelCollection({
+						ChatId: this.id
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.isCollect = false;
+						}
+					})
+				}
+			},
+			// 评论列表
+			getCommentList(){
+				this.$http.getCircleCommentList({
+					ChatterId:this.id,
+					Pagenum: this.page.pageNum,
+					Pagesize: this.page.pageSize
+				}).then(res=>{
+					this.cmtList = res.returnValue.chatterCommentBaseList;
+					this.commentTotal = res.returnValue.total;
+				})
+			},
+			handleComment(){
+				uni.navigateTo({
+					url:'../sendComment/sendComment?id='+this.id
+				})
+			},
 			handleFllow(){
 				if(this.isFllow){
 					var that = this;
@@ -243,14 +300,23 @@
 				this.fabulous = this.isFabulous ? 123 : 124;
 				this.isFabulous = !this.isFabulous
 			},
-			cmtFabulous: function(e) {
-				let index = e.currentTarget.id;
-				let fabulousObj = this.cmtList[index];
-				let isFabulous = this.cmtList[index].isFabulous;
-				let fabulous = this.cmtList[index].fabulous;
-				let fabulousNum = isFabulous ? fabulous - 1 : fabulous + 1;
-				this.$set(fabulousObj, "fabulous", fabulousNum);
-				this.$set(fabulousObj, "isFabulous", !isFabulous);
+			// 评论点赞
+			cmtFabulous: function(item) {
+				if(!item.isPraise){
+					this.$http.setCircleCmtLike({
+						ChatCommentId: item.commentId
+					}).then(res=>{
+						item.isPraise = true
+						item.likeQty = item.likeQty+1
+					})
+				}else {
+					this.$http.delCircleCmtLike({
+						ChatCommentId: item.commentId
+					}).then(res=>{
+						item.isPraise = false
+						item.likeQty = item.likeQty-1
+					})
+				}
 			},
 			collection: function() {
 				this.isCollection = !this.isCollection
@@ -258,33 +324,44 @@
 					this.tui.toast("收藏成功！");
 				}
 			},
-			cmtReply: function() {
+			cmtReply: function(item) {
 				uni.navigateTo({
-					url: '/pages/news/reply/reply'
+					url: '../reply/reply?id='+this.id+'&commentId='+item.commentId+'&userName='+item.userName+'&comment='+item.comment+'&time='+item.modifiedOn
 				})
 			},
 			handleLike(){
-				this.isLike = !this.isLike;
+				if(!this.detail.isPraise){
+					this.$http.setLikeGayCircle({
+						Token: this.token,
+						ChatterId: this.id
+					}).then(res=>{
+						console.log('点赞',res)
+						this.detail.isPraise = true;
+					})
+				}else {
+					this.$http.cancelLikeGayCircle({
+						Token: this.token,
+						ChatterId: this.id
+					}).then(res=>{
+						console.log('取消点赞',res)
+						this.detail.isPraise = false;
+					})
+				}
 			},
 			handlePersonalHome(){
 				uni.navigateTo({
-					url:'../PersonalHome/PersonalHome'
+					url:'../PersonalHome/PersonalHome?createdBy='+this.detail.createdBy
 				})
 			}
 		},
 		// 页面上拉触底事件的处理函数
 		onReachBottom: function() {
-			if (!this.pullUpOn) return;
 			this.loadding = true
-			if (this.pageIndex == 3) {
-				this.loadding = false;
-				this.pullUpOn = false
-			} else {
-				let arr = JSON.parse(JSON.stringify(this.cmtList));
-				this.cmtList = this.cmtList.concat(arr);
-				this.pageIndex = this.pageIndex + 1;
-				this.loadding = false
+			if(this.page.isPage){
+				this.page.pageNum++;
+				this.getCommentList();
 			}
+			this.loadding = false;
 		}
 	}
 </script>

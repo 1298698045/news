@@ -10,7 +10,7 @@
 			<tui-icon name="link" :size="22"></tui-icon>
 		</view> -->
 		<view class="tui-cmt-btn">
-			<tui-form-button radius="50px" :background="comment?'#C70C15':'#ccc'" @click="comment && submitSendNesCmts()">发表</tui-form-button>
+			<tui-form-button radius="50px" :background="comment?'#C70C15':'#ccc'" @click="comment && submitSendCircle()">发表</tui-form-button>
 		</view>
 	</view>
 </template>
@@ -20,7 +20,8 @@ export default {
 	data() {
 		return {
 			comment:'',
-			NewsId:''
+			id:'',
+			parentId:''
 		};
 	},
 	computed:{
@@ -29,14 +30,15 @@ export default {
 		}
 	},
 	onLoad(options){
-		this.NewsId = options.NewsId
+		this.id = options.id
+		this.parentId = options.parentId;
 	},
 	methods: {
-		submitSendNesCmts(){
-			this.$http.sendNesCmts({
+		submitSendCircle(){
+			this.$http.getCircleAddComment({
 				Token:this.token,
-				NewsId: this.NewsId,
-				ParentId: '',
+				MomentId: this.id,
+				ParentId: this.parentId || '',
 				Comment: this.comment
 			}).then(res=>{
 				if(res.returnValue){

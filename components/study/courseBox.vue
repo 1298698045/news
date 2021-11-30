@@ -9,8 +9,8 @@
 					{{item[name]}}
 				</h3>
 				<div class="position">
-					<span class="tag">{{item[post]}}</span>
-					<span class="tag">{{item[duty]}}</span>
+					<span class="tag">{{item[post] || ''}}</span>
+					<span class="tag">{{item[duty] || ''}}</span>
 				</div>
 				<div class="nums">
 					<span class="color">58</span>讲 | &nbsp;&nbsp;<span class="color">20000</span> 人已学习
@@ -102,6 +102,10 @@
 				.desc{
 					font-size: 24rpx;
 					line-height: 1.5;
+					overflow: hidden;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 3;
 				}
 			}
 		}

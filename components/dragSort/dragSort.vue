@@ -16,15 +16,15 @@
 						:x="item.x" :y="item.y"
 						:damping="40"
 						:disabled="!isEdit"
-						@click="onClick($event,item)"
+						@click="!isEdit && onClick($event,item)"
 						@change="onChange($event, item)"
 						@touchstart="onTouchstart(item)"
 						@touchend="onTouchend(item, index)"
 						:style="{width: columnWidth + 'px', height: rpxTopx(rowHeight) + 'px', zIndex: item.zIndex}">
 						<view class="dragSort-view__con">
 							<view class="dragSort-view__label is-ellipsis">{{item[label]}}</view>
-							<view class="dragSort-view__btn-del">
-								<tui-icon v-if="isEdit" @click="handleDel(item)" name="shut" size='10'></tui-icon>
+							<view class="dragSort-view__btn-del" @click.stop="handleDel(item)">
+								<tui-icon v-if="isEdit" name="shut" size='10'></tui-icon>
 							</view>
 							<!-- <text class="dragSort-view__btn-del" v-if="isEdit" @click="handleDel(item)">X</text> -->
 						</view>
@@ -152,15 +152,16 @@
 			
 			/* 删除某项 */
 			handleDel(obj) {
-				for(var i = 0, len = this.list.length; i < len; i++) {
-					var item = this.list[i];
-					if(obj.id == item.id) {
-						var theList = JSON.parse(JSON.stringify(this.list));
-						theList.splice(i, 1);
-						this.updateList(theList);
-						break;
-					}
-				}
+				// for(var i = 0, len = this.list.length; i < len; i++) {
+				// 	var item = this.list[i];
+				// 	if(obj.id == item.id) {
+				// 		var theList = JSON.parse(JSON.stringify(this.list));
+				// 		theList.splice(i, 1);
+				// 		this.updateList(theList);
+				// 		break;
+				// 	}
+				// }
+				this.$emit('del',obj);
 			},
 			
 			/* 处理源数据列表，生成展示用的cloneList和positionList布局位置信息 */
@@ -396,6 +397,9 @@
 		border-radius: 5rpx;
 		font-size: 24rpx;
 		color: #333333;
+	}
+	.dragSort-view.disabled{
+		pointer-events: none;
 	}
 	.dragSort-view.is-touched { opacity: .9;}
 	.dragSort-view__con { position: relative; height: 100%;}

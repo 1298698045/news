@@ -15,7 +15,7 @@
 					<div class="name">
 						课程
 					</div>
-					<CourseBox :list="recommendList" :desc="'desc1'" @clickIn="handleClickIn" />
+					<CourseBox :list="recommendList" :name="'name'"  :desc="'description'" @clickIn="handleClickIn" />
 				</div>
 			</div>
 		</div>
@@ -88,7 +88,17 @@
 				]
 			}
 		},
+		onLoad() {
+			this.getQuery();
+		},
 		methods: {
+			getQuery(){
+				this.$http.getStudyList({
+					
+				}).then(res=>{
+					this.recommendList = res.returnValue;
+				})
+			},
 			bannerDetail(){
 				uni.navigateTo({
 					url:'study'
@@ -96,7 +106,7 @@
 			},
 			handleClickIn(item,index){
 				uni.navigateTo({
-					url:'study'
+					url:'study?courseId='+item.courseId
 				})
 			}
 		}

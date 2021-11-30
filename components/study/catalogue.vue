@@ -156,8 +156,16 @@
 			}
 		},
 		onReady() {
+			this.getQuery();
 		},
 		methods:{
+			getQuery(){
+				this.$http.getStudyCatalogue({
+					
+				}).then(res=>{
+					console.log(res);
+				})
+			},
 			handleHref(item,index){
 				uni.navigateTo({
 					url:'../../pages/study/studyArticle/studyArticle'

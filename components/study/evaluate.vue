@@ -97,6 +97,18 @@
 					}
 				]
 			}
+		},
+		onReady(){
+			this.getQuery();
+		},
+		methods:{
+			getQuery(){
+				this.$http.getStudyComment({
+					
+				}).then(res=>{
+					console.log(res);
+				})
+			}
 		}
 	}
 </script>

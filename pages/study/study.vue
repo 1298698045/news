@@ -41,7 +41,7 @@
 			<div class="container">
 				<swiper class="d-swiper-box" :current="currIndex" @change="changeSwiper" :style="{height:swiperHeight}">
 					<swiper-item>
-						<Introduce class="catalogue_0" v-if="currIndex==0" />
+						<Introduce class="catalogue_0" :courseId="courseId" v-if="currIndex==0" />
 					</swiper-item>
 					<swiper-item>
 						<Catalogue class="catalogue_1" v-if="currIndex==1" />
@@ -87,10 +87,12 @@
 				swiperHeight:'',
 				isFixed: false,
 				userFavor:'',
-				tempHeight:''
+				tempHeight:'',
+				courseId: ''
 			}
 		},
-		onLoad() {
+		onLoad(options) {
+			this.courseId = options.courseId;
 			var tempHeight = 800;
 			var that = this;
 			uni.getSystemInfo({
@@ -122,6 +124,13 @@
 			this.getHeight('.catalogue_'+0);
 		},
 		methods: {
+			getStudyFavor(){
+				this.$http.getStudyFavor({
+					CourseId: this.courseId
+				}).then(res=>{
+					console.log(res);
+				})
+			},
 			async handleTab(index){
 				this.currIndex = index;
 				let className = '.catalogue_'+index;				
@@ -149,7 +158,24 @@
 				return height;
 			},
 			FavorSubject(){
-				this.userFavor = !this.userFavor;
+				// this.userFavor = !this.userFavor;
+				if(!this.userFavor){					
+					this.$http.getStudyCollection({
+						CourseId: this.courseId
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.userFavor = true;
+						}
+					})
+				}else {
+					this.$http.getStudyCancelCollection({
+						CourseId: this.courseId
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.userFavor = false;
+						}
+					})
+				}
 			}
 		},
 		onPageScroll(e) {

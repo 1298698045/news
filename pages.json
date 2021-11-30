@@ -189,8 +189,26 @@
                     "style" :                                                                                    
                 {
                     "navigationBarTitleText": "个人主页",
-                    "enablePullDownRefresh": false,
+                    "enablePullDownRefresh": true,
 					"navigationStyle": "custom"
+                }
+                
+                }
+                ,{
+                    "path" : "sendComment/sendComment",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "reply/reply",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
                 }
                 
                 }
@@ -241,7 +259,8 @@
 			"van-popup":"/wxcomponents/vant/popup/index",
 			"van-tab":"/wxcomponents/vant/tab/index",
 			"van-tabs":"/wxcomponents/vant/tabs/index",
-			"van-field":"/wxcomponents/vant/field/index"
+			"van-field":"/wxcomponents/vant/field/index",
+			"van-uploader":"/wxcomponents/vant/uploader/index"
 		}
 	},
 	"easycom": {

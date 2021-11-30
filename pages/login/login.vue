@@ -57,7 +57,7 @@
 		onShow() {
 			let localTime = uni.getStorageSync('timeStamp');
 			let differTime = this.currenStamp - localTime;
-			let stamp30time = 30 * 60 * 100;
+			let stamp30time = 30 * 60 * 1000;
 			if(differTime<=stamp30time){
 				uni.switchTab({
 					url:'../tabbbar/index/index'
