@@ -9,25 +9,25 @@
 				<view class="tag">党员认证</view>
 			</view>
 			<view class="arrow_icon">
-				<tui-icon name="arrowright"></tui-icon>
+				<tui-icon name="arrowright" color="#ffffff"></tui-icon>
 			</view>
 		</view>
 		<view class="row">
 			<view class="box">
 				<view class="icon">
-					<tui-icon name="star" color="#ff7c0a"></tui-icon>
+					<image src="../../../static/images/news/1-a.png" mode="widthFix"></image>
 				</view>
 				<view>我的收藏</view>
 			</view>
 			<view class="box">
 				<view class="icon">
-					<tui-icon name="message" color="#4ee8ff"></tui-icon>
+					<image src="../../../static/images/news/1-b.png" mode="widthFix"></image>
 				</view>
 				<view>我的评论</view>
 			</view>
 			<view class="box">
 				<view class="icon">
-					<tui-icon name="clock" color="#55ff7f"></tui-icon>
+					<image src="../../../static/images/news/1-c.png" mode="widthFix"></image>
 				</view>
 				<view>浏览历史</view>
 			</view>
@@ -35,31 +35,36 @@
 		<div class="content">
 			<tui-list-view color="#777">
 				<tui-list-cell class="cell" arrow>
-					<tui-icon name="send" color="#C70C15" size="24"></tui-icon>
+					<image src="../../../static/images/news/2-a.png" mode="widthFix"></image>
+					<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
 					<view class="text">
 						我的历程
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow>
-					<tui-icon name="people" color="#C70C15" size="24"></tui-icon>
+					<image src="../../../static/images/news/2-b.png" mode="widthFix"></image>
+					<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
 					<view class="text">
 						党员承诺
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow>
-					<tui-icon name="kefu" color="#C70C15" size="24"></tui-icon>
+					<image src="../../../static/images/news/2-c.png" mode="widthFix"></image>
+					<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
 					<view class="text">
 						在线客服
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow @click="handleIntegral">
-					<tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon>
+					<image src="../../../static/images/news/2-d.png" mode="widthFix"></image>
+					<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
 					<view class="text">
 						学习积分
 					</view>
 				</tui-list-cell>
 				<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
-					<tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon>
+					<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
+					<!-- <tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon> -->
 					<view class="text">
 						我要留言
 					</view>
@@ -67,7 +72,7 @@
 			</tui-list-view>
 		</div>
 		<div class="outBtn">
-			<van-button type="default" :block="true" :round="true" color="#C70C15" @click.stop="handleOut">退出登录</van-button>
+			<van-button type="default" :block="true" :round="true" color="#d24941" @click.stop="handleOut">退出登录</van-button>
 		</div>
 	</view>
 </template>
@@ -144,7 +149,7 @@
 	.header{
 		width: 100%;
 		padding: 30rpx 20rpx;
-		background: #C70C15;
+		background: #d24941;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
@@ -178,7 +183,14 @@
 		background: #fff;
 		.box{
 			.icon{
+				width: 50rpx;
+				height: 50rpx;
 				text-align: center;
+				margin: 0 auto 10rpx;
+				image{
+					width: 50rpx;
+					height: 50rpx;
+				}
 			}
 		}
 	}
@@ -186,6 +198,9 @@
 		.tui-list-cell{
 			display: flex;
 			align-items: center;
+			image{
+				width: 40rpx;
+			}
 			.text{
 				padding-left: 20rpx;
 			}

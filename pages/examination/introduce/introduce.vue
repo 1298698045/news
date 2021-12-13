@@ -4,7 +4,7 @@
 			<div class="content">
 				<div class="row">
 					<p class="label">考试题目</p>
-					<p class="val">微信</p>
+					<p class="val">{{name || ''}}</p>
 				</div>
 				<div class="row">
 					<p class="label">考题数量</p>
@@ -38,13 +38,19 @@
 	export default {
 		data() {
 			return {
-				isPhoneX:this.$tui.isPhoneX()
+				isPhoneX:this.$tui.isPhoneX(),
+				id: '',
+				name: ''
 			}
+		},
+		onLoad(options) {
+			this.name = options.name;
+			this.id = options.id;
 		},
 		methods: {
 			handleHref(){
 				uni.navigateTo({
-					url:'../subject/subject'
+					url:'../subject/subject?id='+this.id
 				})
 			}
 		}
@@ -67,7 +73,7 @@ page{
 					color: #999999;
 					margin-left: 20rpx;
 					span{
-						color: #C70C15;
+						color: #d24941;
 					}
 				}
 			}
@@ -86,7 +92,7 @@ page{
 				line-height: 100rpx;
 				font-size: 32rpx;
 				text-align: center;
-				background: #C70C15;
+				background: #d24941;
 				color: #FFFFFF;
 			}
 			.btn.active{

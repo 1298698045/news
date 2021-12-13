@@ -9,7 +9,9 @@
 		<div class="header">
 			<div class="cover"></div>
 			<div class="infoWrap">
-				<div class="avatar"></div>
+				<div class="avatar">
+					<image :src="userDetail.thumbnailPath"></image>
+				</div>
 				<div class="operation">
 					<div class="box">
 						<p class="btn follow" :class="{'active':isFollow}" @click="handleFoloow">+ 关注</p>
@@ -32,7 +34,7 @@
 			<view class="panelBox" v-for="(item,index) in list" :key="index" @click="handleDetail(item)">
 				<view class="head">
 					<view class="avatar">
-						{{item.userName}}
+						<image :src="item.thumbnailPath" mode=""></image>
 					</view>
 					<view class="info">
 						<p class="name">{{item.userName}}</p>
@@ -99,7 +101,7 @@
 					</view>
 					<view class="btn" :class="{'active':item.isPraise}" @click.stop="handleItemLike(item)">
 						<tui-icon v-if="!item.isPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#C70C15" ></tui-icon>
+						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
 						<span v-if="item.numOfLike==0||item.numOfLike==null">
 						点赞
 						</span>
@@ -135,23 +137,24 @@
 				scrollTop: '',
 				opacity:'',
 				showActionSheet: false,
-				itemList: [{
-					text: "收藏",
-					color: "#2B2B2B"
-				}, {
-					text: "编辑动态",
-					color: "#2B2B2B"
-				},
-				{
-					text: "设为置顶动态",
-					color: "#2B2B2B"
-				},{
-					text: "设为分享范围",
-					color: "#2B2B2B"
-				},
+				itemList: [
+				// {
+				// 	text: "收藏",
+				// 	color: "#2B2B2B"
+				// }, {
+				// 	text: "编辑动态",
+				// 	color: "#2B2B2B"
+				// },
+				// {
+				// 	text: "设为置顶动态",
+				// 	color: "#2B2B2B"
+				// },{
+				// 	text: "设为分享范围",
+				// 	color: "#2B2B2B"
+				// },
 				{
 					text: "删除动态",
-					color: "#C70C15"
+					color: "#d24941"
 				}],
 				list:[
 					{
@@ -212,7 +215,9 @@
 				},
 				userId: "",
 				userDetail:{},
-				totalLikeQty:""
+				totalLikeQty:"",
+				chatterId: '',
+				thumbnailPath:''
 			}
 		},
 		onLoad(options){
@@ -241,6 +246,9 @@
 						temp = this.list.concat(res.returnValue.historyChat.chatterBaseList || []);
 					}
 					this.list = temp;
+					this.list.map(item=>{
+						item.modifiedOn = this.$tui.formData(item.modifiedOn);
+					})
 				})
 			},
 			handleItemLike(item){
@@ -271,7 +279,8 @@
 				console.log('1231231', e)
 				// this.top = e.top;
 			},
-			hanldeMore(){
+			hanldeMore(item){
+				this.chatterId = item.chatterId;
 				this.showActionSheet = true
 			},
 			closeActionSheet(){
@@ -281,26 +290,25 @@
 				let index = e.index;
 				switch(index){
 					case 0:
-						this.$tui.toast({
-							text:'收藏',
-							success:(res)=>{
-								this.showActionSheet = false
+						const callback = (res)=>{
+							console.log(res);
+							if(res){
+								this.handleDelete();
 							}
-						})
-						break;
-					case 1:
-						this.$tui.toast('编辑动态')
-						break;
-					case 2:
-						this.$tui.toast('设置置顶动态')
-						break;
-					case 3:
-						this.$tui.toast('设置分享范围')
-						break;
-					case 4:
-						this.$tui.toast('删除动态') 
+						}
+						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d24941')
 						break;
 				}
+			},
+			handleDelete(){
+				this.$http.deleteCircle({
+					ChatterId: this.chatterId
+				}).then(res=>{
+					if(res.returnValue)
+					this.showActionSheet = false;
+					this.page.pageNum = 1;
+					this.getQuery(); 
+				})
 			},
 			handleDetail(item){
 				uni.navigateTo({
@@ -327,7 +335,7 @@
 							that.isFollow = true;
 						}
 					}
-					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#C70C15')
+					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#d24941')
 				}else {
 					this.isFollow = !this.isFollow;
 				}
@@ -390,10 +398,15 @@
 				width: 100rpx;
 				height: 100rpx;
 				border-radius: 50%;
-				background: #C70C15;
+				background: #d24941;
 				position: absolute;
 				top: -50rpx;
 				left: 30rpx;
+				image{
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+				}
 			}
 			.operation{
 				position: absolute;
@@ -408,7 +421,7 @@
 						text-align: center;
 						font-size: 24rpx;
 						color: #FFFFFF;
-						background: #C70C15;
+						background: #d24941;
 						border-radius: 50rpx;
 						padding: 0;
 					}
@@ -439,7 +452,7 @@
 					font-size: 28rpx;
 					color: #333333;
 					.num{
-						color: #C70C15;
+						color: #d24941;
 						padding-right: 10rpx;
 						font-weight: bold;
 					}
@@ -461,10 +474,15 @@
 					height: 80rpx;
 					line-height: 80rpx;
 					text-align: center;
-					background: #C70C15;
+					background: #d24941;
 					border-radius: 50%;
 					color: #fff;
 					font-size: 28rpx;
+					image{
+						width: 100%;
+						height: 100%;
+						border-radius: 50%;
+					}
 				}
 				.info{
 					margin-left: 20rpx;
@@ -590,7 +608,7 @@
 					}
 				}
 				.btn.active{
-					color: #C70C15;
+					color: #d24941;
 				}
 			}
 		}

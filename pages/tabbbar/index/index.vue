@@ -2,19 +2,24 @@
 	<view class="wrapper">
 		<div class="column">
 			<div class="box" @click="handleHref(1)">
-				<div class="icon"></div>
+				<div class="icon">
+					<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+				</div>
 				<p class="text">考试</p>
 			</div>
 			<div class="box" @click="handleHref(2)">
-				<div class="icon"></div>
+				<div class="icon">
+					<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
+				</div>
 				<p class="text">学习</p>
 			</div>
 			<div class="fake_item"></div>
 			<div class="fake_item"></div>
 		</div>
-		<button @click="getLogin()">获取code</button>
-		<h1 class="code">{{code}}</h1>
-		<span class="tag" @click="handleCopyCode">复制</span>
+		<div class="hr"></div>
+		<!-- <button @click="getLogin()">获取code</button> -->
+	<!-- 	<h1 class="code">{{code}}</h1>
+		<span class="tag" @click="handleCopyCode">复制</span> -->
 <!-- 		<input class="inp" type="text" @input="handleInput">
 		<p v-for="item in copyArr">{{item.name}}</p> -->
 	</view>
@@ -24,7 +29,7 @@
 	import dragSort from '@/components/dragSort/dragSort.vue'
 	import { fakeData } from '@/common/data.js'
 	export default {
-		components: {
+		components: { 
 			dragSort
 		},
 		data() { 
@@ -199,6 +204,14 @@
 </script>
 
 <style lang="scss">
+page{
+	background: #FFFFFF;
+}
+.hr{
+	width: 100%;
+	height: 20rpx;
+	background: #F4F4F4;
+}
 .inp{
 	width: 100px;
 	height: 30px;
@@ -210,11 +223,10 @@
 		display: flex;
 		background: #FFFFFF;
 		font-size: 28rpx;
-		justify-content: space-between;
 		padding:30rpx 0;
 		flex-wrap: wrap;
 		.box{
-			width: 33%;
+			width: 20%;
 			text-align: center;
 			.icon{
 				width: 80rpx;
@@ -222,9 +234,16 @@
 				border-radius: 50%;
 				background: #CCCCCC;
 				margin: 0 auto;
+				image{
+					width: 100%;
+					height: 100%;
+					border-radius: 50%;
+				}
 			}
 			.text{
 				padding-bottom: 10rpx;
+				padding-top: 10rpx;
+				font-size: 24rpx;
 			}
 		}
 		.fake_item{

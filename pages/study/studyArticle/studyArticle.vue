@@ -2,11 +2,11 @@
 	<view class="wrapper">
 		<div class="header">
 			<div class="title">
-				中国共产党人初心的核心要义是对人民的赤胆忠诚中国共产党人初心的核心要义是对人民的赤胆忠诚
+				{{detail.name}}
 			</div>
 			<div class="info">
 				<span class="time">
-					2021-10-10
+					{{detail.modifiedOn}}
 				</span>
 				<span class="author">作者</span>
 			</div>
@@ -15,7 +15,7 @@
 					<p class="name">
 						《党建学习》
 					</p>
-					<p class="tag" @click="handleBack">课程介绍 <tui-icon class="icon" name="arrowright" size='20' color="#C70C15"></tui-icon></p>
+					<p class="tag" @click="handleBack">课程介绍 <tui-icon class="icon" name="arrowright" size='20' color="#d24941"></tui-icon></p>
 				</div>
 				<div class="banner">
 					
@@ -40,62 +40,62 @@
 		</div>
 		<div class="center">
 			<div class="container">
-				 <rich-text :nodes="article"></rich-text>
+				 <rich-text :nodes="detail.description"></rich-text>
 			</div>
 			<div class="hr"></div>
 			 <div class="commentWrap">
-				<view class="tui-cmt-title">精彩留言（20）</view>
-				<view class="tui-cmtbox">
-					<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
-						<image :src="'/static/images/news/' + item.avatar" class="tui-avatar"></image>
-						<view class="tui-cmt-detail">
-							<view class="tui-header-box">
-								<view class="tui-cmt-nickname">{{ item.nickname }}</view>
-								<view class="tui-fabulous" :class="[item.isFabulous ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
-									<text>{{ item.fabulous == 0 ? '赞' : item.fabulous }}</text>
-									<tui-icon :name="iconName(item.isFabulous)" :size="15" :color="itemIconColor(item.isFabulous)"></tui-icon>
-								</view>
-							</view>
-							<view class="tui-cmt-content">{{ item.content }}</view>
-							<view class="tui-reply-box" v-if="item.replayNum > 0">
-								<tui-list-cell
-									backgroundColor="#f2f2f2"
-									:size="28"
-									v-for="(items, index2) in item.reply"
-									:key="index2"
-									:unlined="item.replayNum < 2 && item.reply.length - 1 == index"
-									@tap="cmtReply"
-								>
-									<view class="tui-flex-1 tui-reply-nickname">{{ items.nickname }}</view>
-									<view class="tui-flex-1">{{ items.content }}</view>
-								</tui-list-cell>
-								<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
-									<view class="tui-flex-1  tui-cell-last">
-										<text>共{{ item.replayNum }}条回复</text>
-										<tui-icon name="arrowright" :size="22" color="#C70C15"></tui-icon>
-									</view>
-								</tui-list-cell>
-							</view>
-							<view class="tui-footer">
-								{{ item.time }}
-								<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply">回复</view>
-							</view>
-						</view>
-					</view>
-				</view>
+			 	<view class="tui-cmt-title">精彩留言（{{commentTotal || 0}}）</view>
+			 	<view class="tui-cmtbox">
+			 		<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
+			 			<image :src="item.thumbnailPath" class="tui-avatar"></image>
+			 			<view class="tui-cmt-detail">
+			 				<view class="tui-header-box">
+			 					<view class="tui-cmt-nickname">{{ item.userName }}</view>
+			 					<view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
+			 						<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
+			 						<tui-icon :name="iconName(item.isPraise)" :size="15" :color="itemIconColor(item.isPraise)"></tui-icon>
+			 					</view>
+			 				</view>
+			 				<view class="tui-cmt-content">{{ item.comment }}</view>
+			 				<view class="tui-reply-box" v-if="item.courseChapterCommentBases">
+			 					<tui-list-cell
+			 						backgroundColor="#f2f2f2"
+			 						:size="28"
+			 						v-for="(items, index2) in item.courseChapterCommentBases"
+			 						:key="index2"
+			 						:unlined="item.replayNum < 2 && item.courseChapterCommentBases.length - 1 == index"
+			 						@tap="cmtReply(items)"
+			 					>
+			 						<view class="tui-flex-1 tui-reply-nickname">{{ items.userName }}</view>
+			 						<view class="tui-flex-1">{{ items.comment }}</view>
+			 					</tui-list-cell>
+			 					<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
+			 						<view class="tui-flex-1  tui-cell-last">
+			 							<text>共{{ item.replayNum }}条回复</text>
+			 							<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
+			 						</view>
+			 					</tui-list-cell>
+			 				</view>
+			 				<view class="tui-footer">
+			 					{{ item.modifiedOn }}
+			 					<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply(item)">回复</view>
+			 				</view>
+			 			</view>
+			 		</view>
+			 	</view>
 			 </div>
 		</div>
 		<div class="footer">
 			<div class="comment" :class="{'active':isPhoneX}">
-				<div class="inp" @click="isShow = true">
+				<div class="inp" @click="handleRoute">
 					我来说两句
 				</div>
-				<div class="collection">
-					<p @click="isCollection=!isCollection">
-						<tui-icon name="star" size="20" v-if="!isCollection"></tui-icon>
-						<tui-icon name="star-fill" color="#C70C15" size="20" v-if="isCollection"></tui-icon>
+				<div class="collection" @click="FavorSubject">
+					<p>
+						<tui-icon name="star" size="20" v-if="!detail.isCollect"></tui-icon>
+						<tui-icon name="star-fill" color="#d24941" size="20" v-if="detail.isCollect"></tui-icon>
 					</p>
-					<p class="num" :class="{'active':isCollection}">0</p>
+					<!-- <p class="num" :class="{'active':detail.isCollect}">0</p> -->
 				</div>
 			</div>
 		</div>
@@ -175,15 +175,23 @@
 				comment:'',
 				isShow:false,
 				keyboardHeight:'',
+				chapterId:'',
+				detail:{},
+				page:{
+					isPage: false,
+					pageNum:1,
+					pageSize:10
+				},
+				commentTotal:''
 			}
 		},
 		computed: {
 			iconColor() {
-				return this.isFabulous ? '#C70C15' : '#333'
+				return this.isFabulous ? '#d24941' : '#333'
 			},
 			itemIconColor() {
 				return function(isFabulous) {
-					return isFabulous ? '#C70C15' : '#9a9a9a'
+					return isFabulous ? '#d24941' : '#9a9a9a'
 				}
 			},
 			iconName() {
@@ -197,8 +205,43 @@
 				console.log(res.height,'res');
 				this.keyboardHeight = res.height;
 			})
+			this.getCommentList();
+		},
+		onLoad(options) {
+			this.chapterId = options.chapterId;
+			this.getQuery();
+			// this.getCommentList();
 		},
 		methods: {
+			getQuery(){
+				this.$http.getStudyDetail({
+					chapterId:this.chapterId
+				}).then(res=>{
+					this.detail = res.returnValue;
+				})
+			},
+			getCommentList(){
+				this.$http.getStudyCommentList({
+					ChapterId: this.chapterId,
+					Pagenum:this.page.pageNum,
+					Pagesize: this.page.pageSize
+				}).then(res=>{
+					this.commentTotal = res.returnValue.total;
+					if(this.page.pageNum*this.page.pageSize < this.commentTotal){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let temp = [];
+					if(this.page.pageNum==1){
+						temp = res.returnValue.chapterCommentList;
+					}else {
+						temp = this.cmtList.concat(res.returnValue.chapterCommentList);
+					}
+					this.cmtList = temp;
+					
+				})
+			},
 			changeKeyBoard(e){
 				console.log(e);
 			},
@@ -215,14 +258,22 @@
 				this.fabulous = this.isFabulous ? 123 : 124;
 				this.isFabulous = !this.isFabulous
 			},
-			cmtFabulous: function(e) {
-				let index = e.currentTarget.id;
-				let fabulousObj = this.cmtList[index];
-				let isFabulous = this.cmtList[index].isFabulous;
-				let fabulous = this.cmtList[index].fabulous;
-				let fabulousNum = isFabulous ? fabulous - 1 : fabulous + 1;
-				this.$set(fabulousObj, "fabulous", fabulousNum);
-				this.$set(fabulousObj, "isFabulous", !isFabulous);
+			cmtFabulous: function(item) {
+				if(!item.isPraise){
+					this.$http.getStudyCommentLike({
+						ChapterCommentId: item.commentId
+					}).then(res=>{
+						item.isPraise = true
+						item.likeQty = item.likeQty+1
+					})
+				}else {
+					this.$http.getStudyCancelCommentLike({
+						ChapterCommentId: item.commentId
+					}).then(res=>{
+						item.isPraise = false
+						item.likeQty = item.likeQty-1
+					})
+				}
 			},
 			collection: function() {
 				this.isCollection = !this.isCollection
@@ -231,30 +282,61 @@
 				}
 			},
 			// 回复
-			cmtReply: function() {
+			cmtReply: function(item) {
 				uni.navigateTo({
-					url: '../reply/reply'
+					url: '../reply/reply?id='+this.chapterId+'&commentId='+item.commentId+'&userName='+item.userName+'&comment='+item.comment+'&time='+item.modifiedOn
 				})
 			},
 			handleBack(){
 				uni.navigateBack({
 					delta:1
 				})
+			},
+			handleRoute(){
+				uni.navigateTo({
+					url:'../sendComment/sendComment?id='+this.chapterId
+				})
+			},
+			FavorSubject(){
+				// this.userFavor = !this.userFavor;
+				if(!this.detail.isCollect){					
+					this.$http.getStudyCollection({
+						CourseId: this.detail.chapterId
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.detail.isCollect = true;
+						}
+					})
+				}else {
+					this.$http.getStudyCancelCollection({
+						CourseId: this.detail.chapterId
+					}).then(res=>{
+						if(res.returnValue!=''){
+							this.detail.isCollect = false;
+						}
+					})
+				}
 			}
 		},
 		// 页面上拉触底事件的处理函数
 		onReachBottom: function() {
-			if (!this.pullUpOn) return;
+			// if (!this.pullUpOn) return;
+			// this.loadding = true
+			// if (this.pageIndex == 3) {
+			// 	this.loadding = false;
+			// 	this.pullUpOn = false
+			// } else {
+			// 	let arr = JSON.parse(JSON.stringify(this.cmtList));
+			// 	this.cmtList = this.cmtList.concat(arr);
+			// 	this.pageIndex = this.pageIndex + 1;
+			// 	this.loadding = false
+			// }
 			this.loadding = true
-			if (this.pageIndex == 3) {
-				this.loadding = false;
-				this.pullUpOn = false
-			} else {
-				let arr = JSON.parse(JSON.stringify(this.cmtList));
-				this.cmtList = this.cmtList.concat(arr);
-				this.pageIndex = this.pageIndex + 1;
-				this.loadding = false
+			if(this.page.isPage){
+				this.page.pageNum++;
+				this.getCommentList()();
 			}
+			this.loadding = false;
 		}
 	}
 </script>
@@ -290,7 +372,7 @@ page{
 					padding: 10rpx 20rpx;
 					border-radius: 50rpx;
 					background: #ffcccc;
-					color: #C70C15;
+					color: #d24941;
 					font-size: 28rpx;
 					display: flex;
 					justify-content: center;
@@ -303,14 +385,14 @@ page{
 			.banner{
 				width: 100%;
 				height: 300rpx;
-				background: #C70C15;
+				background: #d24941;
 				border-radius: 20rpx;
 				margin: 30rpx 0;
 			}
 		}
 		.play{
 			width: 100%;
-			background: #C70C15;
+			background: #d24941;
 			border-radius: 20rpx;
 			box-shadow: 0rpx 5rpx 15rpx 5rpx rgba(199, 12, 21, 0.5);
 			border-top-right-radius: 100rpx;
@@ -378,7 +460,7 @@ page{
 					color: #999999;
 				}
 				.num.active{
-					color: #C70C15;
+					color: #d24941;
 				}
 			}
 		}
@@ -425,7 +507,7 @@ page{
 					.btn{
 						border: none;
 						color: #FFFFFF;
-						background: #C70C15;
+						background: #d24941;
 						font-size: 28rpx;
 						width: 150rpx;
 						height: 50rpx;
@@ -455,7 +537,7 @@ page{
 	top: 18%;
 	width: 6rpx;
 	height: 64%;
-	background: #C70C15;
+	background: #d24941;
 }
 .tui-cmtbox {
 	padding-bottom: 20rpx;
@@ -488,7 +570,7 @@ page{
 }
 
 .tui-cmt-nickname {
-	color: #c70c15;
+	color: #d24941;
 }
 
 .tui-fabulous {
@@ -519,7 +601,7 @@ page{
 	display: flex;
 	align-items: center;
 	word-wrap: break-word;
-	color: #C70C15;
+	color: #d24941;
 }
 .tui-flex-1 {
 	flex: 1;
@@ -540,7 +622,7 @@ page{
 }
 
 .tui-primary {
-	color: #C70C15 !important;
+	color: #d24941 !important;
 }
 
 .tui-ml {

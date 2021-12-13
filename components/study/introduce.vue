@@ -3,8 +3,7 @@
 		<div class="panel introduce">
 			<div class="name">简介</div>
 			<div class="desc">
-				党建学习除了传统方式以外，各大政府部门正在探索研究如何让学习跟具有沉浸感，
-				和感知，通过VR技术还原历史，让大家一起参与和见证历史，将会是一种全新的学习方式
+				{{ description }}
 			</div>
 		</div>
 		<div class="panel notice">
@@ -32,23 +31,26 @@
 <script>
 	export default {
 		name:'Introduce',
-		props:['courseId'],
+		// props:['courseId','description'],
+		props:{
+			courseId:{
+				type:String,
+				default: ''
+			},
+			description:{
+				type:String,
+				default: '描述信息'
+			}
+		},
 		data(){
 			return {
 				
 			}
 		},
 		mounted(){
-			this.getQuery();
 		},
 		methods:{
-			getQuery(){
-				this.$http.getStudyInterface({
-					CourseId:this.courseId
-				}).then(res=>{
-					console.log(res);
-				})
-			}
+			
 		}
 	}
 </script>

@@ -10,7 +10,7 @@
 			<tui-icon name="link" :size="22"></tui-icon>
 		</view> -->
 		<view class="tui-cmt-btn">
-			<tui-form-button radius="50px" :background="comment?'#C70C15':'#ccc'" @click="comment && submitSendNesCmts()">发表</tui-form-button>
+			<tui-form-button radius="50px" :background="comment?'#d24941':'#ccc'" @click="comment && submitSendNesCmts()">发表</tui-form-button>
 		</view>
 	</view>
 </template>

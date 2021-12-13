@@ -1,12 +1,12 @@
 <template>
 	<div class="catalogue" id="catalogue">
 		<div class="container">
-			<div class="pannel" v-for="(item,index) in catalogueList" :key="index" @click="handleHref(item,index)">
+			<div class="pannel" v-for="(item,index) in list" :key="index">
 				<h3 class="title">
 					第{{index+1}}章 {{item.name}}
 				</h3>
 				<div class="uls">
-					<div class="li" v-for="(row,idx) in item.children">
+					<div class="li" v-for="(row,idx) in item.courseChapterBases" @click.stop="handleHref(row)">
 						<p class="icon">
 							
 						</p>
@@ -23,6 +23,21 @@
 <script>
 	export default {
 		name: 'Catalogue',
+		props:{
+			list:{
+				type: Array,
+				default: []
+			}
+		},
+		watch:{
+			list:{
+				handler(val){
+					console.log(val,'===========')
+				},
+				immediate:true,
+				deep:true
+			}
+		},
 		data(){
 			return {
 				catalogueList:[
@@ -156,7 +171,7 @@
 			}
 		},
 		onReady() {
-			this.getQuery();
+			// this.getQuery();
 		},
 		methods:{
 			getQuery(){
@@ -166,9 +181,9 @@
 					console.log(res);
 				})
 			},
-			handleHref(item,index){
+			handleHref(item){
 				uni.navigateTo({
-					url:'../../pages/study/studyArticle/studyArticle'
+					url:'../../pages/study/studyArticle/studyArticle?chapterId='+item.chapterId
 				})
 			}
 		}

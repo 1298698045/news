@@ -6,34 +6,34 @@
 					<view class="tui-userinfo-box">
 						<image src="/static/images/news/avatar_1.jpg" class="tui-avatar"></image>
 						<view class="tui-nickname-box">
-							<view class="tui-cmt-nickname">米兰的卡先生</view>
-							<view class="tui-cmt-time">06-22 12:02</view>
+							<view class="tui-cmt-nickname">{{userName}}</view>
+							<view class="tui-cmt-time">{{time}}</view>
 						</view>
 					</view>
-					<view class="tui-fabulous" :class="{ 'tui-primary': isFabulous }" @tap="btnFabulous">
+					<!-- <view class="tui-fabulous" :class="{ 'tui-primary': isFabulous }" @tap="btnFabulous">
 						<text>{{ fabulous == 0 ? '赞' : fabulous }}</text>
 						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#C70C15' : '#9a9a9a'"></tui-icon>
-					</view>
+					</view> -->
 				</view>
-				<view class="tui-cmt-content">我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？☺☺☺☺☺</view>
+				<view class="tui-cmt-content">{{comment}}</view>
 			</view>
 		</view>
 		<view class="tui-empty"></view>
-		<view class="tui-cmt-title">全部回复（44）</view>
+		<view class="tui-cmt-title">全部回复（{{replyList.length || 0}}）</view>
 		<view class="tui-cmtbox">
 			<view class="tui-cmt-cell" v-for="(item, index) in replyList" :key="index">
 				<view class="tui-header-box">
 					<view class="tui-userinfo-box">
-						<image :src="'/static/images/news/' + item.avatar" class="tui-avatar"></image>
+						<image :src="item.thumbnailPath" class="tui-avatar"></image>
 						<view class="tui-nickname-box">
-							<view class="tui-cmt-nickname">{{ item.nickname }}</view>
-							<view class="tui-cmt-time">{{ item.time }}</view>
+							<view class="tui-cmt-nickname">{{ item.userName || '' }}</view>
+							<view class="tui-cmt-time">{{ item.modifiedOn }}</view>
 						</view>
 					</view>
-					<view class="tui-fabulous" :class="[item.isFabulous ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
-						<text>{{ item.fabulous == 0 ? '赞' : item.fabulous }}</text>
-						<tui-icon :name="item.isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="item.isFabulous ? '#C70C15' : '#9a9a9a'"></tui-icon>
-					</view>
+					<!-- <view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
+						<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
+						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#C70C15' : '#9a9a9a'"></tui-icon>
+					</view> -->
 				</view>
 				<view class="tui-reply-box" v-if="item.reply.length > 0">
 					<tui-list-cell backgroundColor="#f2f2f2" :size="28" v-for="(items, index2) in item.reply" :key="index2" :unlined="true">
@@ -41,7 +41,7 @@
 						<view class="tui-flex-1">{{ items.content }}</view>
 					</tui-list-cell>
 				</view>
-				<view class="tui-cmt-content">{{ item.content }}</view>
+				<view class="tui-cmt-content">{{ item.comment }}</view>
 			</view>
 		</view>
 
@@ -98,10 +98,50 @@ export default {
 			],
 			pageIndex: 1,
 			loadding: false,
-			pullUpOn: true
+			pullUpOn: true,
+			id:"",
+			commentId:"",
+			userName: '',
+			comment: '',
+			time:'',
+			page:{
+				isPage:false,
+				pageNum:1,
+				pageSize:10
+			},
+			detail:{}
 		};
 	},
+	onLoad(options){
+		this.id = options.id;
+		this.commentId = options.commentId;
+		this.userName = options.userName;
+		this.comment = options.comment;
+		this.time = options.time;
+		this.getQueryList();
+		this.getDetail();
+	},
+	onShow(){
+		this.getQueryList();
+	},
 	methods: {
+		getDetail(){
+			this.$http.getStudyDetail({
+				chapterId:this.id
+			}).then(res=>{
+				this.detail = res.returnValue;
+			})
+		},
+		getQueryList(){
+			this.$http.getStudyCommentList({
+				ChapterId: this.id,
+				ParentId: this.commentId,
+				Pagenum: this.page.pageNum,
+				Pagesize: this.page.pageSize
+			}).then(res=>{
+				this.replyList = res.returnValue.chapterCommentList;
+			})
+		},
 		btnFabulous: function() {
 			this.fabulous = this.isFabulous ? 173 : 174;
 			this.isFabulous = !this.isFabulous;
@@ -117,7 +157,7 @@ export default {
 		},
 		btnCmt: function() {
 			uni.navigateTo({
-				url: 'sendReply'
+				url: '../sendComment/sendComment?id='+this.id+'&parentId='+this.commentId
 			});
 		}
 	},
@@ -180,7 +220,7 @@ page {
 	top: 30%;
 	width: 6rpx;
 	height: 40%;
-	background: #C70C15;
+	background: #d24941;
 }
 
 .tui-cmt-cell {
@@ -235,7 +275,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #C70C15;
+	color: #d24941;
 	line-height: 28rpx;
 }
 
@@ -342,6 +382,6 @@ page {
 }
 
 .tui-primary {
-	color: #C70C15;
+	color: #d24941;
 }
 </style>

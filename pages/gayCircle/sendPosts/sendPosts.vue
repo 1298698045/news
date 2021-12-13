@@ -45,7 +45,7 @@
 							</view>
 						</div>
 						<div class="icon">
-							<tui-icon name='circle-fill' size='24' v-if="isNotice" color="#C70C15"></tui-icon>
+							<tui-icon name='circle-fill' size='24' v-if="isNotice" color="#d24941"></tui-icon>
 							<tui-icon name='circle' size='24' v-else></tui-icon>
 						</div>
 					</view>
@@ -213,7 +213,20 @@
 						if(res.returnValue){
 							this.$store.commit('setCircle',{})
 							let chatId = res.returnValue;
-							this.uploadFile(chatId)
+							const callback = () =>{
+								uni.navigateBack({
+									delta:1
+								})
+							}
+							this.$tui.toast({
+								text:'发送成功',
+								success:res=>{
+									callback();
+								}
+							})
+							if(this.fileList.length>0){
+								this.uploadFile(chatId)
+							}
 						}
 					})
 				}
@@ -275,7 +288,7 @@ page{
 			align-items: center;
 			.label{
 				span{
-					color: #C70C15;
+					color: #d24941;
 					padding-left: 10rpx;
 				}
 			}
@@ -302,10 +315,10 @@ page{
 			}
 			.btn.save{
 				background: #FFFFFF;
-				color: #C70C15;
+				color: #d24941;
 			}
 			.btn.send{
-				background: #C70C15;
+				background: #d24941;
 				color: #FFFFFF;
 			}
 			.btn.active{

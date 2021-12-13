@@ -2,7 +2,7 @@
 	<view class="wrapper">
 		<div class="banner">
 			<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
-			 indicator-active-color="#C70C15" class="tui-banner-swiper">
+			 indicator-active-color="#d24941" class="tui-banner-swiper">
 				<swiper-item v-for="(item,index) in banner" :key="index" @tap.stop="bannerDetail">
 					<view class="tui-banner-title">{{item.title}}</view>
 					<image :src="'/static/images/news/'+item.img" class="tui-slide-image" mode="widthFix" />
@@ -169,7 +169,7 @@
 			content:'';
 			width:6rpx;
 			height: 30rpx;
-			background: #C70C15;
+			background: #d24941;
 			display: block;
 			border-radius: 5rpx;
 			margin-right: 10rpx;
@@ -181,7 +181,7 @@
 				.left_cover{
 					width: 200rpx;
 					height: 300rpx;
-					background: #C70C15;
+					background: #d24941;
 					border-radius: 20rpx;
 				}
 				.right_info{
@@ -208,7 +208,7 @@
 					.nums{
 						padding: 10rpx 0;
 						.color{
-							color: #C70C15;
+							color: #d24941;
 						}
 					}
 					.desc{

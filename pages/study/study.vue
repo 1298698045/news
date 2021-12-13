@@ -4,15 +4,15 @@
 			<div class="cover">
 				<div class="title">
 					<span class="tag">专栏</span>
-					玩转Vue 3全家桶
+					{{detail.name}}
 				</div>
 				<div class="duty">
 					<span class="name">昵称</span>
 					架构师
 				</div>
-				<div class="introduce">
+				<!-- <div class="introduce">
 					免费课学习 1小时40分·409人学·10.0分
-				</div>
+				</div> -->
 			</div>
 			<div class="d-tabs" :class="{'fixedActive':isFixed}" id="d-tabs">
 				<p class="d-tab" :class="{'active':currIndex==0}" @click="handleTab(0)">
@@ -41,16 +41,16 @@
 			<div class="container">
 				<swiper class="d-swiper-box" :current="currIndex" @change="changeSwiper" :style="{height:swiperHeight}">
 					<swiper-item>
-						<Introduce class="catalogue_0" :courseId="courseId" v-if="currIndex==0" />
+						<Introduce class="catalogue_0" :description='detail.description' :courseId="courseId" v-if="currIndex==0" />
 					</swiper-item>
 					<swiper-item>
-						<Catalogue class="catalogue_1" v-if="currIndex==1" />
+						<Catalogue class="catalogue_1" v-if="currIndex==1" :list="detail.courseChapterBases" />
 					</swiper-item>
 					<swiper-item>
-						<Evaluate class="catalogue_2" v-if="currIndex==2"  />
+						<Evaluate class="catalogue_2" v-if="currIndex==2" :detail="detail.courseScoreBaseTotal"  />
 					</swiper-item>
 					<swiper-item>
-						<Recommend class="catalogue_3" v-if="currIndex==3" />
+						<Recommend class="catalogue_3" v-if="currIndex==3" :list="detail.courseBases" />
 					</swiper-item>
 				</swiper>
 			</div>
@@ -88,7 +88,8 @@
 				isFixed: false,
 				userFavor:'',
 				tempHeight:'',
-				courseId: ''
+				courseId: '',
+				detail:{}
 			}
 		},
 		onLoad(options) {
@@ -122,8 +123,21 @@
 		},
 		onReady() {
 			this.getHeight('.catalogue_'+0);
+			this.getQuery();
 		},
 		methods: {
+			getQuery(){
+				this.$http.getStudyInterface({
+					CourseId:this.courseId
+				}).then(res=>{
+					this.detail = res.returnValue;
+					if(this.detail.courseScoreBaseTotal && this.detail.courseScoreBaseTotal.itemList){
+						this.detail.courseScoreBaseTotal.itemList.map(item=>{
+							item.modifiedOn = this.$tui.formData(item.modifiedOn);
+						})
+					}
+				})
+			},
 			getStudyFavor(){
 				this.$http.getStudyFavor({
 					CourseId: this.courseId
@@ -205,7 +219,7 @@
 .wrapper{
 	.cover{
 		width: 100%;
-		background: #C70C15;
+		background: #d24941;
 		padding: 20rpx 30rpx;
 		box-sizing: border-box;
 		box-shadow: 0 10rpx 10rpx rgba(255,255,255,.5);
@@ -265,8 +279,8 @@
 			}
 		}
 		.d-tab.active{
-			color: #C70C15;
-			border-bottom: 5rpx solid #C70C15;
+			color: #d24941;
+			border-bottom: 5rpx solid #d24941;
 		}
 	}
 	.d-tabs.fixedActive{
@@ -294,7 +308,7 @@
 				height: 80rpx;
 				line-height: 80rpx;
 				text-align: center;
-				background: #C70C15;
+				background: #d24941;
 				font-size: 28rpx;
 				color: #FFFFFF;
 				border-radius: 50rpx;

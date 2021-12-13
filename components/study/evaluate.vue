@@ -4,42 +4,42 @@
 			<div class="score">
 				<div class="item">
 					<div class="num">
-						10.00
+						{{detail.courseComMarks}}
 					</div>
 				</div>
 				<div class="item">
 					<p class="lebel">内容实用</p>
-					<p class="val">10.0</p>
+					<p class="val">{{detail.contentPracticalNum}}</p>
 				</div>
 				<div class="item">
 					<p class="lebel">通俗易懂</p>
-					<p class="val">10.0</p>
+					<p class="val">{{detail.contentDegreeNum}}</p>
 				</div>
 				<div class="item">
 					<p class="lebel">逻辑清晰</p>
-					<p class="val">10.0</p>
+					<p class="val">{{detail.contentClearNum}}</p>
 				</div>
 			</div>
 			<div class="content">
-				<div class="box" v-for="(item,index) in commentList" :key="index">
+				<div class="box" v-for="(item,index) in detail.itemList" :key="index">
 					<div class="row">
 						<div class="avatar">
-							
+							<image class="head_portrait" :src="item.thumbnailPath"></image>
 						</div>
 						<div class="name">
-							{{item.name}}
+							{{item.name || '名称'}}
 						</div>
 						<div class="rate">
 							<p>
-								<tui-rate quantity="6" :current="item.rate" :score="1" active="#C70C15" disabled></tui-rate>
+								<tui-rate quantity="6" :current="item.courseScoreNum" :score="1" active="#C70C15" disabled></tui-rate>
 							</p>
 							<p class="time">
-								{{item.time}}
+								{{item.modifiedOn}}
 							</p>
 						</div>
 					</div>
 					<div class="comment">
-						{{item.desc}}
+						{{item.comments}}
 					</div>
 				</div>
 			</div>
@@ -50,6 +50,13 @@
 <script>
 	export default {
 		name:'Evaluate',
+		props:{
+			detail:{
+				type: [Number, String, Object],
+				default: '',
+				required: true
+			}
+		},
 		data(){
 			return {
 				commentList:[
@@ -99,7 +106,7 @@
 			}
 		},
 		onReady(){
-			this.getQuery();
+			// this.getQuery();
 		},
 		methods:{
 			getQuery(){
@@ -159,6 +166,11 @@
 							height: 80rpx;
 							border-radius: 50%;
 							background: #C70C15;
+							.head_portrait{
+								width: 100%;
+								height: 100%;
+								border-radius: 50%;
+							}
 						}
 						.name{
 							font-size: 32rpx;

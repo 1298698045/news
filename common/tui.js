@@ -57,6 +57,22 @@ const tui = {
 			return true;
 		}
 		return iphone;
+	},
+	// 时间格式化
+	formData:function(time){
+		let str = time.replace(/T/g,' ');
+		if(str.indexOf('.')!=-1){
+			str = str.split('.')[0]
+		}
+		let date = new Date(str.replace(/\-/g,'/'));
+		let yy = date.getFullYear();
+		let mm = date.getMonth() + 1;
+		let dd = date.getDate();
+		let hour = date.getHours();
+		let min = date.getMinutes();
+		let secon = date.getSeconds();
+		let dateTime = `${yy}-${mm}-${dd} ${hour}:${min}:${secon}`;
+		return dateTime;
 	}
 }
 export default tui;

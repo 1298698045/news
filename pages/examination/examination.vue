@@ -8,7 +8,7 @@
 			</div>
 			<div class="rightContent">
 				<view v-if="currIdx==index" v-for="(item,index) in tabs" :key="index">					
-					<div class="empty" v-if="item.children==''">
+					<div class="empty" v-if="item.examClassSubjectBases==''">
 						<div class="emptyImg">
 							
 						</div>
@@ -16,9 +16,9 @@
 							暂没有考试内容
 						</div>
 					</div>
-					<block v-for="(row,idx) in item.children" :key="idx">					
-						<div class="content" v-if="item.children!=''">
-							<div class="row" @click="handleExamination(item,row)">
+					<block v-for="(row,idx) in item.examClassSubjectBases" :key="idx">					
+						<div class="content" v-if="item.examClassSubjectBases!=''">
+							<div class="row" @click="handleExamination(row)">
 								<div class="radius">
 									
 								</div>
@@ -186,13 +186,23 @@
 			});
 			console.log(this.$store.state.circle.circle)
 		},
+		onShow() {
+			this.getClassQuery();
+		},
 		methods: {
+			getClassQuery(){
+				this.$http.getExamClassQuery({
+					
+				}).then(res=>{
+					this.tabs = res.returnValue;
+				})
+			},
 			handleTab(item,index){
 				this.currIdx = index;
 			},
-			handleExamination(row,index){
+			handleExamination(row){
 				uni.navigateTo({
-					url:'introduce/introduce'
+					url:'introduce/introduce?id='+row.itemId+'&name='+row.name
 				})
 			}
 		}

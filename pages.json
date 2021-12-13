@@ -123,6 +123,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/study/sendComment/sendComment",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root":"pages/news",
@@ -249,7 +258,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "#ffffff",
 		"navigationBarTitleText": "党建工作",
-		"navigationBarBackgroundColor": "#C70C15",
+		"navigationBarBackgroundColor": "#d24941",
 		"backgroundColor": "#ffffff",
 		"usingComponents":{
 			"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
@@ -270,29 +279,29 @@
 		}
 	},
 	"tabBar": {
-	    "color": "#7A7E83",
-	    "selectedColor": "#C70C15",
+	    "color": "#ae9594",
+	    "selectedColor": "#a52518",
 	    "borderStyle": "black",
 	    "backgroundColor": "#ffffff",
 	    "list": [{
 	        "pagePath": "pages/tabbbar/index/index",
-	        "iconPath": "static/images/tabs/my.png",
-	        "selectedIconPath": "./static/images/tabs/my_active.png",
+	        "iconPath": "static/images/tabs/icon-1a.png",
+	        "selectedIconPath": "./static/images/tabs/icon-1b.png",
 	        "text": "首页"
 	    },{
 			"pagePath": "pages/tabbbar/gayCircle/gayCircle",
-			"iconPath": "static/images/tabs/my.png",
-			"selectedIconPath": "./static/images/tabs/my_active.png",
+			"iconPath": "static/images/tabs/icon-2a.png",
+			"selectedIconPath": "./static/images/tabs/icon-2b.png",
 			"text": "同志圈"
 		},{
 	        "pagePath": "pages/tabbbar/news/news",
-	        "iconPath": "static/images/tabs/my.png",
-	        "selectedIconPath": "static/images/tabs/my_active.png",
+	        "iconPath": "static/images/tabs/icon-3a.png",
+	        "selectedIconPath": "./static/images/tabs/icon-3b.png",
 	        "text": "新闻"
 	    },{
 			"pagePath": "pages/tabbbar/my/my",
-			"iconPath": "static/images/tabs/my.png",
-			"selectedIconPath": "static/images/tabs/my_active.png",
+			"iconPath": "static/images/tabs/icon-4a.png",
+			"selectedIconPath": "./static/images/tabs/icon-4b.png",
 			"text": "我的"
 		}]
 	}

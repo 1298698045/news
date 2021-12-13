@@ -4,7 +4,7 @@
 			<view class="tui-cmt-cell tui-cell-last">
 				<view class="tui-header-box">
 					<view class="tui-userinfo-box">
-						<image src="/static/images/news/avatar_1.jpg" class="tui-avatar"></image>
+						<image src="" class="tui-avatar"></image>
 						<view class="tui-nickname-box">
 							<view class="tui-cmt-nickname">{{userName}}</view>
 							<view class="tui-cmt-time">{{time}}</view>
@@ -12,7 +12,7 @@
 					</view>
 					<!-- <view class="tui-fabulous" :class="{ 'tui-primary': isFabulous }" @tap="btnFabulous">
 						<text>{{ fabulous == 0 ? '赞' : fabulous }}</text>
-						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#C70C15' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#d24941' : '#9a9a9a'"></tui-icon>
 					</view> -->
 				</view>
 				<view class="tui-cmt-content">{{comment}}</view>
@@ -24,7 +24,7 @@
 			<view class="tui-cmt-cell" v-for="(item, index) in replyList" :key="index">
 				<view class="tui-header-box">
 					<view class="tui-userinfo-box">
-						<image :src="'/static/images/news/' + item.avatar" class="tui-avatar"></image>
+						<image :src="item.thumbnailPath" class="tui-avatar"></image>
 						<view class="tui-nickname-box">
 							<view class="tui-cmt-nickname">{{ item.userName || '' }}</view>
 							<view class="tui-cmt-time">{{ item.modifiedOn }}</view>
@@ -32,7 +32,7 @@
 					</view>
 					<!-- <view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
 						<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
-						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#C70C15' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#d24941' : '#9a9a9a'"></tui-icon>
 					</view> -->
 				</view>
 				<view class="tui-reply-box" v-if="item.reply.length > 0">
@@ -124,6 +124,9 @@ export default {
 				CommentId: this.commentId
 			}).then(res=>{
 				this.replyList = res.returnValue;
+				this.replyList.map(item=>{
+					item.modifiedOn = this.$tui.formData(item.modifiedOn);
+				})
 			})
 		},
 		btnFabulous: function() {
@@ -204,7 +207,7 @@ page {
 	top: 30%;
 	width: 6rpx;
 	height: 40%;
-	background: #C70C15;
+	background: #d24941;
 }
 
 .tui-cmt-cell {
@@ -259,7 +262,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #C70C15;
+	color: #d24941;
 	line-height: 28rpx;
 }
 
@@ -366,6 +369,6 @@ page {
 }
 
 .tui-primary {
-	color: #C70C15;
+	color: #d24941;
 }
 </style>

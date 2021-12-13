@@ -341,5 +341,100 @@ class api{
 		})
 		return res;
 	}
+	async getStudyDetail(data){
+		const res = await https({
+			method:'get',
+			url: api_address.study.detail,
+			data: data
+		})
+		return res;
+	}
+	// 详情评论列表
+	async getStudyCommentList(data){
+		const res = await https({
+			method:'get',
+			url: api_address.study.commentPage,
+			data: data
+		})
+		return res;
+	}
+	async getStudySendComment(data){
+		const res = await https({
+			method:'post',
+			url: api_address.study.sendComment,
+			data: data
+		})
+		return res;
+	}
+	async getStudyCommentLike(data){
+		const res = await https({
+			method:'post',
+			url: api_address.study.commentLike,
+			data: data
+		})
+		return res;
+	}
+	async getStudyCancelCommentLike(data){
+		const res = await https({
+			method:'post',
+			url: api_address.study.commentCancel,
+			data: data
+		})
+		return res;
+	}
+	// 考试
+	// 分类
+	async getExamClassQuery(data){
+		const res = await https({
+			method:'get',
+			url: api_address.exam.classify,
+			data: data
+		})
+		return res;
+	}
+	// 获取试卷
+	async getExamSubjectPaper(data){
+		const res = await https({
+			method:'get',
+			url: api_address.exam.subjectPaper,
+			data: data
+		})
+		return res;
+	}
+	async getExamPersonPaper(data){
+		const res = await https({
+			method:'get',
+			url: api_address.exam.personPaper,
+			data: data
+		})
+		return res;
+	}
+	// 单个题目提交
+	async examSinglePaper(data){
+		const res = await https({
+			method:'post',
+			url: api_address.exam.singleSubmit,
+			data: data
+		})
+		return res;
+	}
+	// 开始考试
+	async examStartPaper(data){
+		const res = await https({
+			method:'post',
+			url: api_address.exam.startPaper,
+			data: data
+		})
+		return res;
+	}
+	// 结束考试
+	async examEndPaper(data){
+		const res = await https({
+			method:'post',
+			url: api_address.exam.endPaper,
+			data: data
+		})
+		return res;
+	}
 }
 export default new api()

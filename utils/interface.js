@@ -56,6 +56,20 @@ export const api_address = {
 		favorStatus: '/SystemUser/collectcourse/getcollectcoursebyid',
 		collection: '/SystemUser/collectcourse/collectcourseadd', // 收藏
 		cancelCollection: '/SystemUser/collectcourse/collectcoursedel', // 取消收藏
+		detail: '/HomePage/course/chapter',
+		commentPage: '/HomePage/course/chaptercommentspage', // 学习评论列表
+		sendComment: '/SystemUser/commentcourse/commentcourseadd',
+		commentLike: '/SystemUser/commentcourse/commentchapterpraiseadd', // 评论点赞
+		commentCancel: '/SystemUser/commentcourse/commentchapterpraisedel', // 取消点赞
+	},
+	// 考试
+	exam:{
+		classify:'/HomePage/exam/classify', // 考试分类
+		subjectPaper:'/HomePage/exam/content/getfixedexampaperbysubject', // 根据科目获取个人试卷Id
+		personPaper: '/HomePage/exam/content/getexampaper', // 根据个人试卷Id
+		singleSubmit: '/HomePage/exam/content/exampaperanswer', // 考试答题 post 参数 Token，PaperId 试卷Id，ContactId 个人试卷Id，QuestionId 问题Id，QuestionType 问题类型，QuestionNumber 问题序号，AnswerOptionId 选项id，OptionNumber 选项序号，AnswerText (根据问题类型判断)闻题回答
+		endPaper: '/HomePage/exam/content/examendpaper', // 考试结束 post 参数 Token，ValueId 个人试卷Id
+		startPaper: '/HomePage/exam/content/examstartpaper', // 开始考试
 	}
 	
 }

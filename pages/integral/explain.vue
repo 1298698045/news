@@ -83,7 +83,7 @@
 					content: '';
 					width: 8rpx;
 					height: 30rpx;
-					background: #C70C15;
+					background: #d24941;
 					display: block;
 					margin-right: 20rpx;
 				}

@@ -25,7 +25,7 @@
 					      @change="changePassWord"
 					    />
 						<div class="loginBtn">
-							<van-button type="default" :block="true" :round="true" :disabled="disabled" color="#C70C15" @click.stop="handleLogin">登录</van-button>
+							<van-button type="default" :block="true" :round="true" :disabled="disabled" color="#d24941" @click.stop="handleLogin">登录</van-button>
 						</div>
 				</form>
 			</div>
@@ -95,7 +95,8 @@
 					that.userInfo.avatarUrl = JSON.parse(res.rawData).avatarUrl;
 					that.$http.getLogin({
 						js_code:that.code,
-						nickName: that.userInfo.nickName
+						nickName: that.userInfo.nickName,
+						PicUrl: that.userInfo.avatarUrl
 					}).then(reponse=>{
 						console.log(reponse);
 						const {wechatAuthToken} = reponse.returnValue;
@@ -129,7 +130,7 @@ page{
 			width: 100rpx;
 			height: 100rpx;
 			border-radius: 50%;
-			background: #C70C15;
+			background: #d24941;
 			margin: 100rpx auto 0;
 		}
 		.content{

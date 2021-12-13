@@ -83,7 +83,7 @@
 .wrapper{
 	.header{
 		width: 100%;
-		background: #C70C15;
+		background: #d24941;
 		color: #FFFFFF;
 		padding-left: 30rpx;
 		box-sizing: border-box;
@@ -96,7 +96,7 @@
 				border-radius: 30rpx;
 				padding: 10rpx 20rpx;
 				background: #FFFFFF;
-				color: #C70C15;
+				color: #d24941;
 				font-weight: bold;
 				display: flex;
 				align-items: center;
@@ -112,7 +112,7 @@
 				background: #FFFFFF;
 				border-top-left-radius: 30rpx;
 				border-bottom-left-radius: 30rpx;
-				color: #c70c15;
+				color: #d24941;
 				width: 80px;
 				height: 50rpx;
 				line-height: 50rpx;
@@ -149,7 +149,7 @@
 					color: #333333;
 					font-size: 24rpx;
 					span{
-						color: #C70C15;
+						color: #d24941;
 						padding-left: 10rpx;
 					}
 				}
@@ -186,7 +186,7 @@
 								margin-right: 20rpx;
 							}
 							.speed.active{
-								background: #C70C15;
+								background: #d24941;
 							}
 						}
 					}
@@ -202,7 +202,7 @@
 						}
 						.statusBtn.active{
 							color: #FFFFFF;
-							background: #C70C15;
+							background: #d24941;
 						}
 					}
 				}

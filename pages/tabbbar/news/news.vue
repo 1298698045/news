@@ -29,7 +29,7 @@
 					</view>
 			</scroll-view>
 			<view class="more" @click="handleOpenModal">
-				<tui-icon name="ellipsis" size="10" color="#fff"></tui-icon>
+				<tui-icon name="ellipsis" size="10" color="#333"></tui-icon>
 			</view>
 		</view>
 		<!--banner-->
@@ -648,7 +648,8 @@
 	.columnNav{
 		display: flex;
 		font-size: 28rpx;
-		background: rgba(199, 12, 21,.5);
+		// background: rgba(199, 12, 21,.5);
+		background: #fff;
 		.tabs{
 			width: calc(100% - 60rpx);
 			white-space: nowrap;
@@ -657,7 +658,7 @@
 				padding: 0 20rpx;
 				text-align: center;
 				line-height: 80rpx;
-				color: #fff;
+				color: #333;
 				display: inline-block;
 				box-sizing: border-box;
 				span{
@@ -667,11 +668,11 @@
 				}
 			}
 			.tab.active{
-				color: #C70C15;
+				color: #d24941;
 				font-weight: bold;
 			}
 			.tab.active span{
-				border-bottom: 5rpx solid #C70C15;
+				border-bottom: 5rpx solid #d24941;
 			}
 		}
 		.more{
@@ -679,10 +680,13 @@
 			height: 82rpx;
 			line-height: 82rpx;
 			text-align: center;
-			background: rgba(0,0,0,.3);
-			box-shadow: 1rpx 0 0 0 rgba(0,0,0,.5);
+			// background: rgba(0,0,0,.3);
+			// box-shadow: 1rpx 0 0 0 rgba(0,0,0,.5);
+			background: rgba(255,255,255,.3);
+			box-shadow: 1rpx 0 0 0 rgba(255,255,255,.5);
 			.tui-icon{
 				background: initial !important;
+				color: #333;
 			}
 		}
 	}
@@ -710,10 +714,10 @@
 				.options{
 					span{
 						display: inline-block;
-						border: 1rpx solid #C70C15;
+						border: 1rpx solid #d24941;
 						border-radius: 50rpx;
 						padding: 8rpx 30rpx;
-						color: #C70C15;
+						color: #d24941;
 						font-size: 28rpx;
 					}
 					span:last-child,.edit{
@@ -721,7 +725,7 @@
 					}
 					.complete{
 						color: #fff;
-						background: #C70C15;
+						background: #d24941;
 					}
 				}
 			}
@@ -884,7 +888,7 @@
 	}
 
 	.tui-banner-swiper .wx-swiper-dot-active::before {
-		background: #C70C15;
+		background: #d24941;
 	}
 
 	.tui-banner-swiper .wx-swiper-dot.wx-swiper-dot-active {

@@ -5,7 +5,7 @@
 				推荐课程
 			</div>
 			<div class="curriculum">
-				<div class="box" v-for="(item,index) in recommendList" :key="index">
+				<div class="box" v-for="(item,index) in list" :key="index" @click="handleClickIn(item)">
 					<div class="left_cover">
 						
 					</div>
@@ -21,7 +21,7 @@
 							<span class="color">58</span>讲 | &nbsp;&nbsp;<span class="color">20000</span> 人已学习
 						</div>
 						<div class="desc">
-							{{item.desc}}
+							{{item.description}}
 						</div>
 					</div>
 				</div>
@@ -33,6 +33,12 @@
 <script>
 	export default {
 		name:'Recommend',
+		props:{
+			list:{
+				type: Array,
+				default: []
+			}
+		},
 		data(){
 			return {
 				recommendList:[
@@ -85,7 +91,7 @@
 			}
 		},
 		mounted() {
-			this.getQuery();
+			// this.getQuery();
 		},
 		methods:{
 			getQuery(){
@@ -93,6 +99,11 @@
 					
 				}).then(res=>{
 					console.log(res);
+				})
+			},
+			handleClickIn(item){
+				uni.navigateTo({
+					url:'../../pages/study/study?courseId='+item.courseId
 				})
 			}
 		}
@@ -162,6 +173,10 @@
 						.desc{
 							font-size: 24rpx;
 							line-height: 1.5;
+							-webkit-line-clamp: 3;
+							overflow: hidden;
+							display: -webkit-box;
+							-webkit-box-orient: vertical;
 						}
 					}
 				}

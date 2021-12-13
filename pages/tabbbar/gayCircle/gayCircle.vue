@@ -4,7 +4,7 @@
 			<view class="panelBox" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
 				<view class="head">
 					<view class="avatar" @click="handlePersonalHome(item)">
-						{{item.userName}}
+						<image :src="item.thumbnailPath"></image>
 					</view>
 					<view class="info">
 						<p class="name">{{item.userName}}</p>
@@ -71,7 +71,7 @@
 					</view>
 					<view class="btn" :class="{'active':item.isPraise}" @click.stop="handleItemLike(item)">
 						<tui-icon v-if="!item.isPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#C70C15" ></tui-icon>
+						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
 						<span v-if="item.numOfLike==0||item.numOfLike==null">
 						点赞
 						</span>
@@ -107,23 +107,25 @@
 			return {
 				pathUrl: 'http://112.126.75.65:10002',
 				showActionSheet: false,
-				itemList: [{
-					text: "收藏",
-					color: "#2B2B2B"
-				}, {
-					text: "编辑动态",
-					color: "#2B2B2B"
-				},
-				{
-					text: "设为置顶动态",
-					color: "#2B2B2B"
-				},{
-					text: "设为分享范围",
-					color: "#2B2B2B"
-				},
+				itemList: [
+				// 	{
+				// 	text: "收藏",
+				// 	color: "#2B2B2B"
+				// },
+				// {
+				// 	text: "编辑动态",
+				// 	color: "#2B2B2B"
+				// },
+				// {
+				// 	text: "设为置顶动态",
+				// 	color: "#2B2B2B"
+				// },{
+				// 	text: "设为分享范围",
+				// 	color: "#2B2B2B"
+				// },
 				{
 					text: "删除动态",
-					color: "#C70C15"
+					color: "#d24941"
 				}],
 				list:[
 					{
@@ -214,6 +216,9 @@
 						temp = this.listData.concat(res.returnValue.chatterBaseList || []);
 					}
 					this.listData = temp;
+					this.listData.map(item=>{
+						item.modifiedOn = this.$tui.formData(item.modifiedOn);
+					})
 				})
 			},
 			hanldeMore(item){
@@ -227,33 +232,25 @@
 				let index = e.index;
 				switch(index){
 					case 0:
-						this.$tui.toast({
-							text:'收藏',
-							success:(res)=>{
-								this.showActionSheet = false
+						const callback = (res)=>{
+							console.log(res);
+							if(res){
+								this.handleDelete();
 							}
-						})
-						break;
-					case 1:
-						this.$tui.toast('编辑动态')
-						break;
-					case 2:
-						this.$tui.toast('设置置顶动态')
-						break;
-					case 3:
-						this.$tui.toast('设置分享范围')
-						break;
-					case 4:
-						this.$http.deleteCircle({
-							ChatterId: this.chatterId
-						}).then(res=>{
-							if(res.returnValue)
-							this.showActionSheet = false;
-							this.page.pageNum = 1;
-							this.getQuery(); 
-						})
+						}
+						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d24941')
 						break;
 				}
+			},
+			handleDelete(){
+				this.$http.deleteCircle({
+					ChatterId: this.chatterId
+				}).then(res=>{
+					if(res.returnValue)
+					this.showActionSheet = false;
+					this.page.pageNum = 1;
+					this.getQuery(); 
+				})
 			},
 			handleHref(){
 				uni.navigateTo({
@@ -347,10 +344,15 @@
 					height: 80rpx;
 					line-height: 80rpx;
 					text-align: center;
-					background: #C70C15;
+					background: #d24941;
 					border-radius: 50%;
 					color: #fff;
 					font-size: 28rpx;
+					image{
+						width: 100%;
+						height: 100%;
+						border-radius: 50%;
+					}
 				}
 				.info{
 					margin-left: 20rpx;
@@ -476,7 +478,7 @@
 					}
 				}
 				.btn.active{
-					color: #C70C15;
+					color: #d24941;
 				}
 			}
 		}
@@ -486,7 +488,7 @@
 		height: 100rpx;
 		line-height: 100rpx;
 		text-align: center;
-		background: #C70C15;
+		background: #d24941;
 		border-radius: 50%;
 		position: fixed;
 		bottom: 20rpx;

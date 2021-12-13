@@ -35,9 +35,9 @@ export default {
 	},
 	methods: {
 		submitSendCircle(){
-			this.$http.getCircleAddComment({
+			this.$http.getStudySendComment({
 				Token:this.token,
-				MomentId: this.id,
+				CourseId: this.id,
 				ParentId: this.parentId || '',
 				Comment: this.comment
 			}).then(res=>{

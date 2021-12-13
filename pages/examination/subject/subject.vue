@@ -7,11 +7,11 @@
 			</view>
 			<view class="cu-bar bg-white solid-bottom">
 				<view class="action text-black">
-					<text v-if="currentType===1">判断题</text>
-					<text v-else-if="currentType===2">单选题</text>
-					<text v-else-if="currentType===3">多选题</text>
-					<text v-else-if="currentType===4">填空题</text>
-					<text v-else-if="currentType===5">问答题</text>
+					<text v-if="currentType===2">问答题</text>
+					<text v-else-if="currentType===0">单选题</text>
+					<text v-else-if="currentType===1">多选题</text>
+					<!-- <text v-else-if="currentType===4">填空题</text>
+					<text v-else-if="currentType===5">问答题</text> -->
 				</view>
 				<view class="action">
 					<button class="cu-btn bg-green shadow" @tap="showCardModal" data-target="modalCard">答题卡</button>
@@ -45,35 +45,35 @@
 											
 						<view class="cu-bar bg-white solid-bottom">
 							<view class="action text-black">
-								<text class="cuIcon-title text-red"></text>{{subject.title}}
+								<text class="cuIcon-title text-red"></text>{{subject.question}}
 							</view>
 						</view>
 						<view>
 			
-							<radio-group class="block"  @change="RadioboxChange" v-if="subject.type===1||subject.type===2">
+							<radio-group class="block"  @change="RadioboxChange" v-if="subject.questionType==0">
 								<view class="cu-form-group" v-for="option in subject.optionList">
-									<radio :value="option.id" :checked="subject.userAnswer.indexOf(option.id) > -1?true:false"></radio>
-									<view class="title text-black">{{option.id}}.{{option.content}}</view>
+									<radio :value="option.answerOptionId" :checked="subject.userAnswer.indexOf(option.answerOptionId) > -1?true:false"></radio>
+									<view class="title text-black">{{option.id}}.{{option.name}}</view>
 								</view>
 							</radio-group>
 			
-							<checkbox-group class="block"  @change="CheckboxChange" v-else-if="subject.type===3">
+							<checkbox-group class="block"  @change="CheckboxChange" v-else-if="subject.questionType===1">
 								<view class="cu-form-group" v-for="option in subject.optionList">
-									<checkbox :value="option.id" :class="subject.userAnswer.indexOf(option.id) > -1?'checked':''" :checked="subject.userAnswer.indexOf(option.id) > -1?true:false"></checkbox>
-									<view class="title  text-black">{{option.id}}.{{option.content}}</view>
+									<checkbox :value="option.answerOptionId" :class="subject.userAnswer.indexOf(option.answerOptionId) > -1?'checked':''" :checked="subject.userAnswer.indexOf(option.answerOptionId) > -1?true:false"></checkbox>
+									<view class="title  text-black">{{option.id}}.{{option.name}}</view>
 								</view>
 							</checkbox-group>
 			
-							<view v-else-if="subject.type===4">
+							<!-- <view v-else-if="subject.type===4">
 								<view class="cu-form-group solid-bottom">
 									<view class="title  text-black">
 										答：
 									</view>
 									<input placeholder="文本输入框" name="input" v-model="subject.userAnswer" @blur="textInput" ></input>
 								</view>
-							</view>
+							</view> -->
 			
-							<view v-else-if="subject.type===5">
+							<view v-else-if="subject.questionType==2">
 								<view class="cu-bar cu-bar-title bg-white margin-top">
 									<view class="action  text-black">
 										答：
@@ -130,12 +130,12 @@
 				<view  :class="[userFavor?'text-red':'text-gray']">收藏</view>
 			</view>
 		
-			<view class="action" @click="ShowAnswerChange">
+			<!-- <view class="action" @click="ShowAnswerChange">
 				<view class="cuIcon-cu-image">
 					<text class="lg text-gray cuIcon-question"></text>
 				</view>
 				<view class="text-gray">解答</view>
-			</view>
+			</view> -->
 		<!-- 	<view class="action" @tap="showErrorModal"  data-target="modalError">
 				<view class="cuIcon-cu-image">
 					<text class="lg text-gray cuIcon-warn"></text>
@@ -316,7 +316,8 @@
 				   ],
 				   modalCard: null ,//显示答题卡
 				   modalError:null , //纠错卡
-				   errorList:['题目不完整','答案不正确','含有错别字','图片不存在','解析不完整','其他错误']
+				   errorList:['题目不完整','答案不正确','含有错别字','图片不存在','解析不完整','其他错误'],
+				   ContactId: '' // 个人试卷id
 			}
 		},	
 		onReady() {
@@ -357,8 +358,16 @@
 				}
 			});
 		},
-		onLoad() {
-			this.currentType = this.subjectList[0].type;
+		onLoad(options) {
+			this.id = options.id;
+			this.getQueryPaper().then(res=>{
+				let ValueId = res.returnValue.personPaperValueId;
+				this.ContactId = ValueId;
+				this.countDown = res.returnValue.answerTime * 60 * 60;
+				this.getPersonPaper(ValueId);
+				this.startPaper();
+			})
+			// this.currentType = this.subjectList[0].type;
 			uni.setNavigationBarTitle({
 				title: this.title
 			});			
@@ -369,15 +378,53 @@
 			}
 		},
 		methods: {
-			// 倒计时结束时间回调
-			changeEnd(e){
-				this.isDown = false;
-				const callback = function(e){
-					console.log(e);
-					if(e){						
+			async getQueryPaper(){
+				let response 
+				await this.$http.getExamSubjectPaper({
+					ExamSubject:this.id
+				}).then(res=>{
+					response = res;
+				})
+				return response;
+			},
+			getPersonPaper(id){
+				this.$http.getExamPersonPaper({
+					ValueId: id
+				}).then(res=>{
+					this.subjectList = res.returnValue.questionList;
+					this.subjectList.map(item=>{
+						item.userAnswer = ''
+					})
+				})
+			},
+			// 开始考试
+			startPaper(){
+				this.$http.examStartPaper({
+					ValueId: this.ContactId
+				}).then(res=>{
+					
+				})
+			},
+			// 结束考试
+			endPaper(){
+				this.$http.examEndPaper({
+					ValueId: this.ContactId
+				}).then(res=>{
+					if(res.returnValue){						
 						uni.navigateBack({
 							delta:1
 						})
+					}
+				})
+			},
+			// 倒计时结束时间回调
+			changeEnd(e){
+				this.isDown = false;
+				var that = this;
+				const callback = function(e){
+					console.log(e);
+					if(e){
+						that.endPaper();
 					}
 				}
 				this.$tui.modal('','考试时间已到,请点击确认交卷！',false,callback,'#C70C15','确认交卷')
@@ -395,39 +442,44 @@
 				this.modalError = null
 			},
 			SwiperChange: function(e) { //滑动事件
-			
 				let index = e.target.current;
 				
 				if (index != undefined) {
 					this.subjectIndex = index;
-					this.currentType = this.subjectList[index].type;
-					this.userFavor = this.subjectList[index].userFavor;					
+					this.currentType = this.subjectList[index].questionType;
+					// this.userFavor = this.subjectList[index].userFavor;
 				}								
 			},			
 			RadioboxChange : function(e) { //单选选中
-			
+				console.log(e,this.subjectIndex);
 				var items = this.subjectList[this.subjectIndex].optionList;
 				var values = e.detail.value;
 				this.subjectList[this.subjectIndex].userAnswer = values;
-				if(this.autoRadioNext && this.subjectIndex < this.subjectList.length - 1){
-					this.subjectIndex += 1;						
-					};
+				let item = items.find(item=>item.answerOptionId==values);
+				this.subjectList[this.subjectIndex].optionsNumber = item.position;
+				// if(this.autoRadioNext && this.subjectIndex < this.subjectList.length - 1){
+				// 	this.subjectIndex += 1;						
+				// 	};
 				
 			},
 			CheckboxChange: function(e) { //复选选中
 			
 				var items = this.subjectList[this.subjectIndex].optionList;
 				var values = e.detail.value;
-				this.subjectList[this.subjectIndex].userAnswer = "";
+				this.subjectList[this.subjectIndex].userAnswer = [];
+				this.subjectList[this.subjectIndex].optionsNumber = [];
 				for (var i = 0, lenI = items.length; i < lenI; ++i) {
 					for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
-						if (items[i].id == values[j]) {
-			
-							this.subjectList[this.subjectIndex].userAnswer += items[i].id;
+						if (items[i].answerOptionId == values[j]) {
+							this.subjectList[this.subjectIndex].optionsNumber.push(items[i].position)
+							this.subjectList[this.subjectIndex].userAnswer.push(items[i].answerOptionId);
 							break
 						}
 					}
 				}
+				this.subjectList[this.subjectIndex].optionsNumber = this.subjectList[this.subjectIndex].optionsNumber.join(',')
+				this.subjectList[this.subjectIndex].userAnswer = this.subjectList[this.subjectIndex].userAnswer.join(',')
+				// this.subjectList[this.subjectIndex].userAnswer.slice(1,this.subjectList[this.subjectIndex].userAnswer.length)
 			},
 			textInput : function(e) { //填空题
 			
@@ -461,12 +513,32 @@
 			},
 			
 			MoveSubject: function(e) { //上一题、下一题
-			
+				if(this.subjectList[this.subjectIndex].userAnswer==''){
+					this.$tui.toast({
+						text: '请答题!'
+					})
+					return false;
+				}
+				else 
 				if (e === -1 && this.subjectIndex != 0) {
 					this.subjectIndex -= 1;
 				}
 				if (e === 1 && this.subjectIndex < this.subjectList.length - 1) {
-					this.subjectIndex += 1;
+					let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
+					this.$http.examSinglePaper({
+						PaperId: this.id,
+						ContactId: this.ContactId,
+						QuestionId: questionId,
+						QuestionType: questionType,
+						QuestionNumber: questionNumber,
+						AnswerOptionId: this.currentType != 2 ? userAnswer : null,
+						OptionNumber: this.currentType != 2 ? optionsNumber : null,
+						AnswerText: this.currentType == 2 ? userAnswer : null
+					}).then(res=>{
+						if(res.returnValue){
+							this.subjectIndex += 1;
+						}
+					})
 				}
 			},
 			
@@ -482,6 +554,15 @@
 			},
 			handleSubmit(){
 				console.log(this.subjectList)
+				this.isDown = false;
+				var that = this;
+				const callback = function(e){
+					console.log(e);
+					if(e){
+						that.endPaper();
+					}
+				}
+				this.$tui.modal('','是否确认交卷！',false,callback,'#C70C15','确认交卷')
 			}
 		}
 	}
