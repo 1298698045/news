@@ -12,7 +12,7 @@
 				<div class="explain" @click="handleExplain">积分说明 <van-icon name="arrow" /></div>
 			</div>
 			<div class="cont">
-				<p class="num">100</p>
+				<p class="num">{{integraTotal||0}}</p>
 				<p class="desc">段位：积分不足，暂无段位</p>
 			</div>
 		</div>
@@ -25,13 +25,13 @@
 					</p>
 				</div>
 				<div class="content">
-					<div class="box" v-for="item in 9">
+					<div class="box" v-for="(item,index) in list" key="index">
 						<div class="left">
-							<p class="name">登录</p>
-							<p class="desc">1分/每日首次登录</p>
+							<p class="name">{{item.name}}</p>
+							<p class="desc">{{item.description}}</p>
 							<div class="cel">
 								<span class="speed"></span>
-								已获1分/每日上线1分
+								已获{{item.integralNum}}分/每日上线{{item.integralNum}}分
 							</div>
 						</div>
 						<div class="right">
@@ -52,10 +52,29 @@
 			return {
 				list:[
 					
-				]
+				],
+				integraTotal:''
 			}
 		},
+		onLoad() {
+			this.getQuery();
+			this.getIntegralInfo();
+		},
 		methods: {
+			getIntegralInfo(){
+				this.$http.getIntegralInfo({
+					
+				}).then(res=>{
+					this.integraTotal = res.returnValue.integraTotal;
+				})
+			},
+			getQuery(){
+				this.$http.integralList({
+					
+				}).then(res=>{
+					this.list = res.returnValue;
+				})
+			},
 			handleTips(){
 				uni.navigateTo({
 					url:'tips'

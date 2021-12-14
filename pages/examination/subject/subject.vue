@@ -552,8 +552,22 @@
 				
 					this.modalError = null;														
 			},
-			handleSubmit(){
-				console.log(this.subjectList)
+			async handleSubmit(){
+				console.log(this.subjectList) 
+				let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
+				let response 
+				await this.$http.examSinglePaper({
+					PaperId: this.id,
+					ContactId: this.ContactId,
+					QuestionId: questionId,
+					QuestionType: questionType,
+					QuestionNumber: questionNumber,
+					AnswerOptionId: this.currentType != 2 ? userAnswer : null,
+					OptionNumber: this.currentType != 2 ? optionsNumber : null,
+					AnswerText: this.currentType == 2 ? userAnswer : null
+				}).then(res=>{
+					response = res;
+				})
 				this.isDown = false;
 				var that = this;
 				const callback = function(e){

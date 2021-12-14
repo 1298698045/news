@@ -14,20 +14,12 @@
 					积分试行期间，积分规则将会适时调整，带来不便敬请谅解积分试行期间，积分规则将会适时调整，带来不便敬请谅解积分试行期间，积分规则将会适时调整，
 					带来不便敬请谅解积分试行期间，积分规则将会适时调整，带来不便敬请谅解积分试行期间，积分规则将会适时调整，带来不便敬请谅解
 				</div>
-				<div class="box">
+				<div class="box" v-for="item in list">
 					<div class="title">
-						登录
+						{{item.description}}
 					</div>
 					<div class="desc">
-						每日首次登录积1分。
-					</div>
-				</div>
-				<div class="box">
-					<div class="title">
-						我要选读文章
-					</div>
-					<div class="desc">
-						每有效阅读或播报一篇文章积1分，上限6分。有效阅读或播报文章累计1分，上限6分。每日上限积12分。
+						{{item.content}}
 					</div>
 				</div>
 			</div>
@@ -39,11 +31,23 @@
 	export default {
 		data() {
 			return {
-				content:"积分试行期间，积分规则将会适时调整，带来不便敬请谅解"
+				content:"积分试行期间，积分规则将会适时调整，带来不便敬请谅解",
+				integraTotal: '',
+				list: []
 			}
 		},
+		onLoad() {
+			this.getIntegralInfo();
+		},
 		methods: {
-			
+			getIntegralInfo(){
+				this.$http.getIntegralInfo({
+					
+				}).then(res=>{
+					this.integraTotal = res.returnValue.integraTotal;
+					this.list = res.returnValue.integraWarningRulesList.filter(item=>item.integraType==1);
+				})
+			},
 		}
 	}
 </script>

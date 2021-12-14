@@ -436,5 +436,39 @@ class api{
 		})
 		return res;
 	}
+	// 学习积分
+	async integralList(data){
+		const res = await https({
+			method:'get',
+			url: api_address.integral.list,
+			data: data
+		})
+		return res;
+	}
+	async getIntegralInfo(data){
+		const res = await https({
+			method:'get',
+			url: api_address.integral.info,
+			data: data
+		})
+		return res;
+	}
+	// 留言
+	async submitFeedback(data){
+		const res = await https({
+			method:'post',
+			url: api_address.feedback,
+			data: data
+		})
+		return res;
+	}
+	async getPartyCostList(data){
+		const res = await https({
+			method: 'get',
+			url: api_address.partyCost,
+			data: data
+		})
+		return res;
+	}
 }
 export default new api()

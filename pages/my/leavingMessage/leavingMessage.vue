@@ -35,7 +35,28 @@
 		},
 		methods: {
 			submit(){
-				
+				if(this.desc==''){
+					this.$tui.toast({
+						text: '描述不能为空!'
+					})
+					return false;
+				}else {		
+					this.$http.submitFeedback({
+						Content: this.desc,
+						ContactInfo: this.telPhone
+					}).then(res=>{
+						if(res.returnValue){
+							this.$tui.toast({
+								text: '提交成功',
+								success:(res)=>{
+									uni.navigateBack({
+										delta: 1
+									})
+								}
+							})
+						}
+					})
+				}
 			}
 		}
 	}

@@ -13,6 +13,12 @@
 				</div>
 				<p class="text">学习</p>
 			</div>
+			<div class="box" @click="handleHref(3)">
+				<div class="icon">
+					<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
+				</div>
+				<p class="text">党费</p>
+			</div>
 			<div class="fake_item"></div>
 			<div class="fake_item"></div>
 		</div>
@@ -141,6 +147,10 @@
 					case 2:
 						uni.navigateTo({
 							url:'../../study/home'
+						})
+					case 3:
+						uni.navigateTo({
+							url: '../../partyCost/partyCost'
 						})
 					default:
 						return

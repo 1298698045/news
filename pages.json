@@ -132,6 +132,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/partyCost/partyCost",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党费查询",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root":"pages/news",

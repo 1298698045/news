@@ -132,6 +132,7 @@
 					console.log(e);
 					if(e){
 						uni.removeStorageSync('timeStamp');
+						uni.removeStorageSync('wechatAuthToken');
 						uni.reLaunch({
 							url:'../../login/login'
 						})

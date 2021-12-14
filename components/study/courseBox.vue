@@ -16,7 +16,7 @@
 					<span class="color">58</span>讲 | &nbsp;&nbsp;<span class="color">20000</span> 人已学习
 				</div>
 				<div class="desc">
-					{{item[desc]}}
+					{{item[desc] || ''}}
 				</div>
 			</div>
 		</div>

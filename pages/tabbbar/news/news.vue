@@ -66,18 +66,18 @@
 						</view>
 						<view class="tui-news-picbox" :class="[item.coverDisplay=='RightTitle'?'right_picbox':'']" v-if="item.coverDisplay=='RightTitle'">
 							<block>
-								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block"></image>
+								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block" mode="widthFix"></image>
 							</block>
 						</view>
 					</view>
 					<view class="tui-news-picbox" v-if="item.coverDisplay=='BelowGrid'||item.coverDisplay=='Carousel'">
 						<block v-for="(items,index2) in item.imgPathList" :key="index2">
-							<image @click.stop="handlePreviewImg(item,index2)" :src="pathurl+items.path"></image>
+							<image @click.stop="handlePreviewImg(item,index2)" :src="pathurl+items.path" mode="widthFix"></image>
 						</block>
 						<view v-if="item.coverDisplay=='BelowGrid'" class="fack_item"></view>
 					</view>
 					<view class="maxImg" v-if="item.coverDisplay=='BelowTitleBigImg'">
-						<image v-for="items in item.imgPathList" :src="pathurl+items.path" @click.stop="handlePreviewImg(item,index2)"></image>
+						<image v-for="items in item.imgPathList" :src="pathurl+items.path" @click.stop="handlePreviewImg(item,index2)" mode="widthFix"></image>
 					</view>
 				</tui-list-cell>
 			</block>

@@ -32,7 +32,7 @@
 						</div> -->
 						<view class="list_img">
 							<view class="box" v-for="(row,idx) in item.listpic" :key="idx" @click.stop="handleOpenImg(item,idx)">
-								<image class="img" :src="pathUrl+row.path.replace(/\\/g,'/')"></image>
+								<image class="img" :src="pathUrl+row.path.replace(/\\/g,'/')" mode="aspectFill"></image>
 							</view>
 							<view class="fake_item"></view>
 							<view class="fake_item"></view>
