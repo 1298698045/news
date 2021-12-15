@@ -391,6 +391,7 @@
 				this.$http.getExamPersonPaper({
 					ValueId: id
 				}).then(res=>{
+					this.userFavor = res.returnValue.isCollect;
 					this.subjectList = res.returnValue.questionList;
 					this.subjectList.map(item=>{
 						item.userAnswer = ''
@@ -502,13 +503,22 @@
 			
 				if(this.userFavor)
 				{
-					this.userFavor=false;
-					this.subjectList[this.subjectIndex].userFavor=false;					
+					this.$http.cancelCollectionSinglePaper({
+						PaperId: this.id
+					}).then(res=>{
+						console.log(res);
+						this.userFavor=false;
+						this.subjectList[this.subjectIndex].userFavor=false;					
+					})
 				}
 				else{
-					
-					this.userFavor=true;
-					this.subjectList[this.subjectIndex].userFavor=true;	
+					this.$http.collectionSinglePaper({
+						PaperId: this.id
+					}).then(res=>{
+						console.log(res);
+						this.userFavor=true;
+						this.subjectList[this.subjectIndex].userFavor=true;					
+					})
 				}				
 			},
 			

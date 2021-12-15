@@ -10,6 +10,14 @@ class api{
 		})
 		return res
 	}
+	async getUserLogin(data){
+		const res = await https({
+		    method: "post",
+		    url: api_address.login.userLogin,
+		    data: data
+		})
+		return res
+	}
 	// 新闻栏目
 	async getNewsColumn(data){
 		const res = await https({
@@ -388,6 +396,23 @@ class api{
 		const res = await https({
 			method:'get',
 			url: api_address.exam.classify,
+			data: data
+		})
+		return res;
+	}
+	// 收藏试卷
+	async collectionSinglePaper(data){
+		const res = await https({
+			method:'post',
+			url: api_address.exam.collection,
+			data: data
+		})
+		return res;
+	}
+	async cancelCollectionSinglePaper(data){
+		const res = await https({
+			method:'post',
+			url: api_address.exam.cancelCollection,
 			data: data
 		})
 		return res;

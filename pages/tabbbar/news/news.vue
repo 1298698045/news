@@ -650,6 +650,7 @@
 		font-size: 28rpx;
 		// background: rgba(199, 12, 21,.5);
 		background: #fff;
+		border-bottom: 1rpx solid #F4F4F4;
 		.tabs{
 			width: calc(100% - 60rpx);
 			white-space: nowrap;

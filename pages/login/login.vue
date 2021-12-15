@@ -77,44 +77,64 @@
 			changePassWord(e){
 				this.password = e.detail;
 			},
-			handleLogin(){
+			async handleLogin(){
 				var that = this;
-				uni.login({
-					provider:'weixin',
-					success:res=>{		
-						console.log(res.code,'code')
-						that.code = res.code;
-					}
-				})
-				uni.getUserProfile({
-				  desc: '登录',
-				  success: function (res) {
-					console.log('用户昵称为：', res);
-					uni.setStorageSync('userInfo',JSON.stringify(res));
-					that.userInfo = res.userInfo;
-					that.userInfo.avatarUrl = JSON.parse(res.rawData).avatarUrl;
-					that.$http.getLogin({
-						js_code:that.code,
-						nickName: that.userInfo.nickName,
-						PicUrl: that.userInfo.avatarUrl
-					}).then(reponse=>{
-						console.log(reponse);
-						const {wechatAuthToken} = reponse.returnValue;
-						uni.setStorageSync('wechatAuthToken', wechatAuthToken)
-						let timeStamp = new Date().getTime();
-						uni.setStorageSync('timeStamp',timeStamp);
-						uni.switchTab({
-							url:'../tabbbar/index/index'
+				this.getUserLogin().then(res=>{
+					console.log('res:',res)
+					if(res.returnValue){						
+						uni.login({
+							provider:'weixin',
+							success:res=>{		
+								console.log(res.code,'code')
+								that.code = res.code;
+							}
 						})
-					})
-				  }
+						uni.getUserProfile({
+						  desc: '登录',
+						  success: function (res) {
+							console.log('用户昵称为：', res);
+							uni.setStorageSync('userInfo',JSON.stringify(res));
+							that.userInfo = res.userInfo;
+							that.userInfo.avatarUrl = JSON.parse(res.rawData).avatarUrl;
+							that.$http.getLogin({
+								js_code:that.code,
+								nickName: that.userInfo.nickName,
+								PicUrl: that.userInfo.avatarUrl
+							}).then(reponse=>{
+								console.log(reponse);
+								const {wechatAuthToken} = reponse.returnValue;
+								uni.setStorageSync('wechatAuthToken', wechatAuthToken)
+								let timeStamp = new Date().getTime();
+								uni.setStorageSync('timeStamp',timeStamp);
+								uni.switchTab({
+									url:'../tabbbar/index/index'
+								})
+							})
+						  }
+						});
+					}else {
+						this.$tui.toast({
+							text: '登陆失败！'
+						})
+					}
 				});
+				
 				
 				// let timeStamp = new Date().getTime();
 				// uni.setStorageSync('timeStamp',timeStamp);
 				// uni.switchTab({
 				// 	url:'../tabbbar/index/index'
 				// })
+			},
+			async getUserLogin(){
+				let response 
+				await this.$http.getUserLogin({
+					LoginName: this.userNumber,
+					Password: this.password
+				}).then(res=>{
+					response = res;
+				})
+				return response;
 			}
 		}
 	}
