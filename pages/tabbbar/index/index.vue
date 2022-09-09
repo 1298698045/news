@@ -19,8 +19,20 @@
 				</div>
 				<p class="text">党费</p>
 			</div>
+			<div class="box" @click="handleHref(4)">
+				<div class="icon">
+					<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
+				</div>
+				<p class="text">问卷</p>
+			</div>
+			<div class="box" @click="handleHref(5)">
+				<div class="icon">
+					<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
+				</div>
+				<p class="text">活动</p>
+			</div>
 			<div class="fake_item"></div>
-			<div class="fake_item"></div>
+			<div class="fake_item"></div> 
 		</div>
 		<div class="hr"></div>
 		<!-- <button @click="getLogin()">获取code</button> -->
@@ -148,10 +160,21 @@
 						uni.navigateTo({
 							url:'../../study/home'
 						})
+						break;
 					case 3:
 						uni.navigateTo({
 							url: '../../partyCost/partyCost'
 						})
+					case 4:
+						uni.navigateTo({
+							url:'../../questionnaire/questionnaire'
+						})
+						break;
+					case 5:
+						uni.navigateTo({
+							url: '../../activity/activity'
+						})
+						break;
 					default:
 						return
 				}

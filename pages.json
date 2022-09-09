@@ -141,6 +141,42 @@
             }
             
         }
+        ,{
+            "path" : "pages/questionnaire/questionnaire",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "问卷",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/questionnaire/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "问卷",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/questionnaire/preview",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "问卷详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/questionnaire/partakePeople",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "参与详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root":"pages/news",
@@ -263,6 +299,45 @@
                 
                 }
             ]
+	},{
+		"root":"pages/activity",
+		"pages":[
+			{
+				"path":"activity",
+				"style" :
+				{
+				    "navigationBarTitleText": "活动",
+				    "enablePullDownRefresh": false
+				}
+			}
+		    ,{
+                    "path" : "activityDetail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "互动详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "signinDetail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "签到详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "signinHome",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "签到",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "#ffffff",
@@ -278,7 +353,12 @@
 			"van-tab":"/wxcomponents/vant/tab/index",
 			"van-tabs":"/wxcomponents/vant/tabs/index",
 			"van-field":"/wxcomponents/vant/field/index",
-			"van-uploader":"/wxcomponents/vant/uploader/index"
+			"van-uploader":"/wxcomponents/vant/uploader/index",
+			"van-checkbox-group": "/wxcomponents/vant/checkbox-group/index",
+			"van-checkbox": "/wxcomponents/vant/checkbox/index",
+			"van-radio-group": "/wxcomponents/vant/radio-group/index",
+			"van-radio": "/wxcomponents/vant/radio/index",
+			"van-action-sheet": "/wxcomponents/vant/action-sheet/index"
 		}
 	},
 	"easycom": {
