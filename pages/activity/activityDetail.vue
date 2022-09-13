@@ -78,10 +78,13 @@
 				comment:''
 			}
 		},
+		onLoad(options) {
+			this.id = options.id;
+		},
 		methods: {
 			topeoplelist(){
 				uni.navigateTo({
-					url:'signinDetail'
+					url:'signinDetail?id='+this.id
 				})
 			},
 			// 评论
@@ -95,7 +98,7 @@
 			// 签到
 			signing(){
 				uni.navigateTo({
-					url:'signinHome'
+					url:'signinHome?id='+this.id
 				})
 			}
 		}

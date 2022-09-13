@@ -307,7 +307,7 @@
 				"style" :
 				{
 				    "navigationBarTitleText": "活动",
-				    "enablePullDownRefresh": false
+				    "enablePullDownRefresh": true
 				}
 			}
 		    ,{

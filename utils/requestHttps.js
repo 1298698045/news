@@ -18,15 +18,17 @@ export function https(config) {
 	 
  }else {	 
 	 config.header = {
-		 'content-type': 'application/x-www-form-urlencoded;charset=utf-8'
+		 'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+		 'token': wx.getStorageSync('wechatAuthToken')
 	 };
-	 config.data.Token = uni.getStorageSync('wechatAuthToken') || ''
+	 // config.data.Token = uni.getStorageSync('wechatAuthToken') || ''
 	 
  }
  //检查缓存中有没有token
- var token = wx.getStorageSync('token');
+ var token = wx.getStorageSync('wechatAuthToken');
  if (token != '') {
-     header.Authorization = token
+     config.header.Authorization = token
+	 config.header.token = token
  }   
  config.url = baseUrl + config.url;   // 请求地址
  let promise = new Promise(function(resolve, reject) {

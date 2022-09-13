@@ -68,7 +68,12 @@
 				})
 			}
 			console.log(localTime,this.currenStamp)
-			
+			uni.login({
+				provider:'weixin',
+				success:res=>{		
+					console.log(res.code,'code')
+				}
+			})
 		},
 		methods: {
 			changeUserNumber(e){
@@ -99,11 +104,12 @@
 							that.$http.getLogin({
 								js_code:that.code,
 								nickName: that.userInfo.nickName,
-								PicUrl: that.userInfo.avatarUrl
+								PicUrl: that.userInfo.avatarUrl,
+								userName: that.userNumber
 							}).then(reponse=>{
 								console.log(reponse);
-								const {wechatAuthToken} = reponse.returnValue;
-								uni.setStorageSync('wechatAuthToken', wechatAuthToken)
+								const {WechatAuthToken} = reponse.returnValue;
+								uni.setStorageSync('wechatAuthToken', WechatAuthToken)
 								let timeStamp = new Date().getTime();
 								uni.setStorageSync('timeStamp',timeStamp);
 								uni.switchTab({

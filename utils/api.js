@@ -495,5 +495,17 @@ class api{
 		})
 		return res;
 	}
+	// 获取活动列表
+	async getActivityList(data){
+		const res = await https({
+			method: 'get',
+			header:{
+				
+			},
+			url: api_address.activity.list,
+			data: data
+		})
+		return res;
+	}
 }
 export default new api()

@@ -65,7 +65,9 @@
 				startTime:"",
 				qty:"",
 				list:[],
-				BuildingName:"" //标志性建筑物
+				BuildingName:"", //标志性建筑物
+				id: '',
+				dateTime: ''
 			}
 		},
 		mounted() {
@@ -76,10 +78,27 @@
 		destroyed() {
 			this.timer = null;
 		},
-		onLoad(){
+		onLoad(options){
+			this.id = options.id;
 			this.getLocation();
 		},
 		methods:{
+			sign(){
+				this.$httpWX({
+					method: 'post',
+					url: '/campaign/clockin',
+					data: {
+						CampaignId: this.id,
+						ClockedIn: this.dateTime,
+						ClockinLocation: this.address,
+						ClockInLatitude: this.latitude,
+						ClockInLongitude: this.longitude,
+						ClockinIP: ''
+					}
+				}).then(res=>{
+					console.log(res,'res')
+				})
+			},
 			// 获取当前位置经纬度
 			handleLoacation(toast) {
 				let that = this;
@@ -245,6 +264,7 @@
 				secondTime = secondTime.toString();
 				this.date = `${yearTime}年${monthTime}月${dayTime}日`;
 				let time = `${hoursTima}:${minvteTime}:${secondTime}`;
+				this.dateTime = `${yearTime}-${monthTime}-${dayTime} ${hoursTima}:${minvteTime}:${secondTime}`;
 				return time;
 			}
 		}

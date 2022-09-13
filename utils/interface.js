@@ -1,7 +1,14 @@
 export const api_address = {
 	login:{
-		login:'/SystemUser/login/wechatauth',
-		userLogin: '/SystemUser/login/passlogin'
+		login:'/Account/login/wechatauth',
+		userLogin: '/Account/login/passlogin'
+	},
+	// 问卷
+	question:{
+		list: '/campaign/getlist'
+	},
+	activity:{
+		list: '/campaign/getlist'
 	},
 	// 新闻
 	journalism:{

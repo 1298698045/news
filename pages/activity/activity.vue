@@ -5,9 +5,9 @@
 		</div>
 		<div class="center">
 			<div class="listWrap">
-				<div class="list-item" @click="toview()">
+				<div class="list-item" @click="toview(item)" v-for="(item,index) in listData" :key="index">
 					<div class="item-head">
-						招募100名儿童免费测骨龄
+						{{item.Name || ''}}
 					</div>
 					<div class="item-body item-img-body">
 						<div class="body-right">
@@ -25,7 +25,7 @@
 						</div>
 						<div>
 							<img src="/static/images/activity/04.5.1.1.Participants.png" />
-							<span>300人报名</span>
+							<span>{{item.Peoples.length || 0}}人报名</span>
 						</div>
 					</div>
 				</div>
@@ -40,29 +40,80 @@
 			return {
 				tabs: [
 					{
-						name: '我创建'
+						name: '全部',
+						scope: 'all'
 					},
 					{
-						name: '我参加'
+						name: '我创建',
+						scope: 'own'
+					},
+					{
+						name: '我参加',
+						scope: 'join'
 					}
 				],
 				currentTab: 0,
-				isLoading: false
+				isLoading: false,
+				scope: 'all',
+				pageNumber: 1,
+				pageSize: 10,
+				listData: [],
+				isBook: false
 			}
 		},
+		onLoad() {
+			this.getQuery();
+		},
 		methods:{
+			getQuery(){
+				this.$http.getActivityList({
+					scope: this.scope,
+					PageNumber: this.pageNumber,
+					PageSize: this.pageSize
+				}).then(res=>{
+					console.log(res);
+					let total = res.total;
+					if(this.pageNumber * this.pageSize < total){
+						this.isBook = true;
+					}else {
+						this.isBook = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue;
+					}else {
+						result = this.listData.concat(res.returnValue);
+					}
+					this.listData = result;
+				})
+			},
 			changeTab(e){
 				console.log(e)
 				this.currentTab = e.index;
+				this.scope = this.tabs[e.index].scope;
+				this.pageNumber = 1;
+				this.getQuery();
 			},
-			onRefresh(e){
-				
-			},
-			toview(){
+			toview(item){
 				uni.navigateTo({
-					url: 'activityDetail'
+					url: 'activityDetail?id='+item.CampaignId
 				})
 			}
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.pageNumber = 1;
+			this.getQuery();
+			wx.stopPullDownRefresh();
+		},
+		/**
+		 * 页面上拉触底事件的处理函数
+		 */
+		onReachBottom() {
+		   if(this.isBook){
+			   this.pageNumber++;
+			   this.getQuery();
+		   }
 		}
 	}
 </script>

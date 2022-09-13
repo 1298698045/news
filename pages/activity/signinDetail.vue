@@ -50,7 +50,18 @@
 				]
 			}
 		},
+		onLoad(options) {
+			this.id = options.id;
+		},
 		methods: {
+			getQuery(){
+				this.$httpWX({
+					url: '',
+					
+				}).then(res=>{
+					
+				})
+			},
 			changeTabList(e){
 				this.currentTab = e.index;
 			}
