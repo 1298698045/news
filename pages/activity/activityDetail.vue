@@ -93,7 +93,33 @@
 			},
 			// 报名
 			signUp(){
+				this.$httpWX({
+					url: '/campaign/signup',
+					method: 'post',
+					data:{
+						CampaignId: this.id,
+						JoinState: '',
+						StatusCode: '',
+						IsLeave: ''
+					}
+				}).then(res=>{
+					
+				})
 				this.isSignUp = true;
+			},
+			cancelSignUp(){
+				this.$httpWX({
+					url: '/campaign/signout',
+					method: 'post',
+					data:{
+						CampaignId: this.id,
+						JoinState: '',
+						StatusCode: '',
+						IsLeave: ''
+					}
+				}).then(res=>{
+					
+				})
 			},
 			// 签到
 			signing(){

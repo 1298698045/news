@@ -23,7 +23,7 @@
 				</div>
 			</div>
 			<div class="signin">
-				<div class="sigin-btn" @click="sign()">
+				<div class="sigin-btn" @click="signIn()">
 					<div class="sigin-btn-text">签到</div>
 					<div class="sigin-btn-time">{{time}}</div>
 				</div>
@@ -83,13 +83,30 @@
 			this.getLocation();
 		},
 		methods:{
-			sign(){
+			signIn(){
 				this.$httpWX({
 					method: 'post',
 					url: '/campaign/clockin',
 					data: {
 						CampaignId: this.id,
 						ClockedIn: this.dateTime,
+						ClockinLocation: this.address,
+						ClockInLatitude: this.latitude,
+						ClockInLongitude: this.longitude,
+						ClockinIP: ''
+					}
+				}).then(res=>{
+					console.log(res,'res');
+				})
+			},
+			// 签退
+			signOut(){
+				this.$httpWX({
+					method: 'post',
+					url: '/campaign/clockout',
+					data: {
+						CampaignId: this.id,
+						ClockedOut: this.dateTime,
 						ClockinLocation: this.address,
 						ClockInLatitude: this.latitude,
 						ClockInLongitude: this.longitude,
