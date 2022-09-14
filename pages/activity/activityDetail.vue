@@ -3,7 +3,7 @@
 		<div class="main-content">
 			<div class="list-item">
 				<div class="item-head">
-					{{record.Name}}
+					{{record.Name.value || ''}}
 				</div>
 				<div class="item-body" v-html="record.Description">
 					
@@ -13,12 +13,12 @@
 						<img src="/static/images/activity/02.3.2.Time-sort.png" />
 						<span>{{record.timerStr || ''}} 截止</span>
 					</div>
-					<div @click="topeoplelist">
+					<div @click="toPeopleSignUp">
 						<img src="/static/images/activity/04.5.1.1.Participants.png" />
-						<span>300人报名</span>
+						<span>{{record.NumOfApplicant.value || 0}}人报名</span>
 					</div>
 				</div>
-				<div class="item-bottom" id="signlist" v-if="isSignUp">
+				<div class="item-bottom" id="signlist" v-if="signObj.JoinState==1">
 					<div>
 						<img src="/img/icons/location.png" />
 						<span>签到</span>
@@ -34,11 +34,11 @@
 					<p class="tab active">评论</p>
 				</div>
 				<div class="box" v-for="(item,index) in commentList" :key="index">
-					<div class="avatar">{{item.CreatedBy}}</div>
+					<div class="avatar">{{item.CreatedBy.userValue.DisplayName}}</div>
 					<div class="info_view">
-						<p class="nikeName">{{item.CreatedBy}}</p>
-						<p class="content" v-html="item.Title"></p>
-						<p class="time">{{item.CreatedOn}}</p>
+						<p class="nikeName">{{item.CreatedBy.userValue.DisplayName}}</p>
+						<p class="content" v-html="item.Name.textValue"></p>
+						<p class="time">{{item.CreatedOn.dateTime}}</p>
 					</div>
 					<div class="like_icon"></div>
 				</div>
@@ -49,8 +49,8 @@
 					<button style="margin-right:10px;" @click="sendComment">
 						评论
 					</button>
-					<button v-if="!isSignUp" @click="signUp">报名</button>
-					<button v-else @click="signing">签到</button>
+					<button style="margin-right:10px;" @click="signObj.JoinState==1?cancelSignUp():signUp()">{{signObj.JoinState == 1 ? '取消报名' : '报名'}}</button>
+					<button v-if="signObj.JoinState==1"  @click="signing">{{signObj.ClockinStatus == 1 ? '签退' : '签到'}}</button>
 				</div>
 			</div>
 		</div>
@@ -75,21 +75,109 @@
 						CreatedOn:'2022'
 					}
 				],
-				comment:''
+				comment:'',
+				signObj:{},
+				pageNumber:1,
+				pageSize:10,
+				isPage: false
 			}
 		},
 		onLoad(options) {
 			this.id = options.id;
+			this.getDetail();
+			this.getIsSign();
+			this.queryCommentList();
 		},
 		methods: {
+			getDetail(){
+				this.$httpWX({
+					url: '/entity/detail/'+this.id,
+					method: 'get',
+					data:{
+						objectTypeCode: 4400,
+						layoutId: '59C9B48D-5578-41F2-9CA2-689E1DAC0905'
+					}
+				}).then(res=>{
+					console.log('res',res)
+					this.record = res.returnValue.record;
+				})
+			},
+			getIsSign(){
+				this.$httpWX({
+					url: '/campaignpeople/state',
+					method:'get',
+					data:{
+						campaignId: this.id
+					}
+				}).then(res=>{
+					console.log(res);
+					this.signObj = res.returnValue;
+					if(res.returnValue.ClockinStatus=='True'){
+						this.signObj.ClockinStatus = 1;
+					}
+				})
+			},
 			topeoplelist(){
 				uni.navigateTo({
 					url:'signinDetail?id='+this.id
 				})
 			},
+			toPeopleSignUp(){
+				uni.navigateTo({
+					url:'signUpContacts?id='+this.id
+				})
+			},
 			// 评论
 			sendComment(){
-				
+				var obj = {
+					params:{
+						recordRep:{
+							objTypeCode: 20310,
+							fields: {
+								Name: this.comment,
+								RegardingObjectId: this.id,
+								RegardingObjectTypeCode: 4400,
+								Body: this.comment
+							}
+						}
+					}
+				}
+				const message = JSON.stringify(obj);
+				this.$httpWX({
+					url: '/entity/save',
+					method:'post',
+					data:{
+						message: message
+					}
+				}).then(res=>{
+					this.comment = '';
+					this.queryCommentList();
+				})
+			},
+			queryCommentList(){
+				var filterQuery = '\nRegardingObjectId\teq\t'+this.id
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data:{
+						objectTypeCode: 20310,
+						filterQuery: filterQuery
+					}
+				}).then(res=>{
+					let total = res.returnValue.totalCount;
+					if(this.pageNumber * this.pageSize < total){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue.nodes;
+					}else {
+						result = this.commentList.concat(res.returnValue.nodes);
+					}
+					this.commentList = result;
+				})
 			},
 			// 报名
 			signUp(){
@@ -98,12 +186,17 @@
 					method: 'post',
 					data:{
 						CampaignId: this.id,
-						JoinState: '',
-						StatusCode: '',
-						IsLeave: ''
+						JoinState: 1,
+						StatusCode: this.record.StatusCode.value || ''
 					}
 				}).then(res=>{
-					
+					uni.showToast({
+						title:'报名成功！',
+						icon:'success',
+						duration:2000
+					})
+					this.getDetail();
+					this.getIsSign();
 				})
 				this.isSignUp = true;
 			},
@@ -113,20 +206,29 @@
 					method: 'post',
 					data:{
 						CampaignId: this.id,
-						JoinState: '',
-						StatusCode: '',
-						IsLeave: ''
+						JoinState: 2,
+						StatusCode: this.record.StatusCode.value || ''
 					}
 				}).then(res=>{
-					
+					this.getDetail();
+					this.getIsSign();
 				})
 			},
 			// 签到
 			signing(){
 				uni.navigateTo({
-					url:'signinHome?id='+this.id
+					url:'signinHome?id='+this.id+'&ClockinStatus=' + this.signObj.ClockinStatus
 				})
 			}
+		},
+		/**
+		 * 页面上拉触底事件的处理函数
+		 */
+		onReachBottom() {
+		   if(this.isPage){
+			   this.pageNumber++;
+			   this.queryCommentList();
+		   }
 		}
 	}
 </script>

@@ -1,10 +1,10 @@
 <template>
 	<view class="wrapper">
-		<div class="header">
+		<!-- <div class="header">
 			<div class="tabContainer">
 				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab" itemWidth="50%" @change="changeTabList"></tui-tabs>
 			</div>
-		</div>
+		</div> -->
 		<div class="center">
 			<div class="listWrap">
 				<div class="list-item" v-for="item in listData" :key="index">
@@ -60,7 +60,7 @@
 		methods: {
 			getQuery(){
 				var filterQuery = '\nCampaignId\teq\t'+this.id;
-				filterQuery += '\nClockinStatus \teq\t'+this.scope;
+				filterQuery += '\nJoinState\teq\t'+this.scope;
 				this.$httpWX({
 					url: '/entity/fetchall',
 					method:'post',

@@ -25,7 +25,7 @@
 						</div>
 						<div>
 							<img src="/static/images/activity/04.5.1.1.Participants.png" />
-							<span>{{item.Peoples.length || 0}}人报名</span>
+							<span>{{item.NumOfPeople || 0}}人报名</span>
 						</div>
 					</div>
 				</div>
@@ -44,12 +44,12 @@
 						scope: 'all'
 					},
 					{
-						name: '我创建',
-						scope: 'own'
-					},
-					{
 						name: '我参加',
 						scope: 'join'
+					},
+					{
+						name: '我创建',
+						scope: 'own'
 					}
 				],
 				currentTab: 0,

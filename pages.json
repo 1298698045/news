@@ -146,7 +146,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "问卷",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
             
         }
@@ -314,8 +314,8 @@
                     "path" : "activityDetail",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "互动详情",
-                    "enablePullDownRefresh": false
+                    "navigationBarTitleText": "活动详情",
+                    "enablePullDownRefresh": true
                 }
                 
                 }
@@ -323,8 +323,8 @@
                     "path" : "signinDetail",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "签到详情",
-                    "enablePullDownRefresh": false
+                    "navigationBarTitleText": "签到人员列表",
+                    "enablePullDownRefresh": true
                 }
                 
                 }
@@ -334,6 +334,15 @@
                 {
                     "navigationBarTitleText": "签到",
                     "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "signUpContacts",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "报名人员列表",
+                    "enablePullDownRefresh": true
                 }
                 
                 }

@@ -8,26 +8,25 @@
 		<div class="center" v-for="(item,index) in list" :key="index" @click="getDetail(item)">
 			<div class="content">
 				<div class="row">
-					<div class="Avatar">{{item.newName || ''}}</div>
+					<div class="Avatar">{{item.createdByName || ''}}</div>
 					<div class="info_r">
 						<p class="name">
-							{{item.CreatedByName || ''}}
+							{{item.createdByName || ''}}
 						</p>
 						<p class="text">
-							{{item.DeptName || ''}}   {{item.time || ''}}
+							{{item.owningBusinessUnitName || ''}}   {{item.createdOn || ''}}
 						</p>
 					</div>
 				</div>
-				<div class="title">{{item.Name}}</div>
+				<div class="title">{{item.title}}</div>
 				<div class="box">
 					<p class="time">
 						<i class="iconfont icon-shijian-copy"></i>
-						{{item.endTime}} 截止</p>
+						{{item.endDate}} 截止</p>
 					<p class="num">
 						<i class="iconfont icon-canyuren"></i>
-						<span class="active">{{item.NumOfResponses || ''}}</span>
-						<span>&nbsp;/&nbsp;{{item.NumOfInvitationsSent || ''}}</span>
-						<!-- {{item.NumOfResponses+'/'+item.NumOfInvitationsSent}} -->
+						<span class="active">{{item.numOfResponses || ''}}</span>
+						<span>&nbsp;/&nbsp;{{item.numOfInvitationsSent || ''}}</span>
 					</p>
 				</div>
 			</div>
@@ -41,19 +40,22 @@
 			return {
 				tabs:[
 					{
-						name: '待填写'
+						name: '待填写',
+						scope: 'stay'
 					},
 					{
-						name: '我创建'
+						name: '我创建',
+						scope: 'own'
 					},
 					{
-						name: '历史问卷'
+						name: '历史问卷',
+						scope: 'complete'
 					}
 				],
 				currentTab: 0,
-				scope:0,
+				scope:'stay',
 				pageNumber:1,
-				pageSize:25,
+				pageSize:10,
 				list:[
 					{
 						CreatedByName: '张三',
@@ -70,9 +72,40 @@
 				isMoreShow: false
 			}
 		},
+		onLoad() {
+			this.getQuery();
+		},
 		methods: {
+			getQuery(){
+				this.$httpWX({
+					url: '/surveyApp/getlist',
+					method: "get",
+					data: {
+						scope: this.scope,
+						PageNumber: this.pageNumber,
+						PageSize: this.pageSize
+					}
+				}).then(res=>{
+					console.log(res);
+					let total = res.total;
+					if(this.pageNumber * this.pageSize < total){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue;
+					}else {
+						result = this.list.concat(res.returnValue);
+					}
+					this.list = result;
+				})
+			},
 			changeTab(e){
 				this.currentTab = e.index;
+				this.scope = this.tabs[e.index].scope;
+				this.getQuery();
 			},
 			getDetail(){
 				uni.navigateTo({
@@ -83,13 +116,17 @@
 		// 下拉刷新
 		onPullDownRefresh() {
 			this.pageNumber = 1;
+			this.getQuery();
 			wx.stopPullDownRefresh();
 		},
 		/**
 		 * 页面上拉触底事件的处理函数
 		 */
 		onReachBottom() {
-		   
+		   if(this.isPage){
+			   this.pageNumber++;
+			   this.getQuery();
+		   }
 		}
 	}
 </script>

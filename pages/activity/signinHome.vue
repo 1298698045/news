@@ -23,8 +23,8 @@
 				</div>
 			</div>
 			<div class="signin">
-				<div class="sigin-btn" @click="signIn()">
-					<div class="sigin-btn-text">签到</div>
+				<div class="sigin-btn" @click="ClockinStatus==1?signOut():signIn()">
+					<div class="sigin-btn-text">{{ClockinStatus==1?'签退':'签到'}}</div>
 					<div class="sigin-btn-time">{{time}}</div>
 				</div>
 				<div class="sigin-status">
@@ -67,7 +67,8 @@
 				list:[],
 				BuildingName:"", //标志性建筑物
 				id: '',
-				dateTime: ''
+				dateTime: '',
+				ClockinStatus: ''
 			}
 		},
 		mounted() {
@@ -80,9 +81,25 @@
 		},
 		onLoad(options){
 			this.id = options.id;
+			this.ClockinStatus = options.ClockinStatus;
 			this.getLocation();
+			this.getIsSign();
 		},
 		methods:{
+			getIsSign(){
+				this.$httpWX({
+					url: '/campaignpeople/state',
+					method:'get',
+					data:{
+						campaignId: this.id
+					}
+				}).then(res=>{
+					console.log(res);
+					if(res.returnValue.ClockinStatus=='True'){
+						this.signObj.ClockinStatus = 1;
+					}
+				})
+			},
 			signIn(){
 				this.$httpWX({
 					method: 'post',
@@ -93,10 +110,12 @@
 						ClockinLocation: this.address,
 						ClockInLatitude: this.latitude,
 						ClockInLongitude: this.longitude,
-						ClockinIP: ''
+						ClockinIP: '',
+						ClockinStatus: 1
 					}
 				}).then(res=>{
 					console.log(res,'res');
+					this.getIsSign();
 				})
 			},
 			// 签退
@@ -110,7 +129,8 @@
 						ClockinLocation: this.address,
 						ClockInLatitude: this.latitude,
 						ClockInLongitude: this.longitude,
-						ClockinIP: ''
+						ClockinIP: '',
+						ClockinStatus: 2
 					}
 				}).then(res=>{
 					console.log(res,'res')
