@@ -4,10 +4,10 @@
 			<div class="cover">
 				<div class="title">
 					<span class="tag">专栏</span>
-					{{detail.name}}
+					{{detail.Name.value || ''}}
 				</div>
 				<div class="duty">
-					<span class="name">昵称</span>
+					<span class="name">{{detail.CreatedBy.value || ''}}</span>
 					架构师
 				</div>
 				<!-- <div class="introduce">
@@ -40,14 +40,14 @@
 		<div class="center">
 			<div class="container">
 				<swiper class="d-swiper-box" :current="currIndex" @change="changeSwiper" :style="{height:swiperHeight}">
-					<swiper-item>
-						<Introduce class="catalogue_0" :description='detail.description' :courseId="courseId" v-if="currIndex==0" />
+					<swiper-item class="swiperItem">
+						<Introduce class="catalogue_0" :description='detail.Description.value' :courseId="courseId" v-if="currIndex==0" />
 					</swiper-item>
 					<swiper-item>
-						<Catalogue class="catalogue_1" v-if="currIndex==1" :list="detail.courseChapterBases" />
+						<Catalogue class="catalogue_1" :courseId="courseId" v-if="currIndex==1" :list="catalogueList" />
 					</swiper-item>
 					<swiper-item>
-						<Evaluate class="catalogue_2" v-if="currIndex==2" :detail="detail.courseScoreBaseTotal"  />
+						<Evaluate class="catalogue_2" :courseId="courseId" v-if="currIndex==2" />
 					</swiper-item>
 					<swiper-item>
 						<Recommend class="catalogue_3" v-if="currIndex==3" :list="detail.courseBases" />
@@ -89,7 +89,146 @@
 				userFavor:'',
 				tempHeight:'',
 				courseId: '',
-				detail:{}
+				detail:{},
+				catalogueList:[
+					{
+						name:'入门SpringBoot2.x',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍',
+								children:[
+									{
+										name:'1-1 SpringBoot2.x入门介绍'
+									},
+									{
+										name:'1-2 SpringBoot2.x入门介绍'
+									},
+									{
+										name:'1-3 SpringBoot2.x入门介绍'
+									},
+								]
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 核心功能讲解',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					},
+					{
+						name:'SpringBoot 数据层操作',
+						children:[
+							{
+								name:'1-1 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-2 SpringBoot2.x入门介绍'
+							},
+							{
+								name:'1-3 SpringBoot2.x入门介绍'
+							},
+						]
+					}
+				]
 			}
 		},
 		onLoad(options) {
@@ -124,18 +263,55 @@
 		onReady() {
 			this.getHeight('.catalogue_'+0);
 			this.getQuery();
+			this.getCatalogue();
 		},
 		methods: {
 			getQuery(){
-				this.$http.getStudyInterface({
-					CourseId:this.courseId
-				}).then(res=>{
-					this.detail = res.returnValue;
-					if(this.detail.courseScoreBaseTotal && this.detail.courseScoreBaseTotal.itemList){
-						this.detail.courseScoreBaseTotal.itemList.map(item=>{
-							item.modifiedOn = this.$tui.formData(item.modifiedOn);
-						})
+				// this.$http.getStudyInterface({
+				// 	CourseId:this.courseId
+				// }).then(res=>{
+				// 	this.detail = res.returnValue;
+				// 	if(this.detail.courseScoreBaseTotal && this.detail.courseScoreBaseTotal.itemList){
+				// 		this.detail.courseScoreBaseTotal.itemList.map(item=>{
+				// 			item.modifiedOn = this.$tui.formData(item.modifiedOn);
+				// 		})
+				// 	}
+				// })
+				this.$httpWX({
+					url: '/entity/detail/'+this.courseId,
+					method:'get',
+					data:{
+						objectTypeCode: 50700,
+						layoutId: '0ccbcaa0-1da5-4b54-a307-9f2434da9632'
 					}
+				}).then(res=>{
+					console.log(res)
+					this.detail = res.returnValue.record;
+				})
+			},
+			getCatalogue(){
+				this.$httpWX({
+					url: '/course/'+ this.courseId +'/chapter/fetchall',
+					method:'get',
+					data:{
+						search: ''
+					}
+				}).then(res=>{
+					this.catalogueList = res.returnValue;
+					const arrayTreeAddLevel = (array, levelName = 'level', childrenName = 'children') => {
+					    if (!Array.isArray(array)) return []
+					    const recursive = (array, level = 0) => {
+					        level++
+					        return array.map(v => {
+					            v[levelName] = level
+					            const child = v[childrenName]
+					            if (child && child.length) recursive(child, level)
+					            return v
+					        })
+					    }
+					    return recursive(array)
+					}
+					this.catalogueList =  arrayTreeAddLevel(this.catalogueList,'level','Children')
 				})
 			},
 			getStudyFavor(){
@@ -291,6 +467,7 @@
 	}
 	.center{
 		.container{
+			padding-bottom: 100rpx;
 			.d-swiper-box{
 				height: 100%;
 			}
@@ -314,6 +491,9 @@
 				border-radius: 50rpx;
 			}
 		}
+	}
+	.swiperItem{
+		overflow: auto;
 	}
 }
 </style>

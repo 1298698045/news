@@ -116,6 +116,9 @@
 				}).then(res=>{
 					console.log(res,'res');
 					this.getIsSign();
+					uni.navigateBack({
+						delta:1
+					})
 				})
 			},
 			// 签退
@@ -134,6 +137,10 @@
 					}
 				}).then(res=>{
 					console.log(res,'res')
+					this.getIsSign();
+					uni.navigateBack({
+						delta:1
+					})
 				})
 			},
 			// 获取当前位置经纬度

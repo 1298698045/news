@@ -24,7 +24,7 @@
 			<scroll-view class="tabs" scroll-x="true" @scroll="scroll" :scroll-left="scrollLeft">
 					<view class="tab" @click="getQueryList(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
 						<span>
-							{{item.name}}
+							{{item.Name}}
 						</span>
 					</view>
 			</scroll-view>
@@ -48,35 +48,35 @@
 					<view class="tui-news-flex">
 						<view class="tui-news-picbox" v-if="item.coverDisplay=='LeftTitle'">
 							<block>
-								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block"></image>
+								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.ImgPathList[0].path" class="tui-block"></image>
 							</block>
 						</view>
-						<view class="tui-news-tbox tui-flex-column tui-flex-between" :class="[item.coverDisplay=='LeftTitle' && !item.isVideo?'tui-h165 tui-pl-20':'']">
-							<view class="tui-news-title" :class="[(!item.isVideo && item.coverDisplay=='LeftTitle')|| item.coverDisplay=='LeftTitle'?'':'tui-pt20']">{{item.title}}</view>
+						<view class="tui-news-tbox tui-flex-column tui-flex-between" :class="[item.CoverDisplay=='LeftTitle' && !item.isVideo?'tui-h165 tui-pl-20':'']">
+							<view class="tui-news-title" :class="[(!item.isVideo && item.CoverDisplay=='LeftTitle')|| item.CoverDisplay=='LeftTitle'?'':'tui-pt20']">{{item.Title}}</view>
 							<!-- <view class="tui-time">{{item.modifiedOn.replace(/T/g,' ')}}</view> -->
-							<view class="tui-sub-box" :class="[!item.isVideo && item.coverDisplay=='LeftTitle'?'':'tui-pt20']">
-								<view class="tui-sub-source">{{item.keyWords}} {{item.modifiedOn.replace(/T/g,' ')}}</view>
+							<view class="tui-sub-box" :class="[!item.isVideo && item.CoverDisplay=='LeftTitle'?'':'tui-pt20']">
+								<view class="tui-sub-source">{{item.KeyWords}} {{item.ModifiedOn.replace(/T/g,' ')}}</view>
 								<view class="tui-sub-cmt">
-									<view>{{item.commentCount}}评论</view>
+									<view>{{item.CommentCount}}评论</view>
 									<view class="tui-scale">
-										<tui-tag padding="10rpx 24rpx" type="gray"  shape="circleRight" v-if="item.isTop">置顶</tui-tag>
+										<tui-tag padding="10rpx 24rpx" type="gray"  shape="circleRight" v-if="item.IsTop">置顶</tui-tag>
 									</view>
 								</view>
 							</view>
 						</view>
-						<view class="tui-news-picbox" :class="[item.coverDisplay=='RightTitle'?'right_picbox':'']" v-if="item.coverDisplay=='RightTitle'">
+						<view class="tui-news-picbox" :class="[item.CoverDisplay=='RightTitle'?'right_picbox':'']" v-if="item.CoverDisplay=='RightTitle'">
 							<block>
-								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.imgPathList[0].path" class="tui-block" mode="widthFix"></image>
+								<image @click.stop="handlePreviewImg(item,0)" :src="pathurl+item.ImgPathList[0].path" class="tui-block" mode="widthFix"></image>
 							</block>
 						</view>
 					</view>
-					<view class="tui-news-picbox" v-if="item.coverDisplay=='BelowGrid'||item.coverDisplay=='Carousel'">
-						<block v-for="(items,index2) in item.imgPathList" :key="index2">
+					<view class="tui-news-picbox" v-if="item.CoverDisplay=='BelowGrid'||item.CoverDisplay=='Carousel'">
+						<block v-for="(items,index2) in item.ImgPathList" :key="index2">
 							<image @click.stop="handlePreviewImg(item,index2)" :src="pathurl+items.path" mode="widthFix"></image>
 						</block>
-						<view v-if="item.coverDisplay=='BelowGrid'" class="fack_item"></view>
+						<view v-if="item.CoverDisplay=='BelowGrid'" class="fack_item"></view>
 					</view>
-					<view class="maxImg" v-if="item.coverDisplay=='BelowTitleBigImg'">
+					<view class="maxImg" v-if="item.CoverDisplay=='BelowTitleBigImg'">
 						<image v-for="items in item.imgPathList" :src="pathurl+items.path" @click.stop="handlePreviewImg(item,index2)" mode="widthFix"></image>
 					</view>
 				</tui-list-cell>
@@ -135,7 +135,7 @@
 							  <tui-icon name='plus' size='10'></tui-icon>
 						  </i>
 						  <span>
-						  	{{item.name}}
+						  	{{item.Name}}
 						  </span>
 					  </view>
 					  <view class="fack_item"></view>
@@ -434,7 +434,7 @@
 			// 列表
 			getQueryList(item,index){
 				if(item){
-					this.typeId = item.itemId;
+					this.typeId = item.ItemId;
 					this.currentIdx = index;
 					this.page.pageNum = 1;
 				}
@@ -453,9 +453,9 @@
 					}
 					let temp = [];
 					if(this.page.pageNum==1){
-						temp = res.returnValue.contentBaseList || [];
+						temp = res.returnValue.ContentBaseList || [];
 					}else {
-						temp = this.newsList.concat(res.returnValue.contentBaseList)
+						temp = this.newsList.concat(res.returnValue.ContentBaseList)
 					}
 					this.newsList = temp;
 				})

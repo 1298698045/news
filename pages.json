@@ -74,7 +74,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
             
         }
@@ -173,6 +173,51 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "参与详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/study/studyDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "学习详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/partyBranch/partyBranch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党支部",
+                "enablePullDownRefresh": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/study/studyCommont",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "章节评论",
+                "enablePullDownRefresh": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/partyBranch/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "党支部详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/partyBranch/peopleDetail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "支部成员详情",
                 "enablePullDownRefresh": false
             }
             

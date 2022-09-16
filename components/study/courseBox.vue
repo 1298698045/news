@@ -6,17 +6,18 @@
 			</div>
 			<div class="right_info">
 				<h3 class="title">
-					{{item[name]}}
+					{{item.Name.textValue || ''}}
 				</h3>
 				<div class="position">
 					<span class="tag">{{item[post] || ''}}</span>
 					<span class="tag">{{item[duty] || ''}}</span>
 				</div>
 				<div class="nums">
-					<span class="color">58</span>讲 | &nbsp;&nbsp;<span class="color">20000</span> 人已学习
+					<!-- <span class="color">58</span>讲 | &nbsp;&nbsp; -->
+					<span class="color">{{item.StudyPeopleCount.textValue || ''}}</span> 人已学习
 				</div>
 				<div class="desc">
-					{{item[desc] || ''}}
+					{{item.Writer.textValue || ''}}
 				</div>
 			</div>
 		</div>

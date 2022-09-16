@@ -14,6 +14,9 @@
 
 <style>
 	/*每个页面公共css */
+	[v-cloak]{
+		display: none;
+	}
 	page{
 		background: #f4f4f4;
 	}

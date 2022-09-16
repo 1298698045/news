@@ -8,20 +8,21 @@
 				<div class="list-item" @click="toview(item)" v-for="(item,index) in listData" :key="index">
 					<div class="item-head">
 						{{item.Name || ''}}
+						<p>
+							发布时间：{{item.ActualStart || ''}}
+							{{item.CreatedByName || ''}}
+							
+						</p>
 					</div>
 					<div class="item-body item-img-body">
 						<div class="body-right">
-							【让孩子远离矮小——“818儿童长高日”免费测骨龄活动开始啦！】
-							全国多家医院推出“818儿童长高日”活动今天开始啦，你报名了吗？参与本次活动还可享
-							受公立医院权威儿科专家一对一问诊、儿科门诊挂号、免费
-							检测骨龄三重福利哟！真正帮助家长们解决生长发育的各真正帮助家长们解决生长发育的各真正帮助家长们解决生长发育的各
-				
+							{{item.Description || ''}}
 						</div>
 					</div>
 					<div class="item-bottom">
 						<div>
 							<img src="/static/images/activity/02.3.2.Time-sort.png" />
-							<span>08月18日 周三 18:00 截止</span>
+							<span>{{item.timeStr || ''}} 截止</span>
 						</div>
 						<div>
 							<img src="/static/images/activity/04.5.1.1.Participants.png" />
@@ -85,7 +86,23 @@
 						result = this.listData.concat(res.returnValue);
 					}
 					this.listData = result;
+					this.listData.forEach(item=>{
+						var timeStr = this.formDateFn(item.ActualEnd);
+						this.$set(item,'timeStr',timeStr)
+					})
 				})
+			},
+			formDateFn(time){
+				var date = new Date(time);
+				var y = date.getFullYear();
+				var m = date.getMonth() + 1;
+				var d = date.getDate();
+				var week = ['周日','周一','周二','周三','周四','周五','周六']
+				var day = week[date.getDay()];
+				var h = date.getHours();
+				var min = date.getMinutes();
+				var str = `${m}月${d}日 ${day} ${h}:${min}`;
+				return str;
 			},
 			changeTab(e){
 				console.log(e)
@@ -130,6 +147,12 @@
 	}
 	.item-head{
 	    font-weight:700;
+		p{
+			font-size: 24rpx;
+			color: #666666;
+			font-weight: normal;
+			line-height: 2;
+		}
 	}
 	.item-body{
 	    margin:5px 0;

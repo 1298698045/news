@@ -2,18 +2,21 @@
 	<div class="catalogue" id="catalogue">
 		<div class="container">
 			<div class="pannel" v-for="(item,index) in list" :key="index">
-				<h3 class="title">
-					第{{index+1}}章 {{item.name}}
+				<h3 class="title" @click="handleDetail(item,index)">
+					第{{index+1}}章 {{item.Name}}
 				</h3>
-				<div class="uls">
-					<div class="li" v-for="(row,idx) in item.courseChapterBases" @click.stop="handleHref(row)">
+				<!-- <div class="uls">
+					<div class="li" v-for="(row,idx) in item.Children" @click.stop="handleHref(row)">
 						<p class="icon">
 							
 						</p>
 						<p class="name">
-							{{row.name}}
+							{{row.Name}}
 						</p>
 					</div>
+				</div> -->
+				<div v-if="item.Children && item.Children.length>0">
+					<Catalogue :courseId="courseId" :list="item.Children" />
 				</div>
 			</div>
 		</div>
@@ -21,12 +24,20 @@
 </template>
 
 <script>
+	import Catalogue from '@/components/study/catalogue.vue';
 	export default {
 		name: 'Catalogue',
+		components:{
+			Catalogue
+		},
 		props:{
 			list:{
 				type: Array,
 				default: []
+			},
+			courseId:{
+				type:[Number, String, Object],
+				dafault: ''
 			}
 		},
 		watch:{
@@ -174,11 +185,26 @@
 			// this.getQuery();
 		},
 		methods:{
+			handleDetail(item,index){
+				uni.navigateTo({
+					url:'./studyDetail?id='+item.chapterId + '&courseId='+this.courseId+'&level='+item.level + '&index=' + index
+				})
+			},
 			getQuery(){
-				this.$http.getStudyCatalogue({
+				// this.$http.getStudyCatalogue({
 					
+				// }).then(res=>{
+				// 	console.log(res);
+				// })
+				this.$httpWX({
+					url: '/course/'+ this.courseId +'/chapter/fetchall',
+					method:'get',
+					data:{
+						search: ''
+					}
 				}).then(res=>{
-					console.log(res);
+					console.log(res)
+					this.catalogueList = res.returnValue;
 				})
 			},
 			handleHref(item){
@@ -192,7 +218,7 @@
 
 <style lang="scss" scoped>
 	.catalogue{
-		padding-bottom: 100rpx;
+		// padding-bottom: 100rpx;
 	}
 	.container{
 		padding: 30rpx;

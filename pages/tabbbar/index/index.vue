@@ -31,6 +31,12 @@
 				</div>
 				<p class="text">活动</p>
 			</div>
+			<div class="box" @click="handleHref(6)">
+				<div class="icon">
+					<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
+				</div>
+				<p class="text">党支部</p>
+			</div>
 			<div class="fake_item"></div>
 			<div class="fake_item"></div> 
 		</div>
@@ -173,6 +179,11 @@
 					case 5:
 						uni.navigateTo({
 							url: '../../activity/activity'
+						})
+						break;
+					case 6:
+						uni.navigateTo({
+							url:'/pages/partyBranch/partyBranch'
 						})
 						break;
 					default:

@@ -1,43 +1,7 @@
 <template>
 	<view class="wrapper">
 		<div class="main-content">
-			<div class="list-item">
-				<div class="item-head">
-					{{record.Name.value || ''}}
-					<div class="timer">
-						开始时间：{{record.ActualStart.value || ''}}
-						{{record.CreatedBy.value || ''}}
-						{{record.OwningBusinessUnit.value || ''}}
-					</div>
-				</div>
-				<div class="item-body" v-html="record.Description">
-					
-				</div>
-				<div class="item-bottom">
-					<div>
-						<img src="/static/images/activity/02.3.2.Time-sort.png" />
-						<span>{{record.timerStr || ''}} 截止</span>
-					</div>
-					<div @click="toPeopleSignUp">
-						<img src="/static/images/activity/04.5.1.1.Participants.png" />
-						<span>{{record.NumOfApplicant.value || 0}}人报名</span>
-					</div>
-				</div>
-				<div class="item-bottom" id="signlist" v-if="signObj.JoinState==1">
-					<div>
-						<img src="/img/icons/location.png" />
-						<span>签到</span>
-					</div>
-					<div @click="topeoplelist">
-						<span>{{record.NumOfClockIn.value || 0}}人签到</span>
-						<img class="signlist-right" src="/static/images/activity/03.3.1.selection.png" />
-					</div>
-				</div>
-			</div>
 			<div class="mainDetailComment">
-				<div class="tabs">
-					<p class="tab active">评论</p>
-				</div>
 				<div class="box" v-for="(item,index) in commentList" :key="index">
 					<div class="avatar">{{item.CreatedBy.userValue.DisplayName}}</div>
 					<div class="info_view">
@@ -54,8 +18,6 @@
 					<button style="margin-right:10px;" @click="sendComment">
 						评论
 					</button>
-					<button style="margin-right:10px;" @click="signObj.JoinState==1?cancelSignUp():signUp()">{{signObj.JoinState == 1 ? '取消报名' : '报名'}}</button>
-					<button v-if="signObj.JoinState==1"  @click="signing">{{signObj.ClockinStatus == 1 ? '签退' : '签到'}}</button>
 				</div>
 			</div>
 		</div>
@@ -84,67 +46,28 @@
 				signObj:{},
 				pageNumber:1,
 				pageSize:10,
-				isPage: false
+				isPage: false,
+				courseId: '',
+				chapterId: ''
 			}
 		},
 		onLoad(options) {
-			this.id = options.id;
-			this.getDetail();
-			// this.getIsSign();
+			this.courseId = options.courseId;
+			this.chapterId = options.chapterId;
 			this.queryCommentList();
 		},
-		onShow() {
-			this.getIsSign();
-		},
 		methods: {
-			getDetail(){
-				this.$httpWX({
-					url: '/entity/detail/'+this.id,
-					method: 'get',
-					data:{
-						objectTypeCode: 4400,
-						layoutId: '59C9B48D-5578-41F2-9CA2-689E1DAC0905'
-					}
-				}).then(res=>{
-					console.log('res',res)
-					this.record = res.returnValue.record;
-				})
-			},
-			getIsSign(){
-				this.$httpWX({
-					url: '/campaignpeople/state',
-					method:'get',
-					data:{
-						campaignId: this.id
-					}
-				}).then(res=>{
-					console.log(res);
-					this.signObj = res.returnValue;
-					if(res.returnValue.ClockinStatus=='True'){
-						this.signObj.ClockinStatus = 1;
-					}
-				})
-			},
-			topeoplelist(){
-				uni.navigateTo({
-					url:'signinDetail?id='+this.id
-				})
-			},
-			toPeopleSignUp(){
-				uni.navigateTo({
-					url:'signUpContacts?id='+this.id
-				})
-			},
 			// 评论
 			sendComment(){
 				var obj = {
 					params:{
 						recordRep:{
-							objTypeCode: 20310,
+							objTypeCode: 50715,
 							fields: {
 								Name: this.comment,
-								RegardingObjectId: this.id,
-								RegardingObjectTypeCode: 4400,
+								RegardingId: {
+									Id: this.chapterId
+								},
 								Body: this.comment
 							}
 						}
@@ -163,12 +86,12 @@
 				})
 			},
 			queryCommentList(){
-				var filterQuery = '\nRegardingObjectId\teq\t'+this.id
+				var filterQuery = '\nRegardingId\teq\t'+this.chapterId
 				this.$httpWX({
 					url: '/entity/fetchall',
 					method: 'post',
 					data:{
-						objectTypeCode: 20310,
+						objectTypeCode: 50715,
 						filterQuery: filterQuery
 					}
 				}).then(res=>{

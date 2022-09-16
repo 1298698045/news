@@ -1,5 +1,18 @@
 <template>
 	<view class="wrapper">
+		<div class="header">
+			<van-search v-model="searchVal" placeholder="请输入搜索关键词" @change="changeSearch" />
+		</div>
+		<div class="tabContainer">
+			<!-- <tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab"  @change="changeTab"></tui-tabs> -->
+			<view class="tabs">
+				<view class="tab" @click="changeTab(item,index)" :class="{'active':currentTab==index}" v-for="(item,index) in tabs" :key="index">
+					<span>
+						{{item.name}}
+					</span>
+				</view>
+			</view>
+		</div>
 		<div class="banner">
 			<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
 			 indicator-active-color="#d24941" class="tui-banner-swiper">
@@ -15,7 +28,7 @@
 					<div class="name">
 						课程
 					</div>
-					<CourseBox :list="recommendList" :name="'name'"  :desc="'description'" @clickIn="handleClickIn" />
+					<CourseBox :list="recommendList" @clickIn="handleClickIn" />
 				</div>
 			</div>
 		</div>
@@ -85,18 +98,87 @@
 						作为一名合格党员要政治素质过硬、要有强烈的使命感，党员更应该严格自我要求。
 						`
 					}
-				]
+				],
+				pageNumber:1,
+				pageSize: 10,
+				isPage: false,
+				searchVal: '',
+				listType: [],
+				currentTab: 0,
+				tabs:[],
+				CourseCategoryId: ''
 			}
 		},
 		onLoad() {
 			this.getQuery();
+			this.getTypes();
 		},
 		methods: {
+			changeTab(item,index){
+				this.currentTab = index;
+				this.CourseCategoryId = item.id;
+				this.getQuery();
+			},
+			changeSearch(e){
+				console.log(e)
+				this.searchVal = e.detail;
+				this.getQuery();
+			},
 			getQuery(){
-				this.$http.getStudyList({
+				// this.$http.getStudyList({
 					
+				// }).then(res=>{
+				// 	this.recommendList = res.returnValue;
+				// })
+				var filterQuery = '\nCourseCategoryId\teq\t'+this.CourseCategoryId
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method:'post',
+					data:{
+						objectTypeCode: 50700,
+						// filterQuery: filterQuery,
+						pageNumber: this.pageNumber,
+						pageSize: this.pageSize,
+						search: this.searchVal,
+						CourseCategoryId: this.CourseCategoryId
+					}
 				}).then(res=>{
-					this.recommendList = res.returnValue;
+					let total = res.returnValue.totalCount;
+					if(this.pageNumber * this.pageSize < total){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue.nodes;
+					}else {
+						result = this.recommendList.concat(res.returnValue.nodes);
+					}
+					this.recommendList = result;
+				})
+			},
+			getTypes(){
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data:{
+						objectTypeCode: 50713
+					}
+				}).then(res=>{
+					console.log(res,'typeList')
+					this.listType = res.returnValue.nodes;
+					this.listType.unshift({
+						Name: {
+							textValue:'全部'
+						},
+						id: ''
+					})
+					this.tabs = this.listType.map(item=>{
+						item.name = item.Name.textValue;
+						item.id = item.id;
+						return item;
+					})
 				})
 			},
 			bannerDetail(){
@@ -106,9 +188,24 @@
 			},
 			handleClickIn(item,index){
 				uni.navigateTo({
-					url:'study?courseId='+item.courseId
+					url:'study?courseId='+item.id
 				})
 			}
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.pageNumber = 1;
+			this.getQuery();
+			wx.stopPullDownRefresh();
+		},
+		/**
+		 * 页面上拉触底事件的处理函数
+		 */
+		onReachBottom() {
+		   if(this.isPage){
+			   this.pageNumber++;
+			   this.getQuery();
+		   }
 		}
 	}
 </script>
@@ -148,6 +245,32 @@
 	text-overflow: ellipsis;
 }
 .wrapper{
+	.tabs{
+		width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		background: #fff;
+		.tab{
+			padding: 0 20rpx;
+			text-align: center;
+			line-height: 80rpx;
+			color: #333;
+			display: inline-block;
+			box-sizing: border-box;
+			span{
+				padding-bottom: 16rpx;
+				border-bottom: 5rpx solid transparent;
+				font-size: 32rpx;
+			}
+		}
+		.tab.active{
+			color: #d24941;
+			font-weight: bold;
+		}
+		.tab.active span{
+			border-bottom: 5rpx solid #d24941;
+		}
+	}
 	.banner{
 		padding: 30rpx;
 		swiper-item{
