@@ -111,7 +111,8 @@
 						ClockInLatitude: this.latitude,
 						ClockInLongitude: this.longitude,
 						ClockinIP: '',
-						ClockinStatus: 1
+						ClockinStatus: 1,
+						BuildingName: this.BuildingName
 					}
 				}).then(res=>{
 					console.log(res,'res');
@@ -133,7 +134,8 @@
 						ClockInLatitude: this.latitude,
 						ClockInLongitude: this.longitude,
 						ClockinIP: '',
-						ClockinStatus: 2
+						ClockinStatus: 2,
+						BuildingName: this.BuildingName
 					}
 				}).then(res=>{
 					console.log(res,'res')

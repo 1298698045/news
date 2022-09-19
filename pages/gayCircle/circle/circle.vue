@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="leftNav" :style="{height:windowHeight+'px'}">
 				<div class="tab" :class="{'active':currIdx==index}" v-for="(item,index) in listData" :key="index" @click="handleTab(item,index)">
-					{{item.name}}
+					{{item.Name}}
 				</div>
 			</div>
 			<div class="rightContent">
@@ -23,7 +23,7 @@
 									
 								</div>
 								<div class="info">
-									<p class="name">{{row.name}}</p>
+									<p class="name">{{row.Name}}</p>
 									<!-- <p class="fans">{{row.fansNums}}</p> -->
 								</div>
 							</div>

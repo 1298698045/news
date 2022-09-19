@@ -108,13 +108,16 @@
 								userName: that.userNumber
 							}).then(reponse=>{
 								console.log(reponse);
-								const {WechatAuthToken} = reponse.returnValue;
-								uni.setStorageSync('wechatAuthToken', WechatAuthToken)
-								let timeStamp = new Date().getTime();
-								uni.setStorageSync('timeStamp',timeStamp);
-								uni.switchTab({
-									url:'../tabbbar/index/index'
-								})
+								if(reponse.returnValue){									
+									const {WechatAuthToken,SystemUserId} = reponse.returnValue;
+									uni.setStorageSync('wechatAuthToken', WechatAuthToken)
+									uni.setStorageSync('userId', SystemUserId)
+									let timeStamp = new Date().getTime();
+									uni.setStorageSync('timeStamp',timeStamp);
+									uni.switchTab({
+										url:'../tabbbar/index/index'
+									})
+								}
 							})
 						  }
 						});

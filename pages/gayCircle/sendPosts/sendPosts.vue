@@ -20,7 +20,7 @@
 							归属圈子
 						</view>
 						<view class="value">
-							{{circle.name || '请选择'}}
+							{{circle.Name || '请选择'}}
 						</view>
 					</view>
 				</tui-list-cell>
@@ -204,7 +204,7 @@
 						Token: this.token,
 						Title: this.title,
 						Comment: this.comment,
-						GroupId: this.circle.itemId || '',
+						GroupId: this.circle.ItemId || '',
 						Longitude: this.longitude,
 						Latitude: this.latitude,
 						Location: this.location

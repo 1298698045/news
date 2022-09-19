@@ -9,16 +9,19 @@
 			<div class="listWrap">
 				<div class="list-item" v-for="item in listData" :key="index">
 					<div class="item-left">
-						<div class="item-photo">{{item.UserId.userValue.DisplayName}}</div>
+						<div class="item-photo">{{item.UserId.userValue.DisplayName || ''}}</div>
 					</div>
 					<div class="item-right">
 						<div class="item-head">
-							<span class="item-head-name">{{item.UserId.userValue.DisplayName}}</span>
+							<span class="item-head-name">{{item.UserId.userValue.DisplayName || ''}}</span>
 							<span class="item-head-dept">信息中心</span>
 						</div>
 						<div class="item-time">
-							{{item.ClockedIn.dateTime}}
+							签到时间：{{item.ClockedIn.dateTime || ''}}
 						 </div>
+						 <div class="item-time">
+						 	签到地点：{{item.ClockinLocation.textValue || ''}}
+						  </div>
 					</div>
 				</div>
 			</div>
@@ -163,6 +166,7 @@
     }
     .item-head-name{
         margin-top:5px;
+		padding-right: 20rpx;
     }
     .item-head{
         margin-top:5px;

@@ -6,7 +6,7 @@
 				{{ description }}
 			</div>
 		</div>
-		<div class="panel notice">
+		<!-- <div class="panel notice">
 			<div class="name">课程须知</div>
 			<div class="desc">
 				<div class="label">课前技术储备：</div>
@@ -24,7 +24,7 @@
 				4、数据层操作</br>
 				5、模板静态化
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 

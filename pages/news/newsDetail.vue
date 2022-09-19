@@ -1,15 +1,15 @@
 <template>
 	<view class="container">
-		<view class="tui-news-title">{{detail.title || ''}}</view>
+		<view class="tui-news-title">{{detail.Title || ''}}</view>
 		<view class="tui-sub-info">
 			<view class="tui-sub-left">
 				<text class="tui-author">早安君</text>
 				<text>{{ timeStr }}</text>
 			</view>
-			<view class="tui-sub-right">阅读 {{detail.readCount || ''}}</view>
+			<view class="tui-sub-right">阅读 {{detail.ReadCount || ''}}</view>
 		</view>
 		<view class="tui-news-content">
-			<rich-text :nodes="detail.contentBody"></rich-text>
+			<rich-text :nodes="detail.ContentBody"></rich-text>
 			<!-- <view class="tui-article">北京时间6月22日，重庆斯威队召开了赛前新闻发布会，主教练小克鲁伊夫和球员彭欣力出席。</view>
 			<view class="tui-article">
 				这是一场很重要的比赛，武汉卓尔在中超目前打的还是不错的，现在积分与我们一样。我们面对这个对手做了充分的准备，他们的战术变化很多，我也认为他们是一支训练有素的队伍。虽然这是一场艰难的比赛，我们也充满了动力去拿到我们想要的分数，实现我们的目标。联赛上半程还有两场比赛，我们也会竭尽全力拿到尽量多的分数。
@@ -25,7 +25,7 @@
 			</view> -->
 		</view>
 
-		<view class="tui-news-source">消息参考来源：{{detail.keyWords || ''}}</view>
+		<view class="tui-news-source">消息参考来源：{{detail.KeyWords || ''}}</view>
 
 		<view class="tui-operate-box">
 			<tui-tag padding="26rpx 56rpx" :type="isFabulous ? 'primary' : 'gray'" shape="circle" :plain="true" @click="btnFabulous()">
@@ -43,31 +43,31 @@
 		<view class="tui-cmt-title">精彩评论（{{ total || 0 }}）</view>
 		<view class="tui-cmtbox">
 			<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
-				<image :src="item.thumbnailPath" class="tui-avatar"></image>
+				<image :src="item.ThumbnailPath" class="tui-avatar"></image>
 				<view class="tui-cmt-detail">
 					<view class="tui-header-box">
-						<view class="tui-cmt-nickname">{{ item.userName }}</view>
-						<view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
-							<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
-							<tui-icon :name="iconName(item.isPraise)" :size="15" :color="itemIconColor(item.isPraise)"></tui-icon>
+						<view class="tui-cmt-nickname">{{ item.UserName }}</view>
+						<view class="tui-fabulous" :class="[item.IsPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
+							<text>{{ item.LikeQty == 0 ? '赞' : item.LikeQty }}</text>
+							<tui-icon :name="iconName(item.IsPraise)" :size="15" :color="itemIconColor(item.IsPraise)"></tui-icon>
 						</view>
 					</view>
-					<view class="tui-cmt-content">{{ item.comment }}</view>
-					<view class="tui-reply-box" v-if="item.contentComments.length > 0">
+					<view class="tui-cmt-content">{{ item.Comment }}</view>
+					<view class="tui-reply-box" v-if="item.ContentComments.length > 0">
 						<tui-list-cell
 							backgroundColor="#f2f2f2"
 							:size="28"
-							v-for="(items, index2) in item.contentComments"
+							v-for="(items, index2) in item.ContentComments"
 							:key="index2"
-							:unlined="item.contentComments.length < 2 && item.contentComments.length - 1 == index"
+							:unlined="item.ContentComments.length < 2 && item.ContentComments.length - 1 == index"
 							@tap="cmtReply"
 						>
-							<view class="tui-flex-1 tui-reply-nickname">{{ items.nickname }}</view>
-							<view class="tui-flex-1">{{ items.content }}</view>
+							<view class="tui-flex-1 tui-reply-nickname">{{ items.Nickname }}</view>
+							<view class="tui-flex-1">{{ items.Content }}</view>
 						</tui-list-cell>
-						<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.contentComments.length > 2" @tap="cmtReply">
+						<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.ContentComments.length > 2" @tap="cmtReply">
 							<view class="tui-flex-1  tui-cell-last">
-								<text>共{{ item.contentComments.length }}条回复</text>
+								<text>共{{ item.ContentComments.length }}条回复</text>
 								<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
 							</view>
 						</tui-list-cell>
@@ -202,9 +202,9 @@ export default {
 				NewsId:this.id
 			}).then(res=>{
 				this.detail = res.returnValue;
-				this.fabulous = this.detail.likeCount;
-				this.isFabulous = this.detail.isPraise;
-				this.isCollection = this.detail.isCollect;
+				this.fabulous = this.detail.LikeCount;
+				this.isFabulous = this.detail.IsPraise;
+				this.isCollection = this.detail.IsCollect;
 			})
 		},
 		// 评论列表
@@ -225,14 +225,14 @@ export default {
 				}
 				let temp = [];
 				if(this.commentPage.pageNum==1){
-					temp = res.returnValue.commentsList;
+					temp = res.returnValue.CommentsList;
 				}else {
-					temp = this.cmtList.concat(res.returnValue.commentsList);
+					temp = this.cmtList.concat(res.returnValue.CommentsList);
 				}
 				this.cmtList = temp;
 				if(this.cmtList){					
 					this.cmtList.map(item=>{
-						item.time = this.$tui.formData(item.modifiedOn);
+						item.time = this.$tui.formData(item.ModifiedOn);
 						return item;
 					})
 				}
@@ -274,18 +274,18 @@ export default {
 			if(!item.isPraise){
 				this.$http.commentLike({
 					Token: this.token,
-					NewsCommentId: item.commentId
+					NewsCommentId: item.CommentId
 				}).then(res=>{
-					item.isPraise = true
-					item.likeQty = item.likeQty+1
+					item.IsPraise = true
+					item.LikeQty = item.LikeQty+1
 				})
 			}else {
 				this.$http.commentCancelLike({
 					Token: this.token,
-					NewsCommentId: item.commentId
+					NewsCommentId: item.CommentId
 				}).then(res=>{
-					item.isPraise = false
-					item.likeQty = item.likeQty-1
+					item.IsPraise = false
+					item.LikeQty = item.LikeQty-1
 				})
 			}
 		},

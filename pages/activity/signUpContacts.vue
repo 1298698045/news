@@ -17,7 +17,7 @@
 							<span class="item-head-dept">信息中心</span>
 						</div>
 						<div class="item-time">
-							{{item.ClockedIn.dateTime}}
+							{{item.ClockedIn.dateTime || ''}}
 						 </div>
 					</div>
 				</div>
@@ -163,6 +163,7 @@
     }
     .item-head-name{
         margin-top:5px;
+		padding-right: 20rpx;
     }
     .item-head{
         margin-top:5px;

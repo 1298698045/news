@@ -7,6 +7,7 @@
 			<div class="right_info">
 				<h3 class="title">
 					{{item.Name.textValue || ''}}
+					<span style="padding-left: 20rpx;">{{item.Writer.textValue || ''}}</span>
 				</h3>
 				<div class="position">
 					<span class="tag">{{item[post] || ''}}</span>
@@ -17,7 +18,7 @@
 					<span class="color">{{item.StudyPeopleCount.textValue || ''}}</span> 人已学习
 				</div>
 				<div class="desc">
-					{{item.Writer.textValue || ''}}
+					{{item.Description.textValue || ''}}
 				</div>
 			</div>
 		</div>

@@ -24,10 +24,10 @@
 			<view class="tui-cmt-cell" v-for="(item, index) in replyList" :key="index">
 				<view class="tui-header-box">
 					<view class="tui-userinfo-box">
-						<image :src="item.thumbnailPath" class="tui-avatar"></image>
+						<image :src="item.ThumbnailPath" class="tui-avatar"></image>
 						<view class="tui-nickname-box">
-							<view class="tui-cmt-nickname">{{ item.userName || '' }}</view>
-							<view class="tui-cmt-time">{{ item.modifiedOn }}</view>
+							<view class="tui-cmt-nickname">{{ item.UserName || '' }}</view>
+							<view class="tui-cmt-time">{{ item.ModifiedOn }}</view>
 						</view>
 					</view>
 					<!-- <view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
@@ -35,13 +35,13 @@
 						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#d24941' : '#9a9a9a'"></tui-icon>
 					</view> -->
 				</view>
-				<view class="tui-reply-box" v-if="item.reply.length > 0">
-					<tui-list-cell backgroundColor="#f2f2f2" :size="28" v-for="(items, index2) in item.reply" :key="index2" :unlined="true">
+				<view class="tui-reply-box" v-if="item.Reply.length > 0">
+					<tui-list-cell backgroundColor="#f2f2f2" :size="28" v-for="(items, index2) in item.Reply" :key="index2" :unlined="true">
 						<view class="tui-flex-1 tui-reply-nickname">{{ items.nickname }}</view>
-						<view class="tui-flex-1">{{ items.content }}</view>
+						<view class="tui-flex-1">{{ items.Content }}</view>
 					</tui-list-cell>
 				</view>
-				<view class="tui-cmt-content">{{ item.comment }}</view>
+				<view class="tui-cmt-content">{{ item.Comment }}</view>
 			</view>
 		</view>
 
@@ -125,7 +125,7 @@ export default {
 			}).then(res=>{
 				this.replyList = res.returnValue;
 				this.replyList.map(item=>{
-					item.modifiedOn = this.$tui.formData(item.modifiedOn);
+					item.ModifiedOn = this.$tui.formData(item.ModifiedOn);
 				})
 			})
 		},

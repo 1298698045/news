@@ -4,14 +4,14 @@
 			<view class="panelBox" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
 				<view class="head">
 					<view class="avatar" @click="handlePersonalHome(item)">
-						<image :src="item.thumbnailPath"></image>
+						<image :src="item.ThumbnailPath"></image>
 					</view>
 					<view class="info">
-						<p class="name">{{item.userName}}</p>
+						<p class="name">{{item.UserName}}</p>
 						<p class="depart">
 							描述
 							<span class="time">
-								{{item.modifiedOn}}
+								{{item.ModifiedOn}}
 							</span>
 						</p>
 					</view>
@@ -21,7 +21,7 @@
 				</view>
 				<view class="content">
 					<view class="desc">
-						{{item.description}}
+						{{item.Description}}
 					</view>
 					<view class="imgTemplate">
 						<!-- <div class="max_img">
@@ -31,8 +31,8 @@
 							<image class="img" src="/static/images/news/banner_1.jpg" mode="widthFix"></image>
 						</div> -->
 						<view class="list_img">
-							<view class="box" v-for="(row,idx) in item.listpic" :key="idx" @click.stop="handleOpenImg(item,idx)">
-								<image class="img" :src="pathUrl+row.path.replace(/\\/g,'/')" mode="aspectFill"></image>
+							<view class="box" v-for="(row,idx) in item.Listpic" :key="idx" @click.stop="handleOpenImg(item,idx)">
+								<image class="img" :src="pathUrl+row.Path.replace(/\\/g,'/')" mode="aspectFill"></image>
 							</view>
 							<view class="fake_item"></view>
 							<view class="fake_item"></view>
@@ -56,10 +56,10 @@
 							</view> -->
 						</view>
 					</view>
-					<view class="location" v-if="item.location" @click.stop="handleOpenLocation(item)">
+					<view class="location" v-if="item.Location" @click.stop="handleOpenLocation(item)">
 						<tui-icon name="gps" :size="24" ></tui-icon>
 						<span class="gps_text">
-							{{item.location}}
+							{{item.Location}}
 						</span>
 					</view>
 				</view>
@@ -69,14 +69,14 @@
 						{{item.NumOfForward || 0}}阅读
 						</span>
 					</view>
-					<view class="btn" :class="{'active':item.isPraise}" @click.stop="handleItemLike(item)">
-						<tui-icon v-if="!item.isPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
-						<span v-if="item.numOfLike==0||item.numOfLike==null">
+					<view class="btn" :class="{'active':item.IsPraise}" @click.stop="handleItemLike(item)">
+						<tui-icon v-if="!item.IsPraise" name="agree" :size="24"></tui-icon>
+						<tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
+						<span v-if="item.NumOfLike==0||item.NumOfLike==null">
 						点赞
 						</span>
 						<span v-else>
-							{{item.numOfLike || 0}}
+							{{item.NumOfLike || 0}}
 						</span>
 					</view>
 					<view class="btn" @click.stop>
@@ -84,7 +84,7 @@
 						<!-- <span>
 						评论
 						</span> -->
-						{{item.chatterCommentBases.length || 0}}
+						{{item.ChatterCommentBases.length || 0}}
 					</view>
 				</view>
 			</view>
@@ -211,18 +211,18 @@
 					}
 					let temp = [];
 					if(this.page.pageNum==1){
-						temp = res.returnValue.chatterBaseList || [];
+						temp = res.returnValue.ChatterBaseList || [];
 					}else {
-						temp = this.listData.concat(res.returnValue.chatterBaseList || []);
+						temp = this.listData.concat(res.returnValue.ChatterBaseList || []);
 					}
 					this.listData = temp;
 					this.listData.map(item=>{
-						item.modifiedOn = this.$tui.formData(item.modifiedOn);
+						item.ModifiedOn = this.$tui.formData(item.ModifiedOn);
 					})
 				})
 			},
 			hanldeMore(item){
-				this.chatterId = item.chatterId
+				this.chatterId = item.ChatterId
 				this.showActionSheet = true
 			},
 			closeActionSheet(){
@@ -244,6 +244,7 @@
 			},
 			handleDelete(){
 				this.$http.deleteCircle({
+					token: this.token,
 					ChatterId: this.chatterId
 				}).then(res=>{
 					if(res.returnValue)
@@ -259,34 +260,34 @@
 			},
 			handleDetail(item){
 				uni.navigateTo({
-					url:'/pages/gayCircle/detail/detail?id='+item.chatterId
+					url:'/pages/gayCircle/detail/detail?id='+item.ChatterId
 				})
 			},
 			handleItemLike(item){
 				if(!item.isPraise){
 					this.$http.setLikeGayCircle({
 						Token: this.token,
-						ChatterId: item.chatterId
+						ChatterId: item.ChatterId
 					}).then(res=>{
 						console.log('点赞',res)
-						item.isPraise = true;
-						item.numOfLike = item.numOfLike+1
+						item.IsPraise = true;
+						item.NumOfLike = item.NumOfLike+1
 					})
 				}else {
 					this.$http.cancelLikeGayCircle({
 						Token: this.token,
-						ChatterId: item.chatterId
+						ChatterId: item.ChatterId
 					}).then(res=>{
 						console.log('取消点赞',res)
-						item.isPraise = false;
-						item.numOfLike = item.numOfLike-1
+						item.IsPraise = false;
+						item.NumOfLike = item.NumOfLike-1
 					})
 				}
 			},
 			handleOpenImg(item,idx){
 				let imgs = [];
-				item.listpic.forEach(item=>{
-					imgs.push(this.pathUrl + item.path.replace(/\\/g,'/'));
+				item.Listpic.forEach(item=>{
+					imgs.push(this.pathUrl + item.Path.replace(/\\/g,'/'));
 				})
 				wx.previewImage({
 				  current: imgs[idx], // 当前显示图片的http链接
@@ -295,7 +296,7 @@
 			},
 			handlePersonalHome(item){
 				uni.navigateTo({
-					url:'/pages/gayCircle/PersonalHome/PersonalHome?createdBy='+item.createdBy
+					url:'/pages/gayCircle/PersonalHome/PersonalHome?createdBy='+item.CreatedBy
 				})
 			},
 			handleOpenLocation(item){
@@ -303,8 +304,8 @@
 				uni.getLocation({
 				 type: 'gcj02', //返回可以用于wx.openLocation的经纬度
 				 success (res) {
-				   const latitude = Number(item.latitude)
-				   const longitude = Number(item.longitude)
+				   const latitude = Number(item.Latitude)
+				   const longitude = Number(item.Longitude)
 				   wx.openLocation({
 				     latitude,
 				     longitude,

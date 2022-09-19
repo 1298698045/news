@@ -4,7 +4,6 @@
 			<van-search
 			  :value="searchVal"
 			  placeholder="请输入搜索关键词"
-			  show-action
 			  shape="round"
 			   background="tranparent"
 			  @change="onSearch"
@@ -119,7 +118,7 @@
 				  <view>  
 					<dragSort ref='childDrag' @clickSelect="handleSelect"
 					 @del.stop="handleIitemDel"
-					 @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
+					 @update:list="update" @changeEdit="setEdit" :isEdit="isEdit" :list="myChannel" label="Name" :columnNum="4" :columnSpace="20" :rowHeight="60" :rowSpace="20"></dragSort>
 				  </view>
 			  </view>
 			  <view class="panel">
@@ -426,7 +425,7 @@
 					Token:this.token
 				}).then(res=>{
 					this.tabs = res.returnValue;
-					this.typeId = this.tabs[0].itemId;
+					this.typeId = this.tabs[0].ItemId;
 					response = res;
 				})
 				return response;
@@ -471,8 +470,8 @@
 						item.id = item.itemId;
 						return item;
 					})
-					this.myChannel = list.filter(item=>item.isCollect==true);
-					this.recommendChannel = list.filter(item=>!item.isCollect);
+					this.myChannel = list.filter(item=>item.IsCollect==true);
+					this.recommendChannel = list.filter(item=>!item.IsCollect);
 					console.log(this.myChannel,this.recommendChannel,'====');
 				})
 			},
@@ -488,7 +487,7 @@
 				})
 			},
 			handleSelect(obj){
-				this.currentIdx = this.tabs.findIndex(item=>item.name==obj.name);
+				this.currentIdx = this.tabs.findIndex(item=>item.Name==obj.Name);
 				if(this.currentIdx>=4){
 					this.scrollLeft = this.currentIdx * 50
 				}else {
@@ -539,7 +538,7 @@
 				// if (this.newsList[index].isVideo) {
 				// 	url = "/pages/news/newsVideo";
 				// }
-				let url = '../../news/newsDetail?id='+item.contentId
+				let url = '../../news/newsDetail?id='+item.ContentId
 				uni.navigateTo({
 					url: url
 				})
@@ -587,7 +586,7 @@
 				// this.recommendChannel.splice(index,1)
 				this.$http.setAddChannle({
 					Token: this.token,
-					NewTypeId: item.id
+					NewTypeId: item.ItemId
 				}).then(res=>{
 					console.log(res);
 					this.getChannle();

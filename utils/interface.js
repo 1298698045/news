@@ -43,13 +43,13 @@ export const api_address = {
 		circleList: '/MomentsContent/Moments/contenttype', // 圈子
 		detail: '/MomentsContent/Moments/contentdetails', // 详情
 		commentList: '/MomentsContent/Moments/contentdetails/commentslist',// 评论列表
-		addComment: '/SystemUser/commentmoments/commentmomentsadd', // 评论
-		cmtLike: '/SystemUser/commentmoments/comchatpraiseadd', // 评论点赞
-		cmtCancelLike: '/SystemUser/commentmoments/comchatpraisedel', // 取消评论点赞
+		addComment: '/Account/commentmoments/commentmomentsadd', // 评论
+		cmtLike: '/Account/commentmoments/comchatpraiseadd', // 评论点赞
+		cmtCancelLike: '/Account/commentmoments/comchatpraisedel', // 取消评论点赞
 		addcmtList :'/MomentsContent/Moments/contentdetails/commentdetaillis', // 追加评论
 		personHome: '/MomentsContent/Moments/personhomepage', // 个人主页
-		collection: '/SystemUser/collectchats/collectchatsadd',
-		cancelCollection: '/SystemUser/Collectchats/Collectchatsdel',
+		collection: '/Account/collectchats/collectchatsadd',
+		cancelCollection: '/Account/Collectchats/Collectchatsdel',
 		delCircle: '/MomentsContent/Moments/contentdel'
 	},
 	// 学习

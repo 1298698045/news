@@ -4,11 +4,11 @@
 			<div class="title">{{detail.title || ''}}</div>
 			<div class="row">
 				<div class="radius" @click="handlePersonalHome">
-					<image :src="detail.thumbnailPath"></image>
+					<image :src="detail.ThumbnailPath"></image>
 				</div>
 				<div class="info">
-					<p class="name">{{detail.userName || ''}}</p>
-					<p class="time">{{detail.modifiedOn}}</p>
+					<p class="name">{{detail.UserName || ''}}</p>
+					<p class="time">{{detail.ModifiedOn}}</p>
 				</div>
 				<div class="fllow" :class="{'active':isFllow}" @click="handleFllow">
 					<tui-icon name="plus" size="12" color="#fff" v-if="!isFllow"></tui-icon>&nbsp;&nbsp;关注
@@ -17,14 +17,14 @@
 		</div>
 		<div class="container">
 			<div class="desc">
-				{{detail.description}} 
+				{{detail.Description}} 
 			</div>
 			<div class="business">
 				<div class="opreation">					
 					<div class="like" @click="handleLike">
-						<div class="like_icon" :class="{'active':detail.isPraise}">
-							<tui-icon v-if="!detail.isPraise" name="agree" size="24" color="#d24941"></tui-icon>
-							<tui-icon v-if="detail.isPraise" name="agree" size="24" color="#FFF"></tui-icon>
+						<div class="like_icon" :class="{'active':detail.IsPraise}">
+							<tui-icon v-if="!detail.IsPraise" name="agree" size="24" color="#d24941"></tui-icon>
+							<tui-icon v-if="detail.IsPraise" name="agree" size="24" color="#FFF"></tui-icon>
 						</div>
 						<p class="text">
 							点赞
@@ -41,44 +41,44 @@
 				</div>
 			</div>
 			<div class="read">
-				阅读 {{detail.numOfForward||0}}
+				阅读 {{detail.NumOfForward||0}}
 			</div>
 		</div>
 		<div class="commentWrap">
 			<view class="tui-cmt-title">精彩评论（{{commentTotal || 0}}）</view>
 			<view class="tui-cmtbox">
 				<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
-					<image :src="item.thumbnailPath" class="tui-avatar"></image>
+					<image :src="item.ThumbnailPath" class="tui-avatar"></image>
 					<view class="tui-cmt-detail">
 						<view class="tui-header-box">
-							<view class="tui-cmt-nickname">{{ item.userName }}</view>
-							<view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
-								<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
-								<tui-icon :name="iconName(item.isPraise)" :size="15" :color="itemIconColor(item.isPraise)"></tui-icon>
+							<view class="tui-cmt-nickname">{{ item.UserName }}</view>
+							<view class="tui-fabulous" :class="[item.IsPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous(item)">
+								<text>{{ item.LikeQty == 0 ? '赞' : item.LikeQty }}</text>
+								<tui-icon :name="iconName(item.IsPraise)" :size="15" :color="itemIconColor(item.IsPraise)"></tui-icon>
 							</view>
 						</view>
-						<view class="tui-cmt-content">{{ item.comment }}</view>
-						<view class="tui-reply-box" v-if="item.chatterCommentBases">
+						<view class="tui-cmt-content">{{ item.Comment }}</view>
+						<view class="tui-reply-box" v-if="item.ChatterCommentBases">
 							<tui-list-cell
 								backgroundColor="#f2f2f2"
 								:size="28"
-								v-for="(items, index2) in item.chatterCommentBases"
+								v-for="(items, index2) in item.ChatterCommentBases"
 								:key="index2"
-								:unlined="item.replayNum < 2 && item.chatterCommentBases.length - 1 == index"
+								:unlined="item.ReplayNum < 2 && item.ChatterCommentBases.length - 1 == index"
 								@tap="cmtReply(items)"
 							>
-								<view class="tui-flex-1 tui-reply-nickname">{{ items.userName }}</view>
-								<view class="tui-flex-1">{{ items.comment }}</view>
+								<view class="tui-flex-1 tui-reply-nickname">{{ items.UserName }}</view>
+								<view class="tui-flex-1">{{ items.Comment }}</view>
 							</tui-list-cell>
-							<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
+							<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.ReplayNum > 2" @tap="cmtReply">
 								<view class="tui-flex-1  tui-cell-last">
-									<text>共{{ item.replayNum }}条回复</text>
+									<text>共{{ item.ReplayNum }}条回复</text>
 									<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
 								</view>
 							</tui-list-cell>
 						</view>
 						<view class="tui-footer">
-							{{ item.modifiedOn }}
+							{{ item.ModifiedOn }}
 							<view class="tui-primary tui-ml" hover-class="opcity" :hover-start-time="150" @tap="cmtReply(item)">回复</view>
 						</view>
 					</view>
@@ -205,6 +205,9 @@
 				return function(isFabulous) {
 					return isFabulous ? 'agree-fill' : 'agree'
 				}
+			},
+			token(){
+				return uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		onShow(){
@@ -225,14 +228,15 @@
 					MomentsId: this.id
 				}).then(res=>{
 					this.detail = res.returnValue;
-					this.detail.modifiedOn = this.$tui.formData(this.detail.modifiedOn);
-					this.isCollect = this.detail.isCollect;
+					this.detail.ModifiedOn = this.$tui.formData(this.detail.ModifiedOn);
+					this.isCollect = this.detail.IsCollect;
 				})
 			},
 			handleCollection(){
 				if(!this.isCollect){
 					this.$http.getCircleCollection({
-						ChatId: this.id
+						ChatId: this.id,
+						token: this.token
 					}).then(res=>{
 						if(res.returnValue!=''){
 							this.isCollect = true;
@@ -240,7 +244,8 @@
 					})
 				}else {
 					this.$http.getCircleCancelCollection({
-						ChatId: this.id
+						ChatId: this.id,
+						token: this.token
 					}).then(res=>{
 						if(res.returnValue!=''){
 							this.isCollect = false;
@@ -255,11 +260,11 @@
 					Pagenum: this.page.pageNum,
 					Pagesize: this.page.pageSize
 				}).then(res=>{
-					this.cmtList = res.returnValue.chatterCommentBaseList;
+					this.cmtList = res.returnValue.ChatterCommentBaseList;
 					this.cmtList.map(item=>{
-						item.modifiedOn = this.$tui.formData(item.modifiedOn);
+						item.ModifiedOn = this.$tui.formData(item.ModifiedOn);
 					})
-					this.commentTotal = res.returnValue.total;
+					this.commentTotal = res.returnValue.Total;
 				})
 			},
 			handleComment(){
@@ -308,17 +313,19 @@
 			cmtFabulous: function(item) {
 				if(!item.isPraise){
 					this.$http.setCircleCmtLike({
-						ChatCommentId: item.commentId
+						token: this.token,
+						ChatCommentId: item.CommentId
 					}).then(res=>{
-						item.isPraise = true
-						item.likeQty = item.likeQty+1
+						item.IsPraise = true
+						item.LikeQty = item.LikeQty+1
 					})
 				}else {
 					this.$http.delCircleCmtLike({
-						ChatCommentId: item.commentId
+						token: this.token,
+						ChatCommentId: item.CommentId
 					}).then(res=>{
-						item.isPraise = false
-						item.likeQty = item.likeQty-1
+						item.IsPraise = false
+						item.LikeQty = item.LikeQty-1
 					})
 				}
 			},
@@ -330,17 +337,17 @@
 			},
 			cmtReply: function(item) {
 				uni.navigateTo({
-					url: '../reply/reply?id='+this.id+'&commentId='+item.commentId+'&userName='+item.userName+'&comment='+item.comment+'&time='+item.modifiedOn
+					url: '../reply/reply?id='+this.id+'&commentId='+item.CommentId+'&userName='+item.UserName+'&comment='+item.Comment+'&time='+item.ModifiedOn
 				})
 			},
 			handleLike(){
-				if(!this.detail.isPraise){
+				if(!this.detail.IsPraise){
 					this.$http.setLikeGayCircle({
 						Token: this.token,
 						ChatterId: this.id
 					}).then(res=>{
 						console.log('点赞',res)
-						this.detail.isPraise = true;
+						this.detail.IsPraise = true;
 					})
 				}else {
 					this.$http.cancelLikeGayCircle({
@@ -348,13 +355,13 @@
 						ChatterId: this.id
 					}).then(res=>{
 						console.log('取消点赞',res)
-						this.detail.isPraise = false;
+						this.detail.IsPraise = false;
 					})
 				}
 			},
 			handlePersonalHome(){
 				uni.navigateTo({
-					url:'../PersonalHome/PersonalHome?createdBy='+this.detail.createdBy
+					url:'../PersonalHome/PersonalHome?createdBy='+this.detail.CreatedBy
 				})
 			}
 		},

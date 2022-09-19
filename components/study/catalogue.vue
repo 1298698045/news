@@ -38,6 +38,10 @@
 			courseId:{
 				type:[Number, String, Object],
 				dafault: ''
+			},
+			isModal:{
+				type:[Number, String, Object],
+				dafault: 0
 			}
 		},
 		watch:{
@@ -186,8 +190,14 @@
 		},
 		methods:{
 			handleDetail(item,index){
-				uni.navigateTo({
-					url:'./studyDetail?id='+item.chapterId + '&courseId='+this.courseId+'&level='+item.level + '&index=' + index
+				this.$nextTick(()=>{					
+					if(this.isModal==1){
+						this.$emit('changeParams',item);
+					}else {
+						uni.navigateTo({
+							url:'./studyDetail?id='+item.chapterId + '&courseId='+this.courseId+'&level='+item.level + '&index=' + index
+						})
+					}
 				})
 			},
 			getQuery(){
@@ -221,15 +231,15 @@
 		// padding-bottom: 100rpx;
 	}
 	.container{
-		padding: 30rpx;
+		padding: 20rpx 30rpx;
 		background: #FFFFFF;
 		.pannel{
-			margin-bottom: 30rpx;
+			// margin-bottom: 30rpx;
 			.title{
 				font-size: 32rpx;
 				font-weight: bold;
 				color: #333333;
-				padding-bottom: 20rpx;
+				// padding-bottom: 20rpx;
 			}
 			.uls{
 				.li{

@@ -75,7 +75,7 @@
 					url:'/entity/detail/'+this.id,
 					method: 'get',
 					data:{
-						objectTypeCode: 20499,
+						objectTypeCode: 31300,
 						layoutId: '58e3f9e5-d72c-40d6-9805-1f9f339bba25'
 					}
 				}).then(res=>{
@@ -88,7 +88,7 @@
 					method: 'post',
 					data:{
 						objectTypeCode: 30020,
-						filterquery: '\ndeptid\teq\t'+this.deptId
+						filterquery: '\nPartyUnitId\teq\t'+this.id
 					}
 				}).then(res=>{
 					let total = res.returnValue.totalCount;

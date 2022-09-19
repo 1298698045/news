@@ -7,7 +7,7 @@
 			<div class="listWrap">
 				<div class="listItem" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
 					<p>{{item.Name.textValue || ''}}</p>
-					<p class="userName">张三</p>
+					<p class="userName">{{item.CreatedByName.textValue || ''}}</p>
 				</div>
 			</div>
 		</div>
@@ -19,7 +19,9 @@
 		data() {
 			return {
 				searchVal: '',
-				listData: []
+				listData: [],
+				pageNumber: 1,
+				pageSize: 20
 			}
 		},
 		onLoad() {
@@ -36,7 +38,7 @@
 					url: '/entity/fetchall',
 					method:'post',
 					data:{
-						objectTypeCode: 20499,
+						objectTypeCode: 31300,
 						search: this.searchVal,
 						pageNumber: this.pageNumber,
 						pageSize: this.pageSize

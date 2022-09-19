@@ -58,9 +58,9 @@
 		<view id="foot-box" class="cu-bar tabbar bg-white shadow foot">
 			<view class="icon" @click="FavorSubject">
 				<view class="cuIcon-cu-image">
-					<text class="lg cuIcon-favor" :class="[userFavor?'text-red':'text-gray']"></text>
+					<text class="lg cuIcon-favor" :class="[IsFavorite?'text-red':'text-gray']"></text>
 				</view>
-				<view  :class="[userFavor?'text-red':'text-gray']">收藏</view>
+				<view  :class="[IsFavorite?'text-red':'text-gray']">{{IsFavorite?'取消收藏':'收藏'}}</view>
 			</view>
 			<div class="submit">
 				<p class="btn">立即学习</p>
@@ -228,7 +228,9 @@
 							},
 						]
 					}
-				]
+				],
+				IsFavorite: false,
+				favoriteId: ''
 			}
 		},
 		onLoad(options) {
@@ -264,6 +266,7 @@
 			this.getHeight('.catalogue_'+0);
 			this.getQuery();
 			this.getCatalogue();
+			this.getIsfavor();
 		},
 		methods: {
 			getQuery(){
@@ -349,23 +352,69 @@
 			},
 			FavorSubject(){
 				// this.userFavor = !this.userFavor;
-				if(!this.userFavor){					
-					this.$http.getStudyCollection({
-						CourseId: this.courseId
-					}).then(res=>{
-						if(res.returnValue!=''){
-							this.userFavor = true;
+				// if(!this.userFavor){					
+				// 	this.$http.getStudyCollection({
+				// 		CourseId: this.courseId
+				// 	}).then(res=>{
+				// 		if(res.returnValue!=''){
+				// 			this.userFavor = true;
+				// 		}
+				// 	})
+				// }else {
+				// 	this.$http.getStudyCancelCollection({
+				// 		CourseId: this.courseId
+				// 	}).then(res=>{
+				// 		if(res.returnValue!=''){
+				// 			this.userFavor = false;
+				// 		}
+				// 	})
+				// }
+				var IsFavorite = this.IsFavorite ? 0 : 1;
+				var obj = {
+					params: {
+						recordRep:{
+							objTypeCode: 50714,
+							id: this.favoriteId,
+							fields: {
+								Name: this.detail.Name,
+								ObjectId: {
+									Id: this.courseId
+								},
+								ObjectTypeCode: 50700,
+								IsFavorite: IsFavorite
+							}
 						}
-					})
-				}else {
-					this.$http.getStudyCancelCollection({
-						CourseId: this.courseId
-					}).then(res=>{
-						if(res.returnValue!=''){
-							this.userFavor = false;
+					}
+				}
+				var message = JSON.stringify(obj);
+				if(!this.userFavor){
+					this.$httpWX({
+						url: '/entity/save',
+						method:'post',
+						data:{
+							message: message
 						}
+					}).then(res=>{
+						console.log(res)
+						this.getIsfavor();
 					})
 				}
+			},
+			// 查看课程是否收藏
+			getIsfavor(){
+				this.$httpWX({
+					url:'/course/isfavorite',
+					method:'get',
+					data:{
+						courseId: this.courseId
+					}
+				}).then(res=>{
+					console.log('课程是否收藏',res);
+					if(res.returnValue){
+						this.favoriteId = res.returnValue.Id;
+						this.IsFavorite = res.returnValue.IsFavorite;
+					}
+				})
 			}
 		},
 		onPageScroll(e) {
@@ -388,7 +437,7 @@
 	@import "../../colorui/main.css";
 	@import "../../colorui/icon.css";
 </style>
-<style lang="scss">
+<style lang="scss" scoped>
 	page{
 		background: #FFFFFF;
 	}
@@ -475,8 +524,9 @@
 	}
 	#foot-box{
 		.icon{
-			width: 100rpx;
+			min-width: 100rpx;
 			text-align: center;
+			padding-left: 20rpx;
 		}
 		.submit{
 			flex: 1;

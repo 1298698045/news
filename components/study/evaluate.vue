@@ -1,7 +1,7 @@
 <template>
 	<view class="evaluate">
 		<div class="container">
-			<div class="score">
+			<!-- <div class="score">
 				<div class="item">
 					<div class="num">
 						{{detail.courseComMarks || 10}}
@@ -19,7 +19,7 @@
 					<p class="lebel">逻辑清晰</p>
 					<p class="val">{{detail.contentClearNum}}</p>
 				</div>
-			</div>
+			</div> -->
 			<div class="content">
 				<div class="box" v-for="(item,index) in commentList" :key="index">
 					<div class="row">

@@ -242,6 +242,9 @@
 </script>
 
 <style>
+	.main-content{
+		padding-bottom: 60rpx;
+	}
     .search {
 		position: absolute;
 		left: 15px;
