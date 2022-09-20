@@ -2,14 +2,34 @@
 	<view class="wrapper">
 		<div class="main-content">
 			<div class="mainDetailComment">
-				<div class="box" v-for="(item,index) in commentList" :key="index">
-					<div class="avatar">{{item.CreatedBy.userValue.DisplayName}}</div>
-					<div class="info_view">
-						<p class="nikeName">{{item.CreatedBy.userValue.DisplayName}}</p>
-						<p class="content" v-html="item.Name.textValue"></p>
-						<p class="time">{{item.CreatedOn.dateTime}}</p>
+				<div class="boxWrap" v-for="(item,index) in commentList" :key="index">					
+					<div class="box">
+						<div class="avatar">{{item.CreatedBy.userValue.DisplayName}}</div>
+						<div class="info_view">
+							<p class="nikeName">{{item.CreatedBy.userValue.DisplayName}}</p>
+							<p class="time">{{item.CreatedOn.dateTime}}</p>
+						</div>
+						<div class="like_icon"></div>
 					</div>
-					<div class="like_icon"></div>
+					<div class="contentWrap">
+						<p class="content" v-html="item.Name.textValue"></p>
+					</div>
+					<div class="optionns">
+						<view class="btn">
+							<tui-icon name="agree" :size="20"></tui-icon>
+							<!-- <tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d24941" ></tui-icon> -->
+						</view>
+						<span v-if="!item.LikeQty.value==0">
+						点赞
+						</span>
+						<span v-else>
+							{{item.LikeQty.value || 0}}
+						</span>
+						<span style="padding: 0 20rpx;">·</span>
+						<view class="reply">
+							回复 20
+						</view>
+					</div>
 				</div>
 			</div>
 			<div class="footer-btn">
@@ -164,7 +184,7 @@
 	}
 </script>
 
-<style>
+<style lang="scss">
     .search {
 		position: absolute;
 		left: 15px;
@@ -288,11 +308,13 @@
         border-radius:3px;
 		font-size: 24rpx;
     }
+	.boxWrap{
+		 border-top:1px solid #e2e3e5;
+		 background:#fff;
+		 padding: 10px 19px;
+	}
     .mainDetailComment .box{
-        border-top:1px solid #e2e3e5;
         display:flex;
-        padding: 10px 19px;
-        background:#fff;
     }
     .mainDetailComment .box .info_view{
         margin-left:10px;
@@ -310,6 +332,21 @@
         color:#cccccc;
         font-size:12px;
     }
+	.contentWrap{
+		font-size: 28rpx;
+		color: #333333;
+		padding: 20rpx 0 0 0;
+	}
+	.optionns{
+		display: flex;
+		align-items: center;
+		font-size: 24rpx;
+		color: #666666;
+		.reply{
+			font-size: 24rpx;
+			color: #666666;
+		}
+	}
     .tabs{
         display:flex;
         padding:0 19px;

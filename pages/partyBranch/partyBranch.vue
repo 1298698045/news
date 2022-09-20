@@ -1,13 +1,18 @@
 <template>
 	<view class="wrapper">
 		<div class="header">
-			<van-search v-model="searchVal" placeholder="请输入搜索关键词" @change="changeSearch" />
+			<van-search background="#d93731" shape="round" v-model="searchVal" placeholder="搜索" @change="changeSearch" />
 		</div>
 		<div class="center">
 			<div class="listWrap">
 				<div class="listItem" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
-					<p>{{item.Name.textValue || ''}}</p>
-					<p class="userName">{{item.CreatedByName.textValue || ''}}</p>
+					<div class="l">						
+						<p>{{item.Name.textValue || ''}}</p>
+						<p class="userName">{{item.CreatedByName.textValue || '暂无'}}</p>
+					</div>
+					<div class="r">
+						<tui-icon name="arrowright" size="24"></tui-icon>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -84,13 +89,28 @@
 </script>
 	
 <style lang="scss">
+.header{
+	background: #d93731;
+}
 .listWrap{
-	background: #fff;
 	.listItem{
-		min-height: 100rpx;
 		border-top:1rpx solid #eceeed;
 		padding: 30rpx;
 		box-sizing: border-box;
+		background: #fff;
+		margin: 30rpx;
+		box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.05);
+		border-radius: 8rpx;
+		font-size: 34rpx;
+		font-weight: bold;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.userName{
+			font-size: 27rpx;
+			color: #7b8187;
+			font-weight: normal;
+		}
 	}
 }
 </style>

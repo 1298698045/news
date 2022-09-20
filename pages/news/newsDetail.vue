@@ -271,7 +271,7 @@ export default {
 			// let fabulousNum = isFabulous ? fabulous - 1 : fabulous + 1;
 			// this.$set(fabulousObj, "fabulous", fabulousNum);
 			// this.$set(fabulousObj, "isFabulous", !isFabulous);
-			if(!item.isPraise){
+			if(!item.IsPraise){
 				this.$http.commentLike({
 					Token: this.token,
 					NewsCommentId: item.CommentId

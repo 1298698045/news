@@ -264,7 +264,7 @@
 				})
 			},
 			handleItemLike(item){
-				if(!item.isPraise){
+				if(!item.IsPraise){
 					this.$http.setLikeGayCircle({
 						Token: this.token,
 						ChatterId: item.ChatterId

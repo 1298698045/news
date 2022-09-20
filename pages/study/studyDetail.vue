@@ -18,7 +18,7 @@
 				{{isLike?'取消点赞':'点赞'}}
 			</p>
 		</div>
-		<div class="borderBox next">
+		<!-- <div class="borderBox next">
 			<div class="l">
 				<p class="nextText">下一页</p>
 				<p class="chapterName">买卖股票的最佳时机</p>
@@ -35,34 +35,41 @@
 				<p class="nextText" style="text-align: right;">下一页</p>
 				<p class="chapterName">买卖股票的最佳时机</p>
 			</div>
-		</div>
+		</div> -->
 		<view id="foot-box" class="cu-bar tabbar bg-white shadow foot">
 			<div class="flexBox">
 				<div class="box" @click="handleBack">
-					<p class="icon"></p>
+					<p class="icon">
+						<van-icon name="wap-nav" size="20" />
+					</p>
 					<p class="name">目录</p>
 				</div>
-				<div class="box">
-					<p class="icon"></p>
-					<p class="name">进度</p>
-				</div>
-				<div class="box">
-					<p class="icon"></p>
-					<p class="name">深色</p>
-				</div>
 				<div class="box" @click="toComment">
-					<p class="icon"></p>
+					<p class="icon">
+						<van-icon name="wap-nav" size="20" />
+					</p>
 					<p class="name">讨论(20)</p>
 				</div>
 				<div class="box">
-					<p class="icon"></p>
-					<p class="name">分享</p>
+					<p class="icon">
+						<van-icon name="wap-nav" size="20" />
+					</p>
+					<p class="name">笔记</p>
+				</div>
+				<div class="box">
+					<p class="icon">
+						<van-icon name="wap-nav" size="20" />
+					</p>
+					<p class="name">下一页</p>
 				</div>
 			</div>
 		</view>
 		<tui-drawer mode="bottom" :visible="isShow" @close="closeDrawer">
 		  <view class="d-container">
-			  <Catalogue class="catalogue_1" :courseId="courseId" :list="catalogueList" :isModal="1" @changeParams="changeParams" />
+			  <div class="drawerHead">
+				  <tui-icon name="shut" size="24" @click="closeDrawer"></tui-icon>
+			  </div>
+			  <Catalogue class="catalogue_1" :chapterId="chapterId" :courseId="courseId" :list="catalogueList" :isModal="1" @changeParams="changeParams" />
 		  </view>
 		</tui-drawer>
 	</view>
@@ -85,7 +92,7 @@
 				record: {},
 				isLike: false,
 				likeId: '',
-				isShow:true
+				isShow:false
 			}
 		},
 		onLoad(options) {
@@ -102,7 +109,9 @@
 		methods: {
 			changeParams(params){
 				this.chapterId = params.chapterId;
-				this.isShow = false;
+				this.$nextTick(()=>{
+					this.isShow = false;
+				})
 				this.getDetail().then(res=>{
 					this.getCatalogue();
 					this.saveRecord();
@@ -113,9 +122,10 @@
 				this.isShow = false;
 			},
 			handleBack(){
-				uni.navigateBack({
-					delta:1
-				})
+				// uni.navigateBack({
+				// 	delta:1
+				// })
+				this.isShow = true;
 			},
 			getCatalogue(){
 				this.$httpWX({
@@ -126,6 +136,20 @@
 					}
 				}).then(res=>{
 					this.catalogueList = res.returnValue;
+					const arrayTreeAddLevel = (array, levelName = 'level', childrenName = 'children') => {
+					    if (!Array.isArray(array)) return []
+					    const recursive = (array, level = 0) => {
+					        level++
+					        return array.map(v => {
+					            v[levelName] = level
+					            const child = v[childrenName]
+					            if (child && child.length) recursive(child, level)
+					            return v
+					        })
+					    }
+					    return recursive(array)
+					}
+					this.catalogueList =  arrayTreeAddLevel(this.catalogueList,'level','Children')
 					// const rowIndex = this.catalogueList.findIndex(item=>item.chapterId==this.chapterId);
 					// console.log(rowIndex)
 					// if(index == 0 && this.level == 0){
@@ -234,7 +258,7 @@
 </style>
 <style lang="scss">
 	page{
-		background: #fff;
+		background: #FFFFFF !important;
 	}
 	.container{
 		padding: 20rpx;
@@ -307,6 +331,17 @@
 				font-size: 24rpx;
 				color: #333333;
 			}
+			.icon{
+				text-align: center;
+				font-weight: bold;
+				color: #333;
+			}
+		}
+	}
+	.d-container{
+		.drawerHead{
+			padding: 20rpx;
+			text-align: right;
 		}
 	}
 </style>

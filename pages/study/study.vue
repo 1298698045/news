@@ -2,17 +2,40 @@
 	<view class="wrapper">
 		<div class="header">			
 			<div class="cover">
-				<div class="title">
-					<span class="tag">专栏</span>
-					{{detail.Name.value || ''}}
+				<div class="leftImg">
+					<image class="img" width="100%" height="100%" :src="pathUrl+detail.ImageUrl.value" mode="aspectFill"></image>
 				</div>
-				<div class="duty">
-					<span class="name">{{detail.CreatedBy.value || ''}}</span>
-					架构师
+				<div class="rightInfo">					
+					<div class="title">
+						{{detail.Name.value || ''}}
+					</div>
+					<div class="duty">
+						{{detail.Writer.value || '前端专家'}}
+					</div>
 				</div>
-				<!-- <div class="introduce">
-					免费课学习 1小时40分·409人学·10.0分
-				</div> -->
+			</div>
+			<div class="statistics">
+				<div class="boxWrap">
+					<div class="boxItem">
+						<p class="th">内容</p>
+					</div>
+					<div class="boxItem">
+						<p class="th">课程难度</p>
+						<p class="td">进阶</p>
+					</div>
+					<div class="boxItem">
+						<p class="th">时常</p>
+						<p class="td">1小时</p>
+					</div>
+					<div class="boxItem">
+						<p class="th">学习人数</p>
+						<p class="td">100人</p>
+					</div>
+					<div class="boxItem">
+						<p class="th">评价</p>
+						<p class="td">10.00分</p>
+					</div>
+				</div>
 			</div>
 			<div class="d-tabs" :class="{'fixedActive':isFixed}" id="d-tabs">
 				<p class="d-tab" :class="{'active':currIndex==0}" @click="handleTab(0)">
@@ -58,7 +81,7 @@
 		<view id="foot-box" class="cu-bar tabbar bg-white shadow foot">
 			<view class="icon" @click="FavorSubject">
 				<view class="cuIcon-cu-image">
-					<text class="lg cuIcon-favor" :class="[IsFavorite?'text-red':'text-gray']"></text>
+					<text class="lg cuIcon-favor" :class="[IsFavorite?'text-red':'text-gray']" style="font-size: 20px;"></text>
 				</view>
 				<view  :class="[IsFavorite?'text-red':'text-gray']">{{IsFavorite?'取消收藏':'收藏'}}</view>
 			</view>
@@ -74,15 +97,18 @@
 	import Catalogue from '@/components/study/catalogue.vue';
 	import Evaluate from '@/components/study/evaluate.vue';
 	import Recommend from '@/components/study/recommend.vue';
+	import CourseBox from '@/components/study/courseBox.vue';
 	export default {
 		components:{
 			Introduce,
 			Catalogue,
 			Evaluate,
-			Recommend
+			Recommend,
+			CourseBox
 		},
 		data() {
 			return {
+				pathUrl:'http://112.126.75.65:10002',
 				currIndex:0,
 				swiperHeight:'',
 				isFixed: false,
@@ -444,14 +470,29 @@
 .wrapper{
 	.cover{
 		width: 100%;
-		background: #d24941;
+		// background: #d24941;
+		background: rgb(244,244,244);
 		padding: 20rpx 30rpx;
 		box-sizing: border-box;
 		box-shadow: 0 10rpx 10rpx rgba(255,255,255,.5);
+		display: flex;
+		.leftImg{
+			width: 120rpx;
+			height: 180rpx;
+			// background: #C70C15;
+			border-radius: 10rpx;
+			.img{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.rightInfo{
+			flex: 1;
+			margin-left: 15rpx;
+		}
 		.title{
 			font-size: 28rpx;
-			color: #FFFFFF;
-			font-size: 32rpx;
+			color: #333;
 			font-weight: bold;
 			display: flex;
 			align-items: center;
@@ -471,11 +512,8 @@
 		}
 		.duty{
 			line-height: 2;
-			font-size: 28rpx;
-			color: #FFFFFF;
-			.name{
-				padding-right: 10rpx;
-			}
+			font-size: 24rpx;
+			color: #666;
 		}
 		.introduce{
 			line-height: 1.5;
@@ -483,7 +521,27 @@
 			color: #FFFFFF;
 		}
 	}
+	.statistics{
+		background: #fff;
+		padding: 20rpx;
+		.boxWrap{
+			display: flex;
+			justify-content: space-around;
+			.boxItem{
+				font-size: 24rpx;
+				.th{
+					color:#666666;
+				}
+				.td{
+					padding-top: 20rpx;
+					color: #333333;
+					font-weight: bold;
+				}
+			}
+		}
+	}
 	.d-tabs{
+		margin-top: 20rpx;
 		display: flex;
 		background: #FFFFFF;
 		// box-shadow: 0 15rpx 20rpx 10rpx #fff;

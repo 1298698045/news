@@ -2,24 +2,22 @@
 	<div class="curriculum">
 		<div class="box" v-for="(item,index) in list" :key="index" @click="handleClick(item,index)">
 			<div class="left_cover">
-				
+				<image class="img" width="100%" height="100%" :src="pathUrl+item.ImageUrl.value" mode="aspectFill"></image>
 			</div>
 			<div class="right_info">
 				<h3 class="title">
 					{{item.Name.textValue || ''}}
-					<span style="padding-left: 20rpx;">{{item.Writer.textValue || ''}}</span>
 				</h3>
 				<div class="position">
-					<span class="tag">{{item[post] || ''}}</span>
-					<span class="tag">{{item[duty] || ''}}</span>
+					<span class="tag">{{item.Writer.textValue || ''}}</span>
 				</div>
 				<div class="nums">
-					<!-- <span class="color">58</span>讲 | &nbsp;&nbsp; -->
-					<span class="color">{{item.StudyPeopleCount.textValue || ''}}</span> 人已学习
+					<span class="color">免费</span>
+					<span class="num">{{item.StudyPeopleCount.textValue || ''}}人学习</span>
 				</div>
-				<div class="desc">
+				<!-- <div class="desc">
 					{{item.Description.textValue || ''}}
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -52,7 +50,7 @@
 		name: 'CourseBox',
 		data(){
 			return {
-				
+				pathUrl:'http://112.126.75.65:10002'
 			}
 		},
 		methods:{
@@ -69,10 +67,14 @@
 			display: flex;
 			margin-top: 30rpx;
 			.left_cover{
-				width: 200rpx;
-				height: 300rpx;
-				background: #C70C15;
-				border-radius: 20rpx;
+				width: 120rpx;
+				height: 180rpx;
+				// background: #C70C15;
+				border-radius: 10rpx;
+				.img{
+					width: 100%;
+					height: 100%;
+				}
 			}
 			.right_info{
 				flex: 1;
@@ -97,8 +99,15 @@
 				}
 				.nums{
 					padding: 10rpx 0;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					font-size: 24rpx;
 					.color{
 						color: #C70C15;
+					}
+					.num{
+						color: #666;
 					}
 				}
 				.desc{

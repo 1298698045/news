@@ -27,7 +27,7 @@
 							<tui-icon v-if="detail.IsPraise" name="agree" size="24" color="#FFF"></tui-icon>
 						</div>
 						<p class="text">
-							点赞
+							{{detail.IsPraise?'取消点赞':'点赞'}} {{detail.NumOfLike || ''}}
 						</p>
 					</div>
 					<div class="share">
@@ -225,7 +225,8 @@
 		methods: {
 			getDetail(){
 				this.$http.getCircleDetail({
-					MomentsId: this.id
+					MomentsId: this.id,
+					token: this.token
 				}).then(res=>{
 					this.detail = res.returnValue;
 					this.detail.ModifiedOn = this.$tui.formData(this.detail.ModifiedOn);
@@ -258,7 +259,8 @@
 				this.$http.getCircleCommentList({
 					ChatterId:this.id,
 					Pagenum: this.page.pageNum,
-					Pagesize: this.page.pageSize
+					Pagesize: this.page.pageSize,
+					token: this.token
 				}).then(res=>{
 					this.cmtList = res.returnValue.ChatterCommentBaseList;
 					this.cmtList.map(item=>{
@@ -358,6 +360,7 @@
 						this.detail.IsPraise = false;
 					})
 				}
+				this.getDetail();
 			},
 			handlePersonalHome(){
 				uni.navigateTo({

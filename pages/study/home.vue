@@ -3,8 +3,7 @@
 		<div class="header">
 			<van-search v-model="searchVal" placeholder="请输入搜索关键词" @change="changeSearch" />
 		</div>
-		<div class="tabContainer">
-			<!-- <tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab"  @change="changeTab"></tui-tabs> -->
+		<!-- <div class="tabContainer">
 			<view class="tabs">
 				<view class="tab" @click="changeTab(item,index)" :class="{'active':currentTab==index}" v-for="(item,index) in tabs" :key="index">
 					<span>
@@ -12,8 +11,8 @@
 					</span>
 				</view>
 			</view>
-		</div>
-		<div class="banner">
+		</div> -->
+		<!-- <div class="banner">
 			<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
 			 indicator-active-color="#d24941" class="tui-banner-swiper">
 				<swiper-item v-for="(item,index) in banner" :key="index" @tap.stop="bannerDetail">
@@ -21,13 +20,22 @@
 					<image :src="'/static/images/news/'+item.img" class="tui-slide-image" mode="widthFix" />
 				</swiper-item>
 			</swiper>
+		</div> -->
+		<div class="classWrap">
+			<!-- <div class="menuItem">
+				{{ selectTypeName }}
+				<tui-icon name="arrowdown" color="#666" size="20" style="vertical-align: middle;"></tui-icon>
+				<tui-icon name="arrowup"></tui-icon>
+			</div> -->
+			<van-dropdown-menu>
+				<van-dropdown-item v-model="currentTab" :options="tabs" @change="changeDrop" >
+					
+				</van-dropdown-item>
+			</van-dropdown-menu>
 		</div>
 		<div class="center">
 			<div class="container">
 				<div class="panel">
-					<div class="name">
-						课程
-					</div>
 					<CourseBox :list="recommendList" @clickIn="handleClickIn" />
 				</div>
 			</div>
@@ -42,6 +50,8 @@
 		},
 		data() {
 			return {
+			    tabs: [
+			    ],
 				banner: [{
 					img: "banner_1.jpg",
 					title: "课程1"
@@ -104,9 +114,12 @@
 				isPage: false,
 				searchVal: '',
 				listType: [],
-				currentTab: 0,
+				currentTab: '',
 				tabs:[],
-				CourseCategoryId: ''
+				CourseCategoryId: '',
+				visible: true,
+				selectTypeName: '全部',
+				dropdownShow: true
 			}
 		},
 		onLoad() {
@@ -117,6 +130,11 @@
 			changeTab(item,index){
 				this.currentTab = index;
 				this.CourseCategoryId = item.id;
+				this.getQuery();
+			},
+			changeDrop(e){
+				this.currentTab = e.detail;
+				this.CourseCategoryId = e.detail;
 				this.getQuery();
 			},
 			changeSearch(e){
@@ -175,10 +193,11 @@
 						id: ''
 					})
 					this.tabs = this.listType.map(item=>{
-						item.name = item.Name.textValue;
-						item.id = item.id;
+						item.text = item.Name.textValue;
+						item.value = item.id;
 						return item;
 					})
+					console.log('this.tabs',this.tabs)
 				})
 			},
 			bannerDetail(){
@@ -277,8 +296,37 @@
 			border-radius: 10rpx;
 		}
 	}
+	.classWrap{
+		padding: 10rpx 20rpx;
+		.menuItem{
+			min-width: 100rpx;
+			padding: 0 20rpx;
+			height: 60rpx;
+			line-height: 60rpx;
+			text-align: center;
+			color: #333;
+			font-size: 24rpx;
+			display: inline-block;
+			background: rgb(249,250,252);
+		}
+	}
+	.van-dropdown-menu{
+		min-width: 100rpx !important;
+		padding: 0 20rpx !important;
+		height: 60rpx !important;
+		line-height: 60rpx !important;
+		text-align: center !important;
+		color: #333 !important;
+		font-size: 24rpx !important;
+		display: inline-block !important;
+		background: rgb(249,250,252) !important;
+	}
+	.van-dropdown-menu__title{
+		line-height: inherit !important;
+		font-size: 24rpx !important;
+	}
 	.container{
-		padding: 30rpx;
+		padding: 0 30rpx;
 		box-sizing: border-box;
 		.name{
 			font-size: 28rpx;
@@ -296,50 +344,6 @@
 			display: block;
 			border-radius: 5rpx;
 			margin-right: 10rpx;
-		}
-		.curriculum{
-			.box{
-				display: flex;
-				margin-top: 30rpx;
-				.left_cover{
-					width: 200rpx;
-					height: 300rpx;
-					background: #d24941;
-					border-radius: 20rpx;
-				}
-				.right_info{
-					flex: 1;
-					margin-left: 30rpx;
-					.title{
-						font-size: 28rpx;
-						color: #333333;
-						font-weight: bold;
-						display: flex;
-						align-items: center;
-						margin-bottom: 20rpx;
-					}
-					.position{
-						.tag{
-							background: #f1f1f1;
-							display: inline-block;
-							padding: 5rpx;
-							font-size: 24rpx;
-							color: #767676;
-							margin-right: 10rpx;
-						}
-					}
-					.nums{
-						padding: 10rpx 0;
-						.color{
-							color: #d24941;
-						}
-					}
-					.desc{
-						font-size: 24rpx;
-						line-height: 1.5;
-					}
-				}
-			}
 		}
 	}
 }

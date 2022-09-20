@@ -103,7 +103,8 @@ export default {
 			commentId:"",
 			userName: '',
 			comment: '',
-			time:''
+			time:'',
+			token:uni.getStorageSync('wechatAuthToken')
 		};
 	},
 	onLoad(options){
@@ -121,7 +122,8 @@ export default {
 		getQueryList(){
 			this.$http.getCircleAddcmtlist({
 				MomentsId: this.id,
-				CommentId: this.commentId
+				CommentId: this.commentId,
+				token: this.token
 			}).then(res=>{
 				this.replyList = res.returnValue;
 				this.replyList.map(item=>{

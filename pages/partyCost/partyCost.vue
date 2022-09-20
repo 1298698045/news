@@ -36,7 +36,8 @@
 						month: 1,
 						cost: '100'
 					}
-				]
+				],
+				userId: uni.getStorageSync('userId')
 			}
 		},
 		onLoad() {
@@ -44,10 +45,20 @@
 		},
 		methods: {
 			getQuery(){
-				this.$http.getPartyCostList({
+				// this.$http.getPartyCostList({
 					
+				// }).then(res=>{
+				// 	console.log(res);
+				// })
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method:"post",
+					data:{
+						objectTypeCode: 31301,
+						filterquery: "\nemployeeid\teq-userid"+this.userId
+					}
 				}).then(res=>{
-					console.log(res);
+					console.log(res,'res')
 				})
 			}
 		}

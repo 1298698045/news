@@ -2,8 +2,11 @@
 	<div class="catalogue" id="catalogue">
 		<div class="container">
 			<div class="pannel" v-for="(item,index) in list" :key="index">
-				<h3 class="title" @click="handleDetail(item,index)">
-					第{{index+1}}章 {{item.Name}}
+				<h3 :class="item.level==1?'title':'childTitle'" @click="handleDetail(item,index)">
+					<span :class="{'active':chapterId==item.chapterId}">						
+						<span v-if="item.level==1" style="padding-right: 10rpx;">第{{index+1}}章</span>
+						{{item.Name}}
+					</span>
 				</h3>
 				<!-- <div class="uls">
 					<div class="li" v-for="(row,idx) in item.Children" @click.stop="handleHref(row)">
@@ -16,7 +19,7 @@
 					</div>
 				</div> -->
 				<div v-if="item.Children && item.Children.length>0">
-					<Catalogue :courseId="courseId" :list="item.Children" />
+					<Catalogue :courseId="courseId" :chapterId="chapterId" :list="item.Children" :isModal="isModal" @changeParams="changeParams" />
 				</div>
 			</div>
 		</div>
@@ -28,7 +31,7 @@
 	export default {
 		name: 'Catalogue',
 		components:{
-			Catalogue
+			Catalogue 
 		},
 		props:{
 			list:{
@@ -42,6 +45,10 @@
 			isModal:{
 				type:[Number, String, Object],
 				dafault: 0
+			},
+			chapterId:{
+				type:[Number, String, Object],
+				dafault: ''
 			}
 		},
 		watch:{
@@ -188,9 +195,11 @@
 		onReady() {
 			// this.getQuery();
 		},
+		mounted() {
+		},
 		methods:{
 			handleDetail(item,index){
-				this.$nextTick(()=>{					
+				this.$nextTick(()=>{
 					if(this.isModal==1){
 						this.$emit('changeParams',item);
 					}else {
@@ -199,6 +208,9 @@
 						})
 					}
 				})
+			},
+			changeParams(item){
+				this.$emit('changeParams',item);
 			},
 			getQuery(){
 				// this.$http.getStudyCatalogue({
@@ -231,15 +243,26 @@
 		// padding-bottom: 100rpx;
 	}
 	.container{
-		padding: 20rpx 30rpx;
+		padding: 0 30rpx;
 		background: #FFFFFF;
 		.pannel{
-			// margin-bottom: 30rpx;
+			margin-bottom: 20rpx;
 			.title{
-				font-size: 32rpx;
+				font-size: 28rpx;
 				font-weight: bold;
 				color: #333333;
-				// padding-bottom: 20rpx;
+				padding-bottom: 10rpx;
+				line-height: 2;
+				
+			}
+			.childTitle{
+				color: #333333;
+				line-height: 60rpx;
+				border-bottom: 1rpx solid #e2e3e5;
+			}
+			.active{
+				color: #d24941;
+				font-weight: bold;
 			}
 			.uls{
 				.li{

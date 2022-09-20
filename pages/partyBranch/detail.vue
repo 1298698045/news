@@ -21,12 +21,23 @@
 			<div class="peopleList" v-if="currentIdx==1">
 				<div class="panel">
 					<div class="row" v-for="(item,index) in partyPeoples" :key="index" @click="handleDetail(item)">
-						<p>
-							<span class="name">
-								{{item.FullName.textValue || ''}}
-							</span>
-							{{item.DeptId.lookupValue.displayName || ''}}
-						</p>
+						<div class="avatar">
+							{{item.name || ''}}
+						</div>
+						<div class="userInfo">
+							<p class="userName">{{item.FullName.textValue || ''}}</p>
+							<p class="dept">{{item.DeptId.lookupValue.displayName || ''}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="activityBox" v-if="currentIdx==2">
+				<div class="emptyBox">
+					<div class="imgBox">
+						<img src="/static/images/activity/empty.png" alt="">
+					</div>
+					<div class="emptyName">
+						没有支部活动
 					</div>
 				</div>
 			</div>
@@ -104,6 +115,14 @@
 						result = this.partyPeoples.concat(res.returnValue.nodes);
 					}
 					this.partyPeoples = result;
+					this.partyPeoples = this.partyPeoples.map(item=>{
+						if(item.FullName.value.length>=3){
+							item.name = item.FullName.value.slice(1);
+						}else {
+							item.name = item.FullName.value;
+						}
+						return item;
+					})
 				})
 			},
 			handleDetail(item){
@@ -116,18 +135,22 @@
 </script>
 
 <style lang="scss">
+	page{
+		background: #fff;
+	}
 	.wrapper{
 		.tabs{
 			width: 100%;
 			white-space: nowrap;
 			overflow: hidden;
 			background: #fff;
+			border-bottom: 1rpx solid #e2e3e5;
 			.tab{
 				width: 33%;
 				padding: 0 20rpx;
 				text-align: center;
 				line-height: 80rpx;
-				color: #333;
+				color: #7b8187;
 				display: inline-block;
 				box-sizing: border-box;
 				span{
@@ -137,8 +160,8 @@
 				}
 			}
 			.tab.active{
-				color: #d24941;
-				font-weight: bold;
+				color: #d93731;
+				// font-weight: bold;
 			}
 			.tab.active span{
 				border-bottom: 5rpx solid #d24941;
@@ -146,19 +169,60 @@
 		}
 		.panel{
 			background: #fff;
-			margin: 20rpx 0;
 			.cell{
 				padding: 20rpx;
 				box-sizing: border-box;
 			}
 			.row{
-				padding: 20rpx;
+				padding: 16rpx 32rpx;
 				box-sizing: border-box;
-				border-bottom: 1rpx solid #E2E3E5;
-				.name{
-					display: inline-block;
-					min-width: 200rpx;
+				display: flex;
+				align-items: center;
+				.avatar{
+					width:80rpx;
+					height: 80rpx;
+					border-radius: 50%;
+					line-height: 80rpx;
+					text-align: center;
+					color: #FFFFFF;
+					font-size: 26rpx;
+					background: #d93731;
 				}
+				.userInfo{
+					margin-left: 28rpx;
+					.userName{
+						color: #333333;
+						font-size: 35rpx;
+					}
+					.dept{
+						color: #999999;
+						font-size: 26rpx;
+					}
+				}
+			}
+		}
+		.activityBox{
+			padding: 35rpx 55rpx;
+		}
+		.emptyBox{
+			width: 100%;
+			height: 324rpx;
+			border: 2rpx solid #ebeef6;
+			box-shadow: rgba(235, 238, 246, 1) solid 7rpx;
+			.imgBox{
+				width: 237rpx;
+				height: 200rpx;
+				margin: 0 auto;
+				img{
+					width: 100%;
+					height: 100%;
+				}
+			}
+			.emptyName{
+				text-align: center;
+				padding-top: 33rpx;
+				color: #999999;
+				font-size: 27rpx;
 			}
 		}
 	}

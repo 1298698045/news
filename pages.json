@@ -412,7 +412,9 @@
 			"van-checkbox": "/wxcomponents/vant/checkbox/index",
 			"van-radio-group": "/wxcomponents/vant/radio-group/index",
 			"van-radio": "/wxcomponents/vant/radio/index",
-			"van-action-sheet": "/wxcomponents/vant/action-sheet/index"
+			"van-action-sheet": "/wxcomponents/vant/action-sheet/index",
+			"van-dropdown-menu": "/wxcomponents/vant/dropdown-menu/index",
+			"van-dropdown-item":"/wxcomponents/vant/dropdown-item/index"
 		}
 	},
 	"easycom": {

@@ -17,20 +17,20 @@ export const api_address = {
 		// searchList: '/NewsContent/ContentSearch/contenttypeidsearch',
 		detail: '/NewsContent/ContentDetails/contentdetail',
 		cmtsList: '/NewsContent/ContentDetails/contentdetail/commentpagelist', // 新闻评论列表
-		sendNesCmts: '/SystemUser/commentnew/commentnewsadd', // 新闻评论
+		sendNesCmts: '/Account/commentnew/commentnewsadd', // 新闻评论
 		// sendNesCmts: '/WeatherForecast/NewsPraiseAdd',
 		setLike: '/NewsContent/contentnewspraise/newspraiseadd', // 点赞
 		delLike: '/NewsContent/contentnewspraise/newspraisedel', // 取消点赞
-		collection: '/SystemUser/collectnews/collectnewsadd', // 收藏
-		delCollection: '/SystemUser/collectnews/collectnewsdel', // 取消收藏
+		collection: '/Account/collectnews/collectnewsadd', // 收藏
+		delCollection: '/Account/collectnews/collectnewsdel', // 取消收藏
 		channel: '/NewsContent/ContentPersonType/personnewtype', // 栏目
 		myChannel:'/NewsContent/ContentPersonType/personnewtype' ,// 我的频道
 		notChannel: '/NewsContent/ContentPersonType/personnewtypeother', // 未关注频道
 		addChannel: '/NewsContent/ContentPersonType/personnewtypeadd', // 添加频道
 		delChannel: '/NewsContent/ContentPersonType/personnewtypedel', // 删除
-		commentLike: '/SystemUser/commentnew/comnewpraiseadd', // 评论点赞
+		commentLike: '/Account/commentnew/comnewpraiseadd', // 评论点赞
 		// commentCancelLike: '/SystemUser​/commentnew​/commentnewpraisedel' // 评论取消点赞
-		commentCancelLike: '/SystemUser/commentnew/commentnewpraisedel'
+		commentCancelLike: '/Account/commentnew/commentnewpraisedel'
 	},
 	// 同志圈
 	gayCircle:{
