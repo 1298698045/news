@@ -16,10 +16,10 @@
 				</div>
 				<div class="box" v-for="item in list">
 					<div class="title">
-						{{item.description}}
+						{{item.Description}}
 					</div>
 					<div class="desc">
-						{{item.content}}
+						{{item.Content}}
 					</div>
 				</div>
 			</div>
@@ -33,7 +33,8 @@
 			return {
 				content:"积分试行期间，积分规则将会适时调整，带来不便敬请谅解",
 				integraTotal: '',
-				list: []
+				list: [],
+				token: uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		onLoad() {
@@ -42,10 +43,10 @@
 		methods: {
 			getIntegralInfo(){
 				this.$http.getIntegralInfo({
-					
+					token: this.token
 				}).then(res=>{
-					this.integraTotal = res.returnValue.integraTotal;
-					this.list = res.returnValue.integraWarningRulesList.filter(item=>item.integraType==1);
+					this.integraTotal = res.returnValue.IntegraTotal;
+					this.list = res.returnValue.IntegraWarningRulesList.filter(item=>item.IntegraType==1);
 				})
 			},
 		}
@@ -87,7 +88,7 @@
 					content: '';
 					width: 8rpx;
 					height: 30rpx;
-					background: #d24941;
+					background: #d03a28;
 					display: block;
 					margin-right: 20rpx;
 				}

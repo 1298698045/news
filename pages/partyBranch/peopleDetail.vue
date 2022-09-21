@@ -7,42 +7,41 @@
 			<p class="userName">{{detail.FullName.value || ''}}</p>
 		</div>
 		<div class="panel">
-			<div class="cell">				
+			<div class="cell" v-if="detail.FullName.value">				
 				<p class="label">姓名</p>
 				<p class="val">{{detail.FullName.value || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.DeptId.Name">
 				<p class="label">部门</p>
 				<p class="val">{{detail.DeptId.Name || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.JobTitle.value">
 				<p class="label">职位</p>
 				<p class="val">{{detail.JobTitle.value || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.Age.value">
 				<p class="label">年龄</p>
 				<p class="val">{{detail.Age.value || ''}}</p>
 			</div>
-			
-			<div class="cell">
+			<div class="cell" v-if="detail.EmpPool.value">
 				<p class="label">状态</p>
 				<p class="val">{{detail.EmpPool.value || ''}}</p>
 			</div>
 		</div>
 		<div class="panel">
-			<div class="cell">
+			<div class="cell" v-if="detail.WorkPhone.value">
 				<p class="label">手机号</p>
 				<p class="val">{{detail.WorkPhone.value || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.EmailAddress1.value">
 				<p class="label">邮箱</p>
 				<p class="val">{{detail.EmailAddress1.value || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.HomeAddress.value">
 				<p class="label">家庭住址</p>
 				<p class="val">{{detail.HomeAddress.value || ''}}</p>
 			</div>
-			<div class="cell">
+			<div class="cell" v-if="detail.HomePhone.value">
 				<p class="label">家庭电话</p>
 				<p class="val">{{detail.HomePhone.value || ''}}</p>
 			</div>

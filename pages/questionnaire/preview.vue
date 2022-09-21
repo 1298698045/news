@@ -318,7 +318,7 @@ export default {
                     text-align: center;
                     font-size: 24rpx;
                     color: #fff;
-                    background: #d24941;
+                    background: #d03a28;
                     border-radius: 50%;
                 }
                 .info{
@@ -337,13 +337,13 @@ export default {
             .preview{
                 span{
                     font-size: 28rpx;
-                    color: #d24941;
-                    border-bottom: 1rpx solid #d24941;
+                    color: #d03a28;
+                    border-bottom: 1rpx solid #d03a28;
                 }
             }
             .title{
                 font-size: 39rpx;
-                color: #d24941;
+                color: #d03a28;
                 font-weight: bold;
                 padding: 21rpx 0;
             }
@@ -376,7 +376,7 @@ export default {
                     }
                     .active{
                         font-size: 35rpx;
-                        color: #d24941;
+                        color: #d03a28;
                         font-weight: bold;
                     }
                 }

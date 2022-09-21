@@ -15,7 +15,7 @@
 					<p class="name">
 						《党建学习》
 					</p>
-					<p class="tag" @click="handleBack">课程介绍 <tui-icon class="icon" name="arrowright" size='20' color="#d24941"></tui-icon></p>
+					<p class="tag" @click="handleBack">课程介绍 <tui-icon class="icon" name="arrowright" size='20' color="#d03a28"></tui-icon></p>
 				</div>
 				<div class="banner">
 					
@@ -72,7 +72,7 @@
 			 					<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.replayNum > 2" @tap="cmtReply">
 			 						<view class="tui-flex-1  tui-cell-last">
 			 							<text>共{{ item.replayNum }}条回复</text>
-			 							<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
+			 							<tui-icon name="arrowright" :size="22" color="#d03a28"></tui-icon>
 			 						</view>
 			 					</tui-list-cell>
 			 				</view>
@@ -93,7 +93,7 @@
 				<div class="collection" @click="FavorSubject">
 					<p>
 						<tui-icon name="star" size="20" v-if="!detail.isCollect"></tui-icon>
-						<tui-icon name="star-fill" color="#d24941" size="20" v-if="detail.isCollect"></tui-icon>
+						<tui-icon name="star-fill" color="#d03a28" size="20" v-if="detail.isCollect"></tui-icon>
 					</p>
 					<!-- <p class="num" :class="{'active':detail.isCollect}">0</p> -->
 				</div>
@@ -187,11 +187,11 @@
 		},
 		computed: {
 			iconColor() {
-				return this.isFabulous ? '#d24941' : '#333'
+				return this.isFabulous ? '#d03a28' : '#333'
 			},
 			itemIconColor() {
 				return function(isFabulous) {
-					return isFabulous ? '#d24941' : '#9a9a9a'
+					return isFabulous ? '#d03a28' : '#9a9a9a'
 				}
 			},
 			iconName() {
@@ -372,7 +372,7 @@ page{
 					padding: 10rpx 20rpx;
 					border-radius: 50rpx;
 					background: #ffcccc;
-					color: #d24941;
+					color: #d03a28;
 					font-size: 28rpx;
 					display: flex;
 					justify-content: center;
@@ -385,14 +385,14 @@ page{
 			.banner{
 				width: 100%;
 				height: 300rpx;
-				background: #d24941;
+				background: #d03a28;
 				border-radius: 20rpx;
 				margin: 30rpx 0;
 			}
 		}
 		.play{
 			width: 100%;
-			background: #d24941;
+			background: #d03a28;
 			border-radius: 20rpx;
 			box-shadow: 0rpx 5rpx 15rpx 5rpx rgba(199, 12, 21, 0.5);
 			border-top-right-radius: 100rpx;
@@ -460,7 +460,7 @@ page{
 					color: #999999;
 				}
 				.num.active{
-					color: #d24941;
+					color: #d03a28;
 				}
 			}
 		}
@@ -507,7 +507,7 @@ page{
 					.btn{
 						border: none;
 						color: #FFFFFF;
-						background: #d24941;
+						background: #d03a28;
 						font-size: 28rpx;
 						width: 150rpx;
 						height: 50rpx;
@@ -537,7 +537,7 @@ page{
 	top: 18%;
 	width: 6rpx;
 	height: 64%;
-	background: #d24941;
+	background: #d03a28;
 }
 .tui-cmtbox {
 	padding-bottom: 20rpx;
@@ -570,7 +570,7 @@ page{
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 }
 
 .tui-fabulous {
@@ -601,7 +601,7 @@ page{
 	display: flex;
 	align-items: center;
 	word-wrap: break-word;
-	color: #d24941;
+	color: #d03a28;
 }
 .tui-flex-1 {
 	flex: 1;
@@ -622,7 +622,7 @@ page{
 }
 
 .tui-primary {
-	color: #d24941 !important;
+	color: #d03a28 !important;
 }
 
 .tui-ml {

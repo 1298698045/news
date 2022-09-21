@@ -23,7 +23,7 @@
 				<div class="opreation">					
 					<div class="like" @click="handleLike">
 						<div class="like_icon" :class="{'active':detail.IsPraise}">
-							<tui-icon v-if="!detail.IsPraise" name="agree" size="24" color="#d24941"></tui-icon>
+							<tui-icon v-if="!detail.IsPraise" name="agree" size="24" color="#d03a28"></tui-icon>
 							<tui-icon v-if="detail.IsPraise" name="agree" size="24" color="#FFF"></tui-icon>
 						</div>
 						<p class="text">
@@ -73,7 +73,7 @@
 							<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.ReplayNum > 2" @tap="cmtReply">
 								<view class="tui-flex-1  tui-cell-last">
 									<text>共{{ item.ReplayNum }}条回复</text>
-									<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
+									<tui-icon name="arrowright" :size="22" color="#d03a28"></tui-icon>
 								</view>
 							</tui-list-cell>
 						</view>
@@ -93,7 +93,7 @@
 				<div class="collection">
 					<p @click="handleCollection">
 						<tui-icon name="star" size="20" v-if="!isCollect"></tui-icon>
-						<tui-icon name="star-fill" color="#d24941" size="20" v-if="isCollect"></tui-icon>
+						<tui-icon name="star-fill" color="#d03a28" size="20" v-if="isCollect"></tui-icon>
 					</p>
 					<!-- <p class="num" :class="{'active':isCollect}">{{detail.numOfForward}}</p> -->
 				</div>
@@ -194,11 +194,11 @@
 		},
 		computed: {
 			iconColor() {
-				return this.isFabulous ? '#d24941' : '#333'
+				return this.isFabulous ? '#d03a28' : '#333'
 			},
 			itemIconColor() {
 				return function(isFabulous) {
-					return isFabulous ? '#d24941' : '#9a9a9a'
+					return isFabulous ? '#d03a28' : '#9a9a9a'
 				}
 			},
 			iconName() {
@@ -284,7 +284,7 @@
 							that.isFllow = true;
 						}
 					}
-					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#d24941')
+					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#d03a28')
 				}else {
 					this.isFllow = !this.isFllow;
 				}
@@ -293,7 +293,7 @@
 				const callback = function(res){
 					console.log(123123)
 				}
-				this.$tui.modal('','抱歉，苹果不支持分享到朋友圈',false,callback,'#d24941');
+				this.$tui.modal('','抱歉，苹果不支持分享到朋友圈',false,callback,'#d03a28');
 			},
 			changeKeyBoard(e){
 				console.log(e);
@@ -313,7 +313,7 @@
 			},
 			// 评论点赞
 			cmtFabulous: function(item) {
-				if(!item.isPraise){
+				if(!item.IsPraise){
 					this.$http.setCircleCmtLike({
 						token: this.token,
 						ChatCommentId: item.CommentId
@@ -422,7 +422,7 @@
 			.fllow{
 				font-size: 28rpx;
 				color: #FFFFFF;
-				background: #d24941;
+				background: #d03a28;
 				border-radius: 50rpx;
 				width: 120rpx;
 				height: 60rpx;
@@ -454,12 +454,12 @@
 					line-height: 100rpx;
 					text-align: center;
 					border-radius: 50%;
-					border: 1rpx solid #d24941;
+					border: 1rpx solid #d03a28;
 					margin: 0rpx auto;
 				}
 				.like_icon.active{
 					border: 1rpx solid transparent;
-					background: #d24941;
+					background: #d03a28;
 				}
 				.text{
 					font-size: 24rpx;
@@ -467,7 +467,7 @@
 					line-height: 2;
 				}
 				.text.active{
-					color: #d24941;
+					color: #d03a28;
 				}
 			}
 			.share{
@@ -528,7 +528,7 @@
 					color: #999999;
 				}
 				.num.active{
-					color: #d24941;
+					color: #d03a28;
 				}
 			}
 		}
@@ -575,7 +575,7 @@
 					.btn{
 						border: none;
 						color: #FFFFFF;
-						background: #d24941;
+						background: #d03a28;
 						font-size: 28rpx;
 						width: 150rpx;
 						height: 50rpx;
@@ -605,7 +605,7 @@
 	top: 18%;
 	width: 6rpx;
 	height: 64%;
-	background: #d24941;
+	background: #d03a28;
 }
 .tui-cmtbox {
 	padding-bottom: 20rpx;
@@ -638,7 +638,7 @@
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 }
 
 .tui-fabulous {
@@ -669,7 +669,7 @@
 	display: flex;
 	align-items: center;
 	word-wrap: break-word;
-	color: #d24941;
+	color: #d03a28;
 }
 .tui-flex-1 {
 	flex: 1;
@@ -690,7 +690,7 @@
 }
 
 .tui-primary {
-	color: #d24941 !important;
+	color: #d03a28 !important;
 }
 
 .tui-ml {

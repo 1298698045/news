@@ -1,7 +1,7 @@
 <template>
 	<div class="wrapper">
 		<div class="header">
-			<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab" itemWidth="50%" @change="changeTab"></tui-tabs> 
+			<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d03a28" selectedColor="#d03a28" :currentTab="currentTab" itemWidth="50%" @change="changeTab"></tui-tabs> 
 		</div>
 		<div class="center">
 			<div class="listWrap">
@@ -113,7 +113,7 @@
 			},
 			toview(item){
 				uni.navigateTo({
-					url: 'activityDetail?id='+item.CampaignId
+					url: '/pages/activity/activityDetail?id='+item.CampaignId
 				})
 			}
 		},

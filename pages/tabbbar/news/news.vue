@@ -668,11 +668,11 @@
 				}
 			}
 			.tab.active{
-				color: #d24941;
+				color: #d03a28;
 				font-weight: bold;
 			}
 			.tab.active span{
-				border-bottom: 5rpx solid #d24941;
+				border-bottom: 5rpx solid #d03a28;
 			}
 		}
 		.more{
@@ -714,10 +714,10 @@
 				.options{
 					span{
 						display: inline-block;
-						border: 1rpx solid #d24941;
+						border: 1rpx solid #d03a28;
 						border-radius: 50rpx;
 						padding: 8rpx 30rpx;
-						color: #d24941;
+						color: #d03a28;
 						font-size: 28rpx;
 					}
 					span:last-child,.edit{
@@ -725,7 +725,7 @@
 					}
 					.complete{
 						color: #fff;
-						background: #d24941;
+						background: #d03a28;
 					}
 				}
 			}
@@ -888,7 +888,7 @@
 	}
 
 	.tui-banner-swiper .wx-swiper-dot-active::before {
-		background: #d24941;
+		background: #d03a28;
 	}
 
 	.tui-banner-swiper .wx-swiper-dot.wx-swiper-dot-active {

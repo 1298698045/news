@@ -30,7 +30,8 @@
 			return {
 				desc:"",
 				email:"",
-				telPhone:""
+				telPhone:"",
+				token: uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		methods: {
@@ -43,7 +44,8 @@
 				}else {		
 					this.$http.submitFeedback({
 						Content: this.desc,
-						ContactInfo: this.telPhone
+						ContactInfo: this.telPhone,
+						token: this.token
 					}).then(res=>{
 						if(res.returnValue){
 							this.$tui.toast({

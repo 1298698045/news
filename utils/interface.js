@@ -82,11 +82,11 @@ export const api_address = {
 		cancelCollection: '/SystemUser/collectexam/collectexamdel'
 	},
 	integral:{
-		info: '/SystemUser/integral/warningrules',
-		list: '/SystemUser/integral/contentitemlist', // 积分列表
+		info: '/Account/integral/warningrules',
+		list: '/Account/integral/contentitemlist', // 积分列表
 	},
 	// 留言
-	feedback: '/SystemUser/service/feedback', // 留言
-	partyCost: '/SystemUser/history/partyfeelist' // 党费
+	feedback: '/Account/service/feedback', // 留言
+	partyCost: '/Account/history/partyfeelist' // 党费
 	
 }

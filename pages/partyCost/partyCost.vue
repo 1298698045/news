@@ -6,7 +6,7 @@
 					<tui-td bold v-for="(item,index) in header" :key="index" :span="8">{{item.title}}</tui-td>
 				</tui-tr>
 				<tui-tr v-for="(item, index) in listData" :key="index">
-					<tui-td :span="8" v-for="(obj, idx) in header" :key="idx">{{item[obj.key]}}</tui-td>
+					<tui-td :span="8" v-for="(obj, idx) in header" :key="idx">{{obj.key == 'EmployeeId' ? item[obj.key].userValue.DisplayName : item[obj.key].value}}</tui-td>
 				</tui-tr>
 			</tui-table>
 		</div>
@@ -18,16 +18,20 @@
 		data() {
 			return {
 				header: [{
-						title: '月份',
-						key: 'month'
+						title: '年份',
+						key: 'YearNumber'
+					},
+					{
+						title:'月份',
+						key: 'MonthNumber'
 					},
 					{
 						title: '姓名',
-						key: 'name'
+						key: 'EmployeeId'
 					},
 					{
 						title: '费用',
-						key: 'cost'
+						key: 'PartyFee'
 					}
 				],
 				listData: [{
@@ -55,10 +59,11 @@
 					method:"post",
 					data:{
 						objectTypeCode: 31301,
-						filterquery: "\nemployeeid\teq-userid"+this.userId
+						filterquery: "\nemployeeid\teq-userid"
 					}
 				}).then(res=>{
 					console.log(res,'res')
+					this.listData = res.returnValue.nodes;
 				})
 			}
 		}

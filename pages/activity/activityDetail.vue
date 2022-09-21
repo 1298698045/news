@@ -363,7 +363,7 @@
         height:30px;
         line-height:30px;
         text-align:center;
-        background:#d24941;
+        background:#d03a28;
         color:#fff;
         border-radius:3px;
 		font-size: 24rpx;
@@ -379,7 +379,7 @@
     }
     .mainDetailComment .box .info_view .nikeName{
         font-size:14px;
-        color:#d24941;
+        color:#d03a28;
     }
     .mainDetailComment .box .info_view .content{
         font-size:16px;
@@ -404,15 +404,15 @@
         color:#333;
     }
     .tabs .tab.active{
-        color: #d24941;
-        border-bottom:2px solid #d24941;
+        color: #d03a28;
+        border-bottom:2px solid #d03a28;
     }
     .avatar {
         width: 40px;
         height: 40px;
         line-height: 40px;
         border-radius: 50%;
-        background: #d24941;
+        background: #d03a28;
         color: #fff;
         text-align: center;
         font-size: 12px;

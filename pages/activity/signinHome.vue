@@ -332,7 +332,7 @@
 	                }
 	                .btn{
 	                    font-size: 28rpx;
-	                    color: #d24941;
+	                    color: #d03a28;
 	                }
 	                .location{
 	                    font-size: 35rpx;

@@ -2,10 +2,10 @@
 	<view class="wrapper">
 		<div class="container" v-for="item in list">
 			<div class="content">
-				{{item.content}}
+				{{item.Content}}
 			</div>
 			<div class="time">
-				{{item.modifiedOn}}
+				{{item.ModifiedOn}}
 			</div>
 		</div>
 	</view>
@@ -15,7 +15,8 @@
 	export default {
 		data() {
 			return {
-				list: []
+				list: [],
+				token: uni.getStorageSync('wechatAuthToken')
 			}
 		},
 		onLoad() {
@@ -24,11 +25,11 @@
 		methods: {
 			getIntegralInfo(){
 				this.$http.getIntegralInfo({
-					
+					token: this.token
 				}).then(res=>{
-					this.list = res.returnValue.integraWarningRulesList.filter(item=>item.integraType==0);
+					this.list = res.returnValue.IntegraWarningRulesList.filter(item=>item.IntegraType==0);
 					this.list.map(item=>{
-						item.modifiedOn = this.$tui.formData(item.modifiedOn);
+						item.ModifiedOn = this.$tui.formData(item.ModifiedOn);
 					})
 				})
 			},

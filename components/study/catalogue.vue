@@ -261,7 +261,7 @@
 				border-bottom: 1rpx solid #e2e3e5;
 			}
 			.active{
-				color: #d24941;
+				color: #d03a28;
 				font-weight: bold;
 			}
 			.uls{

@@ -25,7 +25,7 @@
 					      @change="changePassWord"
 					    />
 						<div class="loginBtn">
-							<van-button type="default" :block="true" :round="true" :disabled="disabled" color="#d24941" @click.stop="handleLogin">登录</van-button>
+							<van-button type="default" :block="true" :round="true" :disabled="disabled" color="#d03a28" @click.stop="handleLogin">登录</van-button>
 						</div>
 				</form>
 			</div>
@@ -159,7 +159,7 @@ page{
 			width: 100rpx;
 			height: 100rpx;
 			border-radius: 50%;
-			background: #d24941;
+			background: #d03a28;
 			margin: 100rpx auto 0;
 		}
 		.content{

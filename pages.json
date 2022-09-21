@@ -209,7 +209,7 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "党支部详情",
-                "enablePullDownRefresh": false
+                "enablePullDownRefresh": true
             }
             
         }
@@ -218,6 +218,33 @@
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "支部成员详情",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/userInfo/userInfo",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "个人信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/practice/home",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "答题练习",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/myStudy/myStudy",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
                 "enablePullDownRefresh": false
             }
             
@@ -396,7 +423,7 @@
 	"globalStyle": {
 		"navigationBarTextStyle": "#ffffff",
 		"navigationBarTitleText": "党建工作",
-		"navigationBarBackgroundColor": "#d24941",
+		"navigationBarBackgroundColor": "#d03a28",
 		"backgroundColor": "#ffffff",
 		"usingComponents":{
 			"van-nav-bar": "/wxcomponents/vant/nav-bar/index",
@@ -425,7 +452,7 @@
 	},
 	"tabBar": {
 	    "color": "#ae9594",
-	    "selectedColor": "#a52518",
+	    "selectedColor": "#d03a28",
 	    "borderStyle": "black",
 	    "backgroundColor": "#ffffff",
 	    "list": [{

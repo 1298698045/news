@@ -73,7 +73,7 @@ page{
 					color: #999999;
 					margin-left: 20rpx;
 					span{
-						color: #d24941;
+						color: #d03a28;
 					}
 				}
 			}
@@ -92,7 +92,7 @@ page{
 				line-height: 100rpx;
 				font-size: 32rpx;
 				text-align: center;
-				background: #d24941;
+				background: #d03a28;
 				color: #FFFFFF;
 			}
 			.btn.active{

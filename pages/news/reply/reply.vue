@@ -12,7 +12,7 @@
 					</view>
 					<view class="tui-fabulous" :class="{ 'tui-primary': isFabulous }" @tap="btnFabulous">
 						<text>{{ fabulous == 0 ? '赞' : fabulous }}</text>
-						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#d24941' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#d03a28' : '#9a9a9a'"></tui-icon>
 					</view>
 				</view>
 				<view class="tui-cmt-content">我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？☺☺☺☺☺</view>
@@ -32,7 +32,7 @@
 					</view>
 					<view class="tui-fabulous" :class="[item.isFabulous ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
 						<text>{{ item.fabulous == 0 ? '赞' : item.fabulous }}</text>
-						<tui-icon :name="item.isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="item.isFabulous ? '#d24941' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="item.isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="item.isFabulous ? '#d03a28' : '#9a9a9a'"></tui-icon>
 					</view>
 				</view>
 				<view class="tui-reply-box" v-if="item.reply.length > 0">
@@ -180,7 +180,7 @@ page {
 	top: 30%;
 	width: 6rpx;
 	height: 40%;
-	background: #d24941;
+	background: #d03a28;
 }
 
 .tui-cmt-cell {
@@ -235,7 +235,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 	line-height: 28rpx;
 }
 
@@ -342,6 +342,6 @@ page {
 }
 
 .tui-primary {
-	color: #d24941;
+	color: #d03a28;
 }
 </style>

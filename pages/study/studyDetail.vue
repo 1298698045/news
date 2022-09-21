@@ -11,7 +11,7 @@
 		</div> -->
 		<div class="like" @click="handleLike">
 			<div class="like_icon" :class="{'active':isLike}">
-				<tui-icon v-if="!isLike" name="agree" size="24" color="#d24941"></tui-icon>
+				<tui-icon v-if="!isLike" name="agree" size="24" color="#d03a28"></tui-icon>
 				<tui-icon v-if="isLike" name="agree" size="24" color="#FFF"></tui-icon>
 			</div>
 			<p class="text">
@@ -267,14 +267,14 @@
 		width: 100rpx;
 		height: 100rpx;
 		border-radius: 50%;
-		background: #d24941;
+		background: #d03a28;
 		text-align: center;
 		line-height: 100rpx;
 		color: #fff;
 		margin: 100rpx auto;
 	}
 	.likeNum{
-		color:#d24941;
+		color:#d03a28;
 	}
 	.like{
 		text-align: center;
@@ -285,12 +285,12 @@
 			line-height: 100rpx;
 			text-align: center;
 			border-radius: 50%;
-			border: 1rpx solid #d24941;
+			border: 1rpx solid #d03a28;
 			margin: 0rpx auto;
 		}
 		.like_icon.active{
 			border: 1rpx solid transparent;
-			background: #d24941;
+			background: #d03a28;
 		}
 		.text{
 			font-size: 24rpx;
@@ -298,7 +298,7 @@
 			line-height: 2;
 		}
 		.text.active{
-			color: #d24941;
+			color: #d03a28;
 		}
 	}
 	.borderBox{

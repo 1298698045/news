@@ -12,7 +12,7 @@
 					</view>
 					<!-- <view class="tui-fabulous" :class="{ 'tui-primary': isFabulous }" @tap="btnFabulous">
 						<text>{{ fabulous == 0 ? '赞' : fabulous }}</text>
-						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#d24941' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="isFabulous ? 'agree-fill' : 'agree'" :size="15" :color="isFabulous ? '#d03a28' : '#9a9a9a'"></tui-icon>
 					</view> -->
 				</view>
 				<view class="tui-cmt-content">{{comment}}</view>
@@ -32,7 +32,7 @@
 					</view>
 					<!-- <view class="tui-fabulous" :class="[item.isPraise ? 'tui-primary' : '']" :id="index" @tap="cmtFabulous">
 						<text>{{ item.likeQty == 0 ? '赞' : item.likeQty }}</text>
-						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#d24941' : '#9a9a9a'"></tui-icon>
+						<tui-icon :name="item.isPraise ? 'agree-fill' : 'agree'" :size="15" :color="item.isPraise ? '#d03a28' : '#9a9a9a'"></tui-icon>
 					</view> -->
 				</view>
 				<view class="tui-reply-box" v-if="item.Reply.length > 0">
@@ -209,7 +209,7 @@ page {
 	top: 30%;
 	width: 6rpx;
 	height: 40%;
-	background: #d24941;
+	background: #d03a28;
 }
 
 .tui-cmt-cell {
@@ -264,7 +264,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 	line-height: 28rpx;
 }
 
@@ -371,6 +371,6 @@ page {
 }
 
 .tui-primary {
-	color: #d24941;
+	color: #d03a28;
 }
 </style>

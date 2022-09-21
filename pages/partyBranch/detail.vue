@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<div class="activityBox" v-if="currentIdx==2">
-				<div class="emptyBox">
+				<div class="emptyBox" v-if="listData.length=='' || listData.length == 0">
 					<div class="imgBox">
 						<img src="/static/images/activity/empty.png" alt="">
 					</div>
@@ -40,7 +40,35 @@
 						没有支部活动
 					</div>
 				</div>
+				<div class="listWrap" v-else>
+					<div class="list-item" @click="toview(item)" v-for="(item,index) in listData" :key="index">
+						<div class="item-head">
+							{{item.Name || ''}}
+							<p>
+								发布时间：{{item.ActualStart || ''}}
+								{{item.CreatedByName || ''}}
+								
+							</p>
+						</div>
+						<div class="item-body item-img-body">
+							<div class="body-right">
+								{{item.Description || ''}}
+							</div>
+						</div>
+						<div class="item-bottom">
+							<div>
+								<img src="/static/images/activity/02.3.2.Time-sort.png" />
+								<span>{{item.timeStr || ''}} 截止</span>
+							</div>
+							<div>
+								<img src="/static/images/activity/04.5.1.1.Participants.png" />
+								<span>{{item.NumOfPeople || 0}}人报名</span>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
+			
 		</div>
 	</view>
 </template>
@@ -66,7 +94,8 @@
 				partyPeoples:[],
 				pageNumber:1,
 				pageSize:20,
-				isPage: false
+				isPage: false,
+				listData: []
 			}
 		},
 		onLoad(options){
@@ -77,9 +106,62 @@
 		methods: {
 			changeTab(item,index){
 				this.currentIdx = index;
+				this.pageNumber = 1;
 				if(index==1){
 					this.getPartyPeople();
+				}else if(index==2){
+					this.getActivityList();
+				}else {
+					this.getDetail();
 				}
+			},
+			getActivityList(){
+				this.$httpWX({
+					url: '/campaign/getlist',
+					method: 'get',
+					data:{
+						scope:'all',
+						PageNumber: this.pageNumber,
+						PageSize: this.pageSize,
+						filterquery: '\nPartyUnitId\teq\t'+this.id
+					}
+				}).then(res=>{
+					console.log(res)
+					let total = res.total;
+					if(this.pageNumber * this.pageSize < total){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue;
+					}else {
+						result = this.listData.concat(res.returnValue);
+					}
+					this.listData = result;
+					this.listData.forEach(item=>{
+						var timeStr = this.formDateFn(item.ActualEnd);
+						this.$set(item,'timeStr',timeStr)
+					})
+				})
+			},
+			formDateFn(time){
+				var date = new Date(time);
+				var y = date.getFullYear();
+				var m = date.getMonth() + 1;
+				var d = date.getDate();
+				var week = ['周日','周一','周二','周三','周四','周五','周六']
+				var day = week[date.getDay()];
+				var h = date.getHours();
+				var min = date.getMinutes();
+				var str = `${m}月${d}日 ${day} ${h}:${min}`;
+				return str;
+			},
+			toview(item){
+				uni.navigateTo({
+					url: '/pages/activity/activityDetail?id='+item.CampaignId
+				})
 			},
 			getDetail(){
 				this.$httpWX({
@@ -99,7 +181,9 @@
 					method: 'post',
 					data:{
 						objectTypeCode: 30020,
-						filterquery: '\nPartyUnitId\teq\t'+this.id
+						filterquery: '\nPartyUnitId\teq\t'+this.id,
+						PageNumber: this.pageNumber,
+						PageSize: this.pageSize
 					}
 				}).then(res=>{
 					let total = res.returnValue.totalCount;
@@ -130,6 +214,29 @@
 					url:'peopleDetail?id='+item.id
 				})
 			}
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.pageNumber = 1;
+			if(this.currentIdx==1){
+				this.getPartyPeople();
+			}else if(this.currentIdx==2){
+				this.getActivityList();
+			}
+			wx.stopPullDownRefresh();
+		},
+		/**
+		 * 页面上拉触底事件的处理函数
+		 */
+		onReachBottom() {
+		   if(this.isPage){
+			   this.pageNumber++;
+			   if(this.currentIdx==1){
+			   	this.getPartyPeople();
+			   }else if(this.currentIdx==2){
+			   	this.getActivityList();
+			   }
+		   }
 		}
 	}
 </script>
@@ -137,6 +244,80 @@
 <style lang="scss">
 	page{
 		background: #fff;
+	}
+	.list-item{
+	    padding:10px;
+	    border-radius:8px;
+	    background-color:white;
+	    margin:10px;
+	}
+	.list-item .fullName{
+	    font-size:12px;
+	    color:#666666;
+	}
+	.item-head{
+	    font-weight:700;
+		p{
+			font-size: 24rpx;
+			color: #666666;
+			font-weight: normal;
+			line-height: 2;
+		}
+	}
+	.item-body{
+	    margin:5px 0;
+	    display: -webkit-box;    
+	    -webkit-box-orient: vertical;    
+	    -webkit-line-clamp: 6;
+	    overflow: hidden;
+	    font-size:14px;
+	    padding:2px;
+	}
+	.item-img-body{
+	    display:flex;
+	}
+	.body-left{
+	    width:120px;
+	    height:120px;
+	}
+	.body-left img{
+	    width:115px;
+	    height:115px;
+	}
+	.body-right{
+	    flex:1;
+	    display: -webkit-box;    
+	    -webkit-box-orient: vertical;    
+	    -webkit-line-clamp: 6;
+	    overflow: hidden;
+	    font-size:14px;
+	    padding:2px;
+	    box-sizing:border-box;
+	}
+	.item-bottom{
+	    padding:15px 10px;
+	    background-color:#f8f8f8;
+	    font-size:12px;
+	    color:#999;
+	    display:flex;
+	    justify-content: space-between
+	}
+	.item-bottom img{
+	    width:14px;
+	    height:14px;
+	    position:relative;
+	    top:3px;
+	    margin-right:3px;
+	}
+	.avatar {
+	    width: 40px;
+	    height: 40px;
+	    line-height: 40px;
+	    border-radius: 50%;
+	    background: #3399ff;
+	    color: #fff;
+	    text-align: center;
+	    font-size: 12px;
 	}
 	.wrapper{
 		.tabs{
@@ -164,7 +345,7 @@
 				// font-weight: bold;
 			}
 			.tab.active span{
-				border-bottom: 5rpx solid #d24941;
+				border-bottom: 5rpx solid #d03a28;
 			}
 		}
 		.panel{
@@ -174,7 +355,7 @@
 				box-sizing: border-box;
 			}
 			.row{
-				padding: 16rpx 32rpx;
+				padding-left:32rpx;
 				box-sizing: border-box;
 				display: flex;
 				align-items: center;
@@ -189,7 +370,10 @@
 					background: #d93731;
 				}
 				.userInfo{
+					flex: 1;
 					margin-left: 28rpx;
+					padding: 16rpx 32rpx 16rpx 0;
+					border-bottom: 1rpx solid #e2e3e5;
 					.userName{
 						color: #333333;
 						font-size: 35rpx;

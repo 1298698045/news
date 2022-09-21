@@ -220,7 +220,7 @@ page {
 	top: 30%;
 	width: 6rpx;
 	height: 40%;
-	background: #d24941;
+	background: #d03a28;
 }
 
 .tui-cmt-cell {
@@ -275,7 +275,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 	line-height: 28rpx;
 }
 
@@ -382,6 +382,6 @@ page {
 }
 
 .tui-primary {
-	color: #d24941;
+	color: #d03a28;
 }
 </style>

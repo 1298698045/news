@@ -1,6 +1,6 @@
 <template>
 	<view class="wrapper">
-		<view class="header">
+		<view class="header" @click="gotoInfo">
 			<view class="headPortrait" @click="!isLogin&&getLogin()">
 				<image class="img" v-if="isLogin" :src="userInfo.avatarUrl" mode="widthFix" />
 			</view>
@@ -33,46 +33,60 @@
 			</view>
 		</view>
 		<div class="content">
-			<tui-list-view color="#777">
-				<tui-list-cell class="cell" arrow>
-					<image src="../../../static/images/news/2-a.png" mode="widthFix"></image>
-					<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
-					<view class="text">
-						我的历程
-					</view>
-				</tui-list-cell>
-				<tui-list-cell class="cell" arrow>
-					<image src="../../../static/images/news/2-b.png" mode="widthFix"></image>
-					<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
-					<view class="text">
-						党员承诺
-					</view>
-				</tui-list-cell>
-				<tui-list-cell class="cell" arrow>
-					<image src="../../../static/images/news/2-c.png" mode="widthFix"></image>
-					<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
-					<view class="text">
-						在线客服
-					</view>
-				</tui-list-cell>
-				<tui-list-cell class="cell" arrow @click="handleIntegral">
-					<image src="../../../static/images/news/2-d.png" mode="widthFix"></image>
-					<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
-					<view class="text">
-						学习积分
-					</view>
-				</tui-list-cell>
-				<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
-					<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
-					<!-- <tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon> -->
-					<view class="text">
-						我要留言
-					</view>
-				</tui-list-cell>
-			</tui-list-view>
+			<div class="panelBox">
+				<tui-list-view color="#777">
+					<tui-list-cell class="cell" arrow>
+						<image src="../../../static/images/news/2-a.png" mode="widthFix"></image>
+						<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的历程
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<image src="../../../static/images/news/2-b.png" mode="widthFix"></image>
+						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							党员承诺
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<image src="../../../static/images/news/2-c.png" mode="widthFix"></image>
+						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							在线客服
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow @click="handleIntegral">
+						<image src="../../../static/images/news/2-d.png" mode="widthFix"></image>
+						<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							学习积分
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
+						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
+						<!-- <tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我要留言
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow @click="gotoMystudy">
+						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
+						<view class="text">
+							我的课程
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
+						<view class="text">
+							我的考试
+						</view>
+					</tui-list-cell>
+				</tui-list-view>
+			</div>
 		</div>
 		<div class="outBtn">
-			<van-button type="default" :block="true" :round="true" color="#d24941" @click.stop="handleOut">退出登录</van-button>
+			<van-button type="default" :block="true" :round="true" color="#d03a28" @click.stop="handleOut">退出登录</van-button>
 		</div>
 	</view>
 </template>
@@ -98,6 +112,11 @@
 			}
 		},
 		methods: {
+			gotoInfo(){
+				uni.navigateTo({
+					url:'/pages/my/userInfo/userInfo'
+				})
+			},
 			getLogin(){
 				var that = this;
 				uni.login({
@@ -139,6 +158,11 @@
 					}
 				}
 				this.$tui.modal('','确定要退出登录吗？',true,callback,'#C70C15')
+			},
+			gotoMystudy(){
+				uni.navigateTo({
+					url:'/pages/my/myStudy/myStudy'
+				})
 			}
 		}
 	}
@@ -150,7 +174,7 @@
 	.header{
 		width: 100%;
 		padding: 30rpx 20rpx;
-		background: #d24941;
+		background: #d03a28;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
@@ -196,14 +220,20 @@
 		}
 	}
 	.content{
-		.tui-list-cell{
-			display: flex;
-			align-items: center;
-			image{
-				width: 40rpx;
-			}
-			.text{
-				padding-left: 20rpx;
+		padding: 0 20rpx;
+		.panelBox{
+			background: #fff;
+			border-radius: 20rpx;
+			.tui-list-cell{
+				display: flex;
+				align-items: center;
+				background: transparent !important;
+				image{
+					width: 40rpx;
+				}
+				.text{
+					padding-left: 20rpx;
+				}
 			}
 		}
 	}

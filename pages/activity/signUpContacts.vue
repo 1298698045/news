@@ -2,7 +2,7 @@
 	<view class="wrapper">
 		<!-- <div class="header">
 			<div class="tabContainer">
-				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab" itemWidth="50%" @change="changeTabList"></tui-tabs>
+				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d03a28" selectedColor="#d03a28" :currentTab="currentTab" itemWidth="50%" @change="changeTabList"></tui-tabs>
 			</div>
 		</div> -->
 		<div class="center">
@@ -147,7 +147,7 @@
         margin-left:10px;
     }
     .item-photo{
-        background-color:#d24941;
+        background-color:#d03a28;
         text-align:center;
         line-height:40px;
         border-radius:50%;

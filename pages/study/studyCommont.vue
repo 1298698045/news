@@ -4,31 +4,27 @@
 			<div class="mainDetailComment">
 				<div class="boxWrap" v-for="(item,index) in commentList" :key="index">					
 					<div class="box">
-						<div class="avatar">{{item.CreatedBy.userValue.DisplayName}}</div>
+						<div class="avatar">{{item.UserName || ''}}</div>
 						<div class="info_view">
-							<p class="nikeName">{{item.CreatedBy.userValue.DisplayName}}</p>
-							<p class="time">{{item.CreatedOn.dateTime}}</p>
+							<p class="nikeName">{{item.UserName || ''}}</p>
+							<p class="time">{{item.CreatedOn || ''}}</p>
 						</div>
 						<div class="like_icon"></div>
 					</div>
 					<div class="contentWrap">
-						<p class="content" v-html="item.Name.textValue"></p>
+						<p class="content" v-html="item.Body"></p>
 					</div>
-					<div class="optionns">
+					<div class="optionns" @click="handleLike(item)">
 						<view class="btn">
-							<tui-icon name="agree" :size="20"></tui-icon>
-							<!-- <tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d24941" ></tui-icon> -->
+							<tui-icon name="agree" :size="20" v-if="!item.IsPraise"></tui-icon>
+							<tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d03a28" ></tui-icon>
 						</view>
-						<span v-if="!item.LikeQty.value==0">
+						<span v-if="!item.LikeQty">
 						点赞
 						</span>
 						<span v-else>
-							{{item.LikeQty.value || 0}}
+							{{item.LikeQty || 0}}
 						</span>
-						<span style="padding: 0 20rpx;">·</span>
-						<view class="reply">
-							回复 20
-						</view>
 					</div>
 				</div>
 			</div>
@@ -106,16 +102,14 @@
 				})
 			},
 			queryCommentList(){
-				var filterQuery = '\nRegardingId\teq\t'+this.chapterId
 				this.$httpWX({
-					url: '/entity/fetchall',
-					method: 'post',
+					url: '/course/chapterpraise/commentdetaillistprs',
+					method: 'get',
 					data:{
-						objectTypeCode: 50715,
-						filterQuery: filterQuery
+						chapterId: this.chapterId
 					}
 				}).then(res=>{
-					let total = res.returnValue.totalCount;
+					let total = res.total;
 					if(this.pageNumber * this.pageSize < total){
 						this.isPage = true;
 					}else {
@@ -123,54 +117,29 @@
 					}
 					let result = [];
 					if(this.pageNumber==1){
-						result = res.returnValue.nodes;
+						result = res.returnValue;
 					}else {
-						result = this.commentList.concat(res.returnValue.nodes);
+						result = this.commentList.concat(res.returnValue);
 					}
 					this.commentList = result;
 				})
 			},
-			// 报名
-			signUp(){
+			handleLike(item){
+				var url = '/course/chapterpraise/praiseadd'
+				if(item.IsPraise){
+					url = '/course/chapterpraise/praiseadel'
+				}
 				this.$httpWX({
-					url: '/campaign/signup',
-					method: 'post',
+					url:url,
 					data:{
-						CampaignId: this.id,
-						JoinState: 1,
-						StatusCode: this.record.StatusCode.value || ''
-					}
+						ChapterCommentId: item.CommentId
+					},
+					method: 'post'
 				}).then(res=>{
-					uni.showToast({
-						title:'报名成功！',
-						icon:'success',
-						duration:2000
-					})
-					this.getDetail();
-					this.getIsSign();
-				})
-				this.isSignUp = true;
-			},
-			cancelSignUp(){
-				this.$httpWX({
-					url: '/campaign/signout',
-					method: 'post',
-					data:{
-						CampaignId: this.id,
-						JoinState: 2,
-						StatusCode: this.record.StatusCode.value || ''
-					}
-				}).then(res=>{
-					this.getDetail();
-					this.getIsSign();
+					console.log(res);
+					this.queryCommentList();
 				})
 			},
-			// 签到
-			signing(){
-				uni.navigateTo({
-					url:'signinHome?id='+this.id+'&ClockinStatus=' + this.signObj.ClockinStatus
-				})
-			}
 		},
 		/**
 		 * 页面上拉触底事件的处理函数
@@ -180,7 +149,13 @@
 			   this.pageNumber++;
 			   this.queryCommentList();
 		   }
-		}
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.pageNumber = 1;
+			this.queryCommentList();
+			wx.stopPullDownRefresh();
+		},
 	}
 </script>
 
@@ -303,7 +278,7 @@
         height:30px;
         line-height:30px;
         text-align:center;
-        background:#d24941;
+        background:#d03a28;
         color:#fff;
         border-radius:3px;
 		font-size: 24rpx;
@@ -321,7 +296,7 @@
     }
     .mainDetailComment .box .info_view .nikeName{
         font-size:14px;
-        color:#d24941;
+        color:#d03a28;
     }
     .mainDetailComment .box .info_view .content{
         font-size:16px;
@@ -361,15 +336,15 @@
         color:#333;
     }
     .tabs .tab.active{
-        color: #d24941;
-        border-bottom:2px solid #d24941;
+        color: #d03a28;
+        border-bottom:2px solid #d03a28;
     }
     .avatar {
         width: 40px;
         height: 40px;
         line-height: 40px;
         border-radius: 50%;
-        background: #d24941;
+        background: #d03a28;
         color: #fff;
         text-align: center;
         font-size: 12px;

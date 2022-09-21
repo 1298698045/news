@@ -10,7 +10,7 @@
 			<tui-icon name="link" :size="22"></tui-icon>
 		</view> -->
 		<view class="tui-cmt-btn">
-			<tui-form-button radius="50px" background="#d24941">发表</tui-form-button>
+			<tui-form-button radius="50px" background="#d03a28">发表</tui-form-button>
 		</view>
 	</view>
 </template>

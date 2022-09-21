@@ -14,7 +14,7 @@
 		</div> -->
 		<!-- <div class="banner">
 			<swiper indicator-dots autoplay circular :interval="5000" :duration="150" indicator-color="rgba(255, 255, 255, 0.9)"
-			 indicator-active-color="#d24941" class="tui-banner-swiper">
+			 indicator-active-color="#d03a28" class="tui-banner-swiper">
 				<swiper-item v-for="(item,index) in banner" :key="index" @tap.stop="bannerDetail">
 					<view class="tui-banner-title">{{item.title}}</view>
 					<image :src="'/static/images/news/'+item.img" class="tui-slide-image" mode="widthFix" />
@@ -283,11 +283,11 @@
 			}
 		}
 		.tab.active{
-			color: #d24941;
+			color: #d03a28;
 			font-weight: bold;
 		}
 		.tab.active span{
-			border-bottom: 5rpx solid #d24941;
+			border-bottom: 5rpx solid #d03a28;
 		}
 	}
 	.banner{
@@ -340,7 +340,7 @@
 			content:'';
 			width:6rpx;
 			height: 30rpx;
-			background: #d24941;
+			background: #d03a28;
 			display: block;
 			border-radius: 5rpx;
 			margin-right: 10rpx;

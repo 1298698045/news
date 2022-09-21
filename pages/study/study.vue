@@ -470,7 +470,7 @@
 .wrapper{
 	.cover{
 		width: 100%;
-		// background: #d24941;
+		// background: #d03a28;
 		background: rgb(244,244,244);
 		padding: 20rpx 30rpx;
 		box-sizing: border-box;
@@ -491,7 +491,7 @@
 			margin-left: 15rpx;
 		}
 		.title{
-			font-size: 28rpx;
+			font-size: 32rpx;
 			color: #333;
 			font-weight: bold;
 			display: flex;
@@ -562,8 +562,8 @@
 			}
 		}
 		.d-tab.active{
-			color: #d24941;
-			border-bottom: 5rpx solid #d24941;
+			color: #d03a28;
+			border-bottom: 5rpx solid #d03a28;
 		}
 	}
 	.d-tabs.fixedActive{
@@ -593,7 +593,7 @@
 				height: 80rpx;
 				line-height: 80rpx;
 				text-align: center;
-				background: #d24941;
+				background: #d03a28;
 				font-size: 28rpx;
 				color: #FFFFFF;
 				border-radius: 50rpx;

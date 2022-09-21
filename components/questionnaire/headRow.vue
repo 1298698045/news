@@ -190,7 +190,7 @@ export default {
                 display: block;
                 width: 30rpx;
                 height: 100%;
-                background: #ff6666;
+                background: #d03a28;
               }
             }
             .num {

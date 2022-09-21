@@ -68,7 +68,7 @@
 						<tui-list-cell padding="20rpx 30rpx" backgroundColor="#f2f2f2" :size="28" :unlined="true" v-if="item.ContentComments.length > 2" @tap="cmtReply">
 							<view class="tui-flex-1  tui-cell-last">
 								<text>共{{ item.ContentComments.length }}条回复</text>
-								<tui-icon name="arrowright" :size="22" color="#d24941"></tui-icon>
+								<tui-icon name="arrowright" :size="22" color="#d03a28"></tui-icon>
 							</view>
 						</tui-list-cell>
 					</view>
@@ -88,7 +88,7 @@
 					<tui-badge absolute type="white_primary" :scaleRatio="0.7">{{ total || 0 }}</tui-badge>
 				</view>
 				<view class="tui-operation-item" @tap="collection">
-					<tui-icon :name="isCollection ? 'star-fill' : 'star'" :size="29" :color="isCollection ? '#d24941' : '#444'"></tui-icon>
+					<tui-icon :name="isCollection ? 'star-fill' : 'star'" :size="29" :color="isCollection ? '#d03a28' : '#444'"></tui-icon>
 				</view>
 				<view class="tui-operation-item" hover-class="tui-opcity" :hover-stay-time="150" @tap="btnShare">
 					<button open-type="share" class="tui-share-btn"><tui-icon name="share" :size="31" color="#444"></tui-icon></button>
@@ -164,11 +164,11 @@ export default {
 	},
 	computed: {
 		iconColor() {
-			return this.isFabulous ? '#d24941' : '#333'
+			return this.isFabulous ? '#d03a28' : '#333'
 		},
 		itemIconColor() {
 			return function(isFabulous) {
-				return isFabulous ? '#d24941' : '#9a9a9a'
+				return isFabulous ? '#d03a28' : '#9a9a9a'
 			}
 		},
 		iconName() {
@@ -401,7 +401,7 @@ page {
 }
 
 .tui-author {
-	color: #d24941;
+	color: #d03a28;
 	padding-right: 20rpx;
 }
 
@@ -457,7 +457,7 @@ page {
 	top: 18%;
 	width: 6rpx;
 	height: 64%;
-	background: #d24941;
+	background: #d03a28;
 }
 
 .tui-cmtbox {
@@ -493,7 +493,7 @@ page {
 }
 
 .tui-cmt-nickname {
-	color: #d24941;
+	color: #d03a28;
 }
 
 .tui-fabulous {
@@ -524,7 +524,7 @@ page {
 	display: flex;
 	align-items: center;
 	word-wrap: break-word;
-	color: #d24941;
+	color: #d03a28;
 }
 .tui-flex-1 {
 	flex: 1;
@@ -546,7 +546,7 @@ page {
 }
 
 .tui-primary {
-	color: #d24941 !important;
+	color: #d03a28 !important;
 }
 
 .tui-ml {
@@ -640,6 +640,6 @@ page {
 	padding: 0;
 }
 >>>.tui-badge{
-	color: #d24941 !important;
+	color: #d03a28 !important;
 }
 </style>

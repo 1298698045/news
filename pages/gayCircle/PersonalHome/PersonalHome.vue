@@ -101,7 +101,7 @@
 					</view>
 					<view class="btn" :class="{'active':item.isPraise}" @click.stop="handleItemLike(item)">
 						<tui-icon v-if="!item.isPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
+						<tui-icon v-if="item.isPraise" name="agree" :size="24" color="#d03a28" ></tui-icon>
 						<span v-if="item.numOfLike==0||item.numOfLike==null">
 						点赞
 						</span>
@@ -154,7 +154,7 @@
 				// },
 				{
 					text: "删除动态",
-					color: "#d24941"
+					color: "#d03a28"
 				}],
 				list:[
 					{
@@ -296,7 +296,7 @@
 								this.handleDelete();
 							}
 						}
-						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d24941')
+						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d03a28')
 						break;
 				}
 			},
@@ -335,7 +335,7 @@
 							that.isFollow = true;
 						}
 					}
-					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#d24941')
+					this.$tui.modal('','确定不再关注啤酒泡沫？',true,callback,'#d03a28')
 				}else {
 					this.isFollow = !this.isFollow;
 				}
@@ -398,7 +398,7 @@
 				width: 100rpx;
 				height: 100rpx;
 				border-radius: 50%;
-				background: #d24941;
+				background: #d03a28;
 				position: absolute;
 				top: -50rpx;
 				left: 30rpx;
@@ -421,7 +421,7 @@
 						text-align: center;
 						font-size: 24rpx;
 						color: #FFFFFF;
-						background: #d24941;
+						background: #d03a28;
 						border-radius: 50rpx;
 						padding: 0;
 					}
@@ -452,7 +452,7 @@
 					font-size: 28rpx;
 					color: #333333;
 					.num{
-						color: #d24941;
+						color: #d03a28;
 						padding-right: 10rpx;
 						font-weight: bold;
 					}
@@ -474,7 +474,7 @@
 					height: 80rpx;
 					line-height: 80rpx;
 					text-align: center;
-					background: #d24941;
+					background: #d03a28;
 					border-radius: 50%;
 					color: #fff;
 					font-size: 28rpx;
@@ -608,7 +608,7 @@
 					}
 				}
 				.btn.active{
-					color: #d24941;
+					color: #d03a28;
 				}
 			}
 		}

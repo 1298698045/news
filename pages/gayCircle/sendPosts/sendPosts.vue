@@ -45,7 +45,7 @@
 							</view>
 						</div>
 						<div class="icon">
-							<tui-icon name='circle-fill' size='24' v-if="isNotice" color="#d24941"></tui-icon>
+							<tui-icon name='circle-fill' size='24' v-if="isNotice" color="#d03a28"></tui-icon>
 							<tui-icon name='circle' size='24' v-else></tui-icon>
 						</div>
 					</view>
@@ -288,7 +288,7 @@ page{
 			align-items: center;
 			.label{
 				span{
-					color: #d24941;
+					color: #d03a28;
 					padding-left: 10rpx;
 				}
 			}
@@ -315,10 +315,10 @@ page{
 			}
 			.btn.save{
 				background: #FFFFFF;
-				color: #d24941;
+				color: #d03a28;
 			}
 			.btn.send{
-				background: #d24941;
+				background: #d03a28;
 				color: #FFFFFF;
 			}
 			.btn.active{

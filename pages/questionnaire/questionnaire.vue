@@ -2,7 +2,7 @@
 	<view class="wrapper">
 		<div class="header">
 			<div class="tabContainer">
-				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d24941" selectedColor="#d24941" :currentTab="currentTab" itemWidth="50%" @change="changeTab"></tui-tabs>
+				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d03a28" selectedColor="#d03a28" :currentTab="currentTab" itemWidth="50%" @change="changeTab"></tui-tabs>
 			</div>
 		</div>
 		<div class="center" v-for="(item,index) in list" :key="index" @click="getDetail(item)">
@@ -147,7 +147,7 @@
 				line-height: 75rpx;
 				text-align: center;
 				border-radius: 50%;
-				background: #d24941;
+				background: #d03a28;
 				color: #fff;
 				font-size: 24rpx;
 			}
@@ -196,7 +196,7 @@
 				}
 				.active{
 					font-size: 35rpx;
-					color: #d24941;
+					color: #d03a28;
 					font-weight: bold;
 				}
 			}

@@ -71,7 +71,7 @@
 					</view>
 					<view class="btn" :class="{'active':item.IsPraise}" @click.stop="handleItemLike(item)">
 						<tui-icon v-if="!item.IsPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d24941" ></tui-icon>
+						<tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d03a28" ></tui-icon>
 						<span v-if="item.NumOfLike==0||item.NumOfLike==null">
 						点赞
 						</span>
@@ -125,7 +125,7 @@
 				// },
 				{
 					text: "删除动态",
-					color: "#d24941"
+					color: "#d03a28"
 				}],
 				list:[
 					{
@@ -238,7 +238,7 @@
 								this.handleDelete();
 							}
 						}
-						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d24941')
+						this.$tui.modal('','是否要删除该朋友圈？',true,callback,'#d03a28')
 						break;
 				}
 			},
@@ -345,7 +345,7 @@
 					height: 80rpx;
 					line-height: 80rpx;
 					text-align: center;
-					background: #d24941;
+					background: #d03a28;
 					border-radius: 50%;
 					color: #fff;
 					font-size: 28rpx;
@@ -479,7 +479,7 @@
 					}
 				}
 				.btn.active{
-					color: #d24941;
+					color: #d03a28;
 				}
 			}
 		}
@@ -489,7 +489,7 @@
 		height: 100rpx;
 		line-height: 100rpx;
 		text-align: center;
-		background: #d24941;
+		background: #d03a28;
 		border-radius: 50%;
 		position: fixed;
 		bottom: 20rpx;

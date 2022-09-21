@@ -1,7 +1,7 @@
 <template>
 	<view class="wrapper">
 		<div class="header">
-			<van-search background="#d93731" shape="round" v-model="searchVal" placeholder="搜索" @change="changeSearch" />
+			<van-search background="#d03a28" shape="round" v-model="searchVal" placeholder="搜索" @change="changeSearch" />
 		</div>
 		<div class="center">
 			<div class="listWrap">
