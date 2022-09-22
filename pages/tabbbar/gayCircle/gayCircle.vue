@@ -9,7 +9,7 @@
 					<view class="info">
 						<p class="name">{{item.UserName}}</p>
 						<p class="depart">
-							描述
+							{{item.OwningBusinessUnit || ''}}
 							<span class="time">
 								{{item.ModifiedOn}}
 							</span>

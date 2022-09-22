@@ -249,6 +249,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/practice/practiceClass/practiceClass",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "答题分类",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root":"pages/news",

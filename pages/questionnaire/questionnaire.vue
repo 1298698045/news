@@ -5,7 +5,7 @@
 				<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d03a28" selectedColor="#d03a28" :currentTab="currentTab" itemWidth="50%" @change="changeTab"></tui-tabs>
 			</div>
 		</div>
-		<div class="center" v-for="(item,index) in list" :key="index" @click="getDetail(item)">
+		<div class="center" v-for="(item,index) in list" :key="index">
 			<div class="content">
 				<div class="row">
 					<div class="Avatar">{{item.createdByName || ''}}</div>
