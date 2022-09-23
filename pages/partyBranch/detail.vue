@@ -1,13 +1,14 @@
 <template>
 	<view class="wrapper">
 		<div class="header">
-			<view class="tabs">
+			<tui-tabs :tabs="tabs" color="#333" sliderBgColor="#d03a28" selectedColor="#d03a28" :currentTab="currentIdx" itemWidth="50%" @change="changeTab"></tui-tabs>
+			<!-- <view class="tabs">
 				<view class="tab" @click="changeTab(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
 					<span>
 						{{item.name}}
 					</span>
 				</view>
-			</view>
+			</view> -->
 		</div>
 		<div class="center">
 			<div class="panel" v-if="currentIdx==0">
@@ -104,12 +105,12 @@
 			this.getDetail();
 		},
 		methods: {
-			changeTab(item,index){
-				this.currentIdx = index;
+			changeTab(e){
+				this.currentIdx = e.index;
 				this.pageNumber = 1;
-				if(index==1){
+				if(e.index==1){
 					this.getPartyPeople();
-				}else if(index==2){
+				}else if(e.index==2){
 					this.getActivityList();
 				}else {
 					this.getDetail();

@@ -1,25 +1,50 @@
 <template>
 	<view class="wrapper" v-cloak>
+		
 		<div class="header">
 			<div class="title">{{detail.title || ''}}</div>
 			<div class="row">
 				<div class="radius" @click="handlePersonalHome">
-					<image :src="detail.ThumbnailPath"></image>
+					<image v-if="detail.ThumbnailPath" :src="detail.ThumbnailPath"></image>
+					<span v-else>{{detail.nikeName || ''}}</span>
 				</div>
-				<div class="info">
-					<p class="name">{{detail.UserName || ''}}</p>
-					<p class="time">{{detail.ModifiedOn}}</p>
+				<div class="rightInfo">					
+					<div class="info">
+						<p class="name">{{detail.UserName || ''}}</p>
+						<p class="time">{{detail.ModifiedOn}}</p>
+					</div>
+					<div class="dept">
+						{{detail.OwningBusinessUnit || ''}}
+					</div>
 				</div>
-				<div class="fllow" :class="{'active':isFllow}" @click="handleFllow">
+				<!-- <div class="fllow" :class="{'active':isFllow}" @click="handleFllow">
 					<tui-icon name="plus" size="12" color="#fff" v-if="!isFllow"></tui-icon>&nbsp;&nbsp;关注
-				</div>
+				</div> -->
 			</div>
+			<div class="detailContent">				
+				<div class="desc">
+					{{detail.Description}} 
+				</div>
+				<view class="imgTemplate">
+					<!-- <div class="max_img">
+						<image class="img" src="/static/images/news/banner_1.jpg" mode="widthFix"></image>
+					</div>
+					<div class="min_img">
+						<image class="img" src="/static/images/news/banner_1.jpg" mode="widthFix"></image>
+					</div> -->
+					<view class="list_img">
+						<view class="box" v-for="(row,idx) in detail.Listpic" :key="idx" @click.stop="handleOpenImg(detail,idx)">
+							<image class="img" :src="pathUrl+row.Path.replace(/\\/g,'/')" mode="aspectFill"></image>
+						</view>
+						<view class="fake_item"></view>
+						<view class="fake_item"></view>
+					</view>
+				</view>
+			</div>
+			
 		</div>
 		<div class="container">
-			<div class="desc">
-				{{detail.Description}} 
-			</div>
-			<div class="business">
+			<!-- <div class="business">
 				<div class="opreation">					
 					<div class="like" @click="handleLike">
 						<div class="like_icon" :class="{'active':detail.IsPraise}">
@@ -42,10 +67,32 @@
 			</div>
 			<div class="read">
 				阅读 {{detail.NumOfForward||0}}
-			</div>
+			</div> -->
 		</div>
 		<div class="commentWrap">
-			<view class="tui-cmt-title">精彩评论（{{commentTotal || 0}}）</view>
+			<div class="tabContainer">
+				<div class="tabs">
+					<div class="tab" :class="{'active':currentTab==1}" :style="{'--left':leftTab1}" @click="handleTab(1)">
+						<p class="tabName">
+							点赞 <span class="num">{{detail.NumOfLike || 0}}</span>
+						</p>
+						<span class="xian" v-if="currentTab==1"></span>
+					</div>
+					<div class="tab" :class="{'active':currentTab==2}" :style="{'--left':leftTab2}" @click="handleTab(2)">
+						<p class="tabName">
+							评论 <span class="num">0</span>
+						</p>
+						<span class="xian" v-if="currentTab==2"></span>
+					</div>
+					<div class="tab" :class="{'active':currentTab==3}" :style="{'--left':leftTab3}" @click="handleTab(3)">
+						<p class="tabName">
+							阅读 <span class="num">0</span>
+						</p>
+						<span class="xian" v-if="currentTab==3"></span>
+					</div>
+				</div>
+			</div>
+			<!-- <view class="tui-cmt-title">精彩评论（{{commentTotal || 0}}）</view> -->
 			<view class="tui-cmtbox">
 				<view class="tui-cmt-cell" v-for="(item, index) in cmtList" :key="index">
 					<image :src="item.ThumbnailPath" class="tui-avatar"></image>
@@ -90,13 +137,22 @@
 				<div class="inp" @click="handleComment">
 					我来说两句
 				</div>
-				<div class="collection">
+				<div class="likeIcon" @click="handleLike">
+					<i class="iconfont icon-weizan" v-if="!detail.IsPraise" style="color:#a4a4a4;"></i>
+					<i class="iconfont icon-yizan" v-if="detail.IsPraise" style="color: #d03a28;"></i>
+					<span>
+						{{detail.NumOfLike || '赞'}}
+					</span>
+				</div>
+				<div class="moreIcon" @click.stop="hanldeMore(detail)">
+					<i class="iconfont icon-gengduo" style="color:#a4a4a4;"></i>
+				</div>
+				<!-- <div class="collection">
 					<p @click="handleCollection">
 						<tui-icon name="star" size="20" v-if="!isCollect"></tui-icon>
 						<tui-icon name="star-fill" color="#d03a28" size="20" v-if="isCollect"></tui-icon>
 					</p>
-					<!-- <p class="num" :class="{'active':isCollect}">{{detail.numOfForward}}</p> -->
-				</div>
+				</div> -->
 			</div>
 		</div>
 		<div class="reply" catchtouchmove="true" v-if="isShow" @tap="handleClose">
@@ -115,6 +171,12 @@
 				</div>
 			</div>
 		</div>
+		<tui-actionsheet
+		  :show="showActionSheet" 
+		  :item-list="itemList" 
+		  @click="handleItem" 
+		  @cancel="closeActionSheet">
+		</tui-actionsheet>
 	</view>
 </template>
 
@@ -124,6 +186,7 @@
 		mixins:[shareMixins,shareWechat],
 		data() {
 			return {
+				pathUrl: 'http://112.126.75.65:10002',
 				isPhoneX:this.$tui.isPhoneX(), // 判断是否是iPhoneX以上机型
 				isCollect:false, // 是否收藏
 				isFllow: false, // 是否关注
@@ -189,7 +252,21 @@
 					pageNum: 1,
 					pageSize: 10
 				},
-				commentTotal:''
+				commentTotal:'',
+				showActionSheet: false,
+				itemList: [
+					{
+					text: "收藏",
+					color: "#2B2B2B"
+				},
+				{
+					text: "删除",
+					color: "#d03a28"
+				}],
+				currentTab: 1,
+				leftTab1: '',
+				leftTab2: '',
+				leftTab3: ''
 			}
 		},
 		computed: {
@@ -210,6 +287,17 @@
 				return uni.getStorageSync('wechatAuthToken')
 			}
 		},
+		watch:{
+			isCollect:{
+				handler(newVal,oldVal){
+					if(newVal){
+						this.itemList[0].text = '取消收藏';
+					}else {
+						this.itemList[0].text = '收藏';
+					}
+				}
+			}
+		},
 		onShow(){
 			wx.onKeyboardHeightChange(res => { //监听键盘高度变化
 				console.log(res.height,'res');
@@ -222,7 +310,117 @@
 			this.getDetail();
 			
 		},
+		mounted(){
+			// this.$nextTick(()=>{	
+			// 	const query = uni.createSelectorQuery().in(this)
+			// 	query.select('.tab1').boundingClientRect()
+			// 	query.exec((res)=>{
+			// 		console.log(res)
+			// 		if(res[0].width<44){
+			// 			this.leftTab1 = '-'+ res[0].width / 2 + 'rpx';
+			// 		}else {
+			// 			this.leftTab1 = res[0].width / 2 + 'rpx';
+			// 		}
+			// 	})
+			// 	query.select('.tab2').boundingClientRect()
+			// 	query.exec((res)=>{
+			// 		console.log(res)
+			// 		if(res[1].width<44){
+			// 			this.leftTab2 = '-'+ res[1].width / 2 + 'rpx';
+			// 		}else {
+			// 			this.leftTab2 = res[1].width / 2 + 'rpx';
+			// 		}
+			// 	})
+			// 	query.select('.tab3').boundingClientRect()
+			// 	query.exec((res)=>{
+			// 		console.log(res)
+			// 		if(res[2].width<44){
+			// 			this.leftTab3 = '-'+ res[2].width / 2 + 'rpx';
+			// 		}else {
+			// 			this.leftTab3 = res[2].width / 2 + 'rpx';
+			// 		}
+			// 	})
+			// })
+		},
 		methods: {
+			handleTab(index){
+				this.currentTab = index;
+				if(this.currentTab == 2){
+					this.getCommentList();
+				}
+			},
+			handleItem(e){
+				let index = e.index;
+				switch(index){
+					case 0:
+						if(!this.isCollect){
+							this.$http.getCircleCollection({
+								ChatId: this.id,
+								token: this.token
+							}).then(res=>{
+								if(res.returnValue!=''){
+									this.isCollect = true;
+									uni.showToast({
+										title:'收藏成功!',
+										icon:'success',
+										duration:2000
+									})
+									setTimeout(()=>{
+										this.getDetail();
+									},1000)
+								}
+							})
+						}else {
+							this.$http.getCircleCancelCollection({
+								ChatId: this.id,
+								token: this.token
+							}).then(res=>{
+								if(res.returnValue!=''){
+									uni.showToast({
+										title:'取消收藏成功!',
+										icon:'success',
+										duration:2000
+									})
+									this.isCollect = false;
+									setTimeout(()=>{
+										this.getDetail();
+									},1000)
+								}
+							})
+						}
+						this.showActionSheet = false;
+						break;
+					case 1:
+						const callback = (res)=>{
+							console.log(res);
+							if(res){
+								this.handleDelete();
+							}
+						}
+						this.$tui.modal('','是否要删除该同志圈？',true,callback,'#d03a28')
+						break;
+				}
+			},
+			handleDelete(){
+				this.$http.deleteCircle({
+					token: this.token,
+					ChatterId: this.id
+				}).then(res=>{
+					if(res.returnValue)
+					this.showActionSheet = false;
+					uni.navigateBack({
+						delta:1
+					})
+				})
+			},
+			closeActionSheet(){
+				this.showActionSheet = false
+			},
+			hanldeMore(item){
+				this.id = item.ChatterId;
+				this.isCollect = item.IsCollect;
+				this.showActionSheet = true
+			},
 			getDetail(){
 				this.$http.getCircleDetail({
 					MomentsId: this.id,
@@ -231,6 +429,17 @@
 					this.detail = res.returnValue;
 					this.detail.ModifiedOn = this.$tui.formData(this.detail.ModifiedOn);
 					this.isCollect = this.detail.IsCollect;
+					this.detail.nikeName = this.detail.UserName.length > 2 ? this.detail.UserName.slice(1) : this.detail.UserName;
+				})
+			},
+			handleOpenImg(item,idx){
+				let imgs = [];
+				item.Listpic.forEach(item=>{
+					imgs.push(this.pathUrl + item.Path.replace(/\\/g,'/'));
+				})
+				wx.previewImage({
+				  current: imgs[idx], // 当前显示图片的http链接
+				  urls: imgs // 需要预览的图片http链接列表
 				})
 			},
 			handleCollection(){
@@ -381,12 +590,47 @@
 </script>
 
 <style lang="scss">
+	@font-face {
+	  font-family: "iconfont"; /* Project id 3665209 */
+	  src: url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.woff2?t=1663901575608') format('woff2'),
+		   url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.woff?t=1663901575608') format('woff'),
+		   url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.ttf?t=1663901575608') format('truetype');
+	}
+	
+	.iconfont {
+	  font-family: "iconfont" !important;
+	  font-size: 16px;
+	  font-style: normal;
+	  -webkit-font-smoothing: antialiased;
+	  -moz-osx-font-smoothing: grayscale;
+	}
+	
+	.icon-weizan:before {
+	  content: "\e7e2";
+	}
+	
+	.icon-yizan:before {
+	  content: "\e7e3";
+	}
+	
+	.icon-pinglun:before {
+	  content: "\e7e4";
+	}
+	
+	.icon-gengduo:before {
+	  content: "\e7e5";
+	}
+	
+	.icon-a-shoucang:before {
+	  content: "\e7e6";
+	}
 	page{
-		background: #FFFFFF;
+		// background: #FFFFFF;
 	}
 .wrapper{
 	.header{
 		padding: 30rpx;
+		background: #FFFFFF;
 		.title{
 			font-size: 32rpx;
 			font-weight: bold;
@@ -407,18 +651,29 @@
 					border-radius: 50%;
 				}
 			}
-			.info{
+			.rightInfo{
 				flex: 1;
-				margin-left: 10rpx;
-				.name{
-					font-size: 28rpx;
-					color: #333333;
+				display: flex;
+				justify-content: space-between;
+				.info{
+					flex: 1;
+					margin-left: 10rpx;
+					.name{
+						font-size: 28rpx;
+						color: #333333;
+					}
+					.time{
+						font-size: 24rpx;
+						color: #999;
+					}
 				}
-				.time{
-					font-size: 24rpx;
-					color: #999;
+				.dept{
+					color: #999999;
+					font-size: 20rpx;
+					max-width: 320rpx;
 				}
 			}
+			
 			.fllow{
 				font-size: 28rpx;
 				color: #FFFFFF;
@@ -432,6 +687,82 @@
 			.fllow.active{
 				background: #EEEEEE;
 				color: #999999
+			}
+		}
+		.detailContent{
+			padding-left: 75rpx;
+			.desc{
+				font-size: 30rpx;
+				color: #333333;
+				line-height: 1.5;
+			}
+			.imgTemplate{
+				margin-top: 30rpx;
+				.max_img{
+					width: 100%;
+					max-height: 380rpx;
+					background: #d4d4d4;
+					border-radius: 8rpx;
+					margin-bottom: 10rpx;
+					.img{
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
+						border-radius: 8rpx;
+					}
+				}
+				.min_img{
+					width: 460rpx;
+					max-height: 274rpx;
+					background: #d4d4d4;
+					border-radius: 8rpx;
+					margin-bottom: 10rpx;
+					.img{
+						width: 100%;
+						height: 100%;
+						vertical-align: top;
+						border-radius: 8rpx;
+					}
+				}
+				.list_img{
+					display: flex;
+					justify-content: space-between;
+					flex-wrap: wrap;
+					.box{
+						width: 193rpx;
+						height: 180rpx;
+						border-radius: 8rpx;
+						background: #d4d4d4;
+						margin-bottom: 10rpx;
+						.img{
+							width: 100%;
+							height: 100% !important;
+							vertical-align: top;
+							border-radius: 7rpx;
+						}
+					}
+					.box.active{
+						position: relative;
+						.mask{
+							position: absolute;
+							top: 0;
+							left: 0;
+							width: 100%;
+							height: 100%;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							background: rgba(0,0,0,.5);
+							font-size: 100rpx;
+							border-radius: 8rpx;
+							color: #FFFFFF;
+						}
+					}
+					.fake_item{
+						flex: 0 0 222rpx;
+						height: 0;
+					}
+				}
 			}
 		}
 	}
@@ -511,13 +842,28 @@
 			.inp{
 				flex: 1;
 				width: 100%;
-				border-radius: 50rpx;
-				background: #EDEDED;
+				border-radius: 13rpx;
+				background: #f4f4f5;
 				color: #999999;
-				font-size: 24rpx;
-				padding-left: 20rpx;
-				line-height: 60rpx;
-				height: 60rpx;
+				font-size: 29rpx;
+				padding-left: 29rpx;
+				line-height: 72rpx;
+				height: 72rpx;
+			}
+			.iconfont{
+				display: inline-block;
+				font-size: 37rpx;
+			}
+			.likeIcon{
+				margin-left: 33rpx;
+				span{
+					color: #777777;
+					font-size: 24rpx;
+					padding-left: 10rpx;
+				}
+			}
+			.moreIcon{
+				margin-left: 29rpx;
 			}
 			.collection{
 				width: 80rpx;
@@ -589,8 +935,62 @@
 	}
 }
 .commentWrap{
-	padding: 40rpx 30rpx 200rpx 30rpx;
+	// padding: 34rpx 31rpx 200rpx 31rpx;
 	box-sizing: border-box;
+	background: #fff;
+	margin-top: 16rpx;
+	.tabContainer{
+		.tabs{
+			display: flex;
+			border-bottom: 1rpx solid #e2e3e5;
+			padding: 0 31rpx;
+			box-sizing: border-box;
+			.tab{
+				font-size: 30rpx;
+				color: #7b8187;
+				padding-top: 24rpx;
+				// border-bottom: 6rpx solid transparent;
+				font-size: 30rpx;
+				margin-right: 34rpx;
+				position: relative;
+				text-align: center;
+				.tabName{
+					padding-bottom: 30rpx;
+				}
+				span.num{
+					padding-left: 10rpx;
+				}
+				.xian{
+					display: block;
+					width: 88rpx;
+					height: 6rpx;
+					background: #d93731;
+					border-radius: 3rpx;
+					margin: 0 auto;
+				}
+			}
+			.tab.active{
+				color: #d93731;
+				// border-bottom: 6rpx solid #d93731;
+				font-weight: bold;
+			}
+			// .tab.active::after{
+			// 	content: '';
+			// 	display: block;
+			// 	position: absolute;
+			// 	bottom: 0;
+			// 	width: 88rpx;
+			// 	height: 6rpx;
+			// 	background: #d93731;
+			// 	border-radius: 3rpx;
+			// 	left: var(--left);
+			// }
+			.tab:last-child{
+				margin-left: auto;
+				margin-right:0;
+			}
+		}
+	}
 }
 .tui-cmt-title {
 	font-size: 30rpx;
@@ -608,26 +1008,34 @@
 	background: #d03a28;
 }
 .tui-cmtbox {
-	padding-bottom: 20rpx;
+	// padding-bottom: 20rpx;
 }
 .tui-cmt-cell {
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-between;
-	padding-top: 44rpx;
+	// padding: 24rpx 32rpx;
+	box-sizing: border-box;
+}
+.tui-cmt-cell:last-child .tui-cmt-detail{
+	border-bottom: none;
 }
 .tui-avatar {
-	width: 64rpx;
-	height: 64rpx;
+	width: 56rpx;
+	height: 56rpx;
 	border-radius: 32rpx;
 	display: block;
 	flex-shrink: 0;
+	margin-top: 24rpx;
+	margin-left: 32rpx;
 }
 
 .tui-cmt-detail {
 	width: 100%;
-	padding-left: 16rpx;
+	margin-left: 52rpx;
 	box-sizing: border-box;
+	border-bottom: 1rpx solid #e2e3e5;
+	padding: 34rpx 33rpx 19rpx 0;
 }
 
 .tui-header-box {
@@ -638,7 +1046,7 @@
 }
 
 .tui-cmt-nickname {
-	color: #d03a28;
+	color: #606f95;
 }
 
 .tui-fabulous {
@@ -654,7 +1062,8 @@
 	font-size: 32rpx;
 	color: #333;
 	text-align: justify;
-	padding-top: 8rpx;
+	padding-bottom: 39rpx;
+	padding-top: 29rpx;
 	word-break: break-all;
 	word-wrap: break-word;
 }
@@ -677,7 +1086,7 @@
 }
 
 .tui-reply-nickname {
-	font-size: 24rpx;
+	font-size: 28rpx;
 	color: #7a7a7a;
 	padding-bottom: 8rpx;
 }
@@ -686,7 +1095,7 @@
 	align-items: center;
 	font-size: 24rpx;
 	margin-top: 16rpx;
-	color: #9a9a9a;
+	color: #999999;
 }
 
 .tui-primary {

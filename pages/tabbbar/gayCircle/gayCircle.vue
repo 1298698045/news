@@ -4,20 +4,25 @@
 			<view class="panelBox" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
 				<view class="head">
 					<view class="avatar" @click="handlePersonalHome(item)">
-						<image :src="item.ThumbnailPath"></image>
+						<image v-if="item.ThumbnailPath" :src="item.ThumbnailPath"></image>
+						<span v-else>
+							{{item.nikeName || ''}}
+						</span>
 					</view>
-					<view class="info">
-						<p class="name">{{item.UserName}}</p>
-						<p class="depart">
-							{{item.OwningBusinessUnit || ''}}
-							<span class="time">
+					<div class="rightHead">						
+						<view class="info">
+							<p class="name">{{item.UserName}}</p>
+							<p class="time">
 								{{item.ModifiedOn}}
-							</span>
-						</p>
-					</view>
-					<view class="arrow_icon" @click.stop="hanldeMore(item)">
+							</p>
+						</view>
+						<view class="dept">
+							{{item.OwningBusinessUnit || ''}}
+						</view>
+					</div>
+					<!-- <view class="arrow_icon" @click.stop="hanldeMore(item)">
 						<tui-icon name="arrowdown" :size="24" ></tui-icon>
-					</view>
+					</view> -->
 				</view>
 				<view class="content">
 					<view class="desc">
@@ -57,21 +62,21 @@
 						</view>
 					</view>
 					<view class="location" v-if="item.Location" @click.stop="handleOpenLocation(item)">
-						<tui-icon name="gps" :size="24" ></tui-icon>
+						<tui-icon name="gps" :size="20" ></tui-icon>
 						<span class="gps_text">
 							{{item.Location}}
 						</span>
 					</view>
 				</view>
 				<view class="operation">
-					<view class="btn">
+					<!-- <view class="btn">
 						<span>
 						{{item.NumOfForward || 0}}阅读
 						</span>
-					</view>
+					</view> -->
 					<view class="btn" :class="{'active':item.IsPraise}" @click.stop="handleItemLike(item)">
-						<tui-icon v-if="!item.IsPraise" name="agree" :size="24"></tui-icon>
-						<tui-icon v-if="item.IsPraise" name="agree" :size="24" color="#d03a28" ></tui-icon>
+						<i v-if="!item.IsPraise" class="iconfont icon-weizan"></i>
+						<i v-if="item.IsPraise" class="iconfont icon-yizan" style="color: #d03a28;"></i>
 						<span v-if="item.NumOfLike==0||item.NumOfLike==null">
 						点赞
 						</span>
@@ -79,15 +84,21 @@
 							{{item.NumOfLike || 0}}
 						</span>
 					</view>
-					<view class="btn" @click.stop>
-						<tui-icon name="message" :size="24" ></tui-icon>
-						<!-- <span>
+					<view class="btn commentBtn" @click.stop>
+						<i class="iconfont icon-pinglun"></i>
+					<!-- 	<span>
 						评论
 						</span> -->
 						{{item.ChatterCommentBases.length || 0}}
 					</view>
+					<view class="arrow_icon" @click.stop="hanldeMore(item)">
+						<i class="iconfont icon-gengduo"></i>
+					</view>
 				</view>
 			</view>
+			<div class="loadMore">
+				没有更多了
+			</div>
 		</view>
 		<tui-actionsheet  
 		  :show="showActionSheet" 
@@ -108,10 +119,10 @@
 				pathUrl: 'http://112.126.75.65:10002',
 				showActionSheet: false,
 				itemList: [
-				// 	{
-				// 	text: "收藏",
-				// 	color: "#2B2B2B"
-				// },
+					{
+					text: "收藏",
+					color: "#2B2B2B"
+				},
 				// {
 				// 	text: "编辑动态",
 				// 	color: "#2B2B2B"
@@ -124,7 +135,7 @@
 				// 	color: "#2B2B2B"
 				// },
 				{
-					text: "删除动态",
+					text: "删除",
 					color: "#d03a28"
 				}],
 				list:[
@@ -184,7 +195,8 @@
 					pageSize:10
 				},
 				listData:[],
-				chatterId:''
+				chatterId:'',
+				IsCollect: false
 			}
 		},
 		computed:{
@@ -195,6 +207,17 @@
 		onShow(){
 			this.getQuery();
 		},
+		watch:{
+			IsCollect:{
+				handler(newVal,oldVal){
+					if(newVal){
+						this.itemList[0].text = '取消收藏';
+					}else {
+						this.itemList[0].text = '收藏';
+					}
+				}
+			}
+		},
 		methods: {
 			getQuery(){
 				this.$http.getGayCircleList({
@@ -203,7 +226,7 @@
 					Pagesize:this.page.pageSize
 				}).then(res=>{
 					// this.listData = res.returnValue;
-					let total = res.returnValue.total;
+					let total = res.returnValue.Total;
 					if(this.page.pageNum*this.page.pageSize < total){
 						this.page.isPage = true;
 					}else {
@@ -218,11 +241,14 @@
 					this.listData = temp;
 					this.listData.map(item=>{
 						item.ModifiedOn = this.$tui.formData(item.ModifiedOn);
+						item.nikeName = item.UserName.length > 2 ? item.UserName.slice(1) : item.UserName;
+						return item;
 					})
 				})
 			},
 			hanldeMore(item){
-				this.chatterId = item.ChatterId
+				this.chatterId = item.ChatterId;
+				this.IsCollect = item.IsCollect;
 				this.showActionSheet = true
 			},
 			closeActionSheet(){
@@ -232,6 +258,44 @@
 				let index = e.index;
 				switch(index){
 					case 0:
+						if(!this.IsCollect){
+							this.$http.getCircleCollection({
+								ChatId: this.chatterId,
+								token: this.token
+							}).then(res=>{
+								if(res.returnValue!=''){
+									this.IsCollect = true;
+									uni.showToast({
+										title:'收藏成功!',
+										icon:'success',
+										duration:2000
+									})
+									setTimeout(()=>{
+										this.getQuery();
+									},1000)
+								}
+							})
+						}else {
+							this.$http.getCircleCancelCollection({
+								ChatId: this.chatterId,
+								token: this.token
+							}).then(res=>{
+								if(res.returnValue!=''){
+									uni.showToast({
+										title:'取消收藏成功!',
+										icon:'success',
+										duration:2000
+									})
+									this.IsCollect = false;
+									setTimeout(()=>{
+										this.getQuery();
+									},1000)
+								}
+							})
+						}
+						this.showActionSheet = false;
+						break;
+					case 1:
 						const callback = (res)=>{
 							console.log(res);
 							if(res){
@@ -330,12 +394,47 @@
 </script>
 
 <style lang="scss">
+@font-face {
+  font-family: "iconfont"; /* Project id 3665209 */
+  src: url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.woff2?t=1663901575608') format('woff2'),
+	   url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.woff?t=1663901575608') format('woff'),
+	   url('//at.alicdn.com/t/c/font_3665209_j67d1bwpzu9.ttf?t=1663901575608') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-weizan:before {
+  content: "\e7e2";
+}
+
+.icon-yizan:before {
+  content: "\e7e3";
+}
+
+.icon-pinglun:before {
+  content: "\e7e4";
+}
+
+.icon-gengduo:before {
+  content: "\e7e5";
+}
+
+.icon-a-shoucang:before {
+  content: "\e7e6";
+}
+
 .wrapper{
 	font-size: 24rpx;
 	.container{
 		.panelBox{
 			background: #fff;
-			padding: 20rpx;
+			padding: 32rpx;
 			margin-top: 20rpx;
 			.head{
 				display: flex;
@@ -355,18 +454,27 @@
 						border-radius: 50%;
 					}
 				}
-				.info{
-					margin-left: 20rpx;
+				.rightHead{
 					flex: 1;
-					.depart{
-						color: #999999;
+					display: flex;
+					.info{
+						margin-left: 20rpx;
+						flex: 1;
 						.time{
-							padding-left: 20rpx;
+							font-size: 24rpx;
+							color: #999999;
 						}
+					}
+					.dept{
+						color: #999999;
+						font-size: 20rpx;
+						max-width: 320rpx;
 					}
 				}
 			}
 			.content{
+				padding-left: 75rpx;
+				box-sizing: border-box;
 				.desc{					
 					font-size: 32rpx;
 					color: #333333;
@@ -412,8 +520,8 @@
 						justify-content: space-between;
 						flex-wrap: wrap;
 						.box{
-							width: 222rpx;
-							height: 222rpx;
+							width: 193rpx;
+							height: 180rpx;
 							border-radius: 8rpx;
 							background: #d4d4d4;
 							margin-bottom: 10rpx;
@@ -421,7 +529,7 @@
 								width: 100%;
 								height: 100% !important;
 								vertical-align: top;
-								border-radius: 8rpx;
+								border-radius: 7rpx;
 							}
 						}
 						.box.active{
@@ -448,10 +556,10 @@
 					}
 				}
 				.location{
-					max-width: 200rpx;
+					max-width: 300rpx;
 					display: flex;
 					align-items: center;
-					padding: 10rpx;
+					padding: 5rpx 10rpx;
 					border-radius: 30rpx;
 					border: 1rpx solid #e2e3e5;
 					margin-top: 20rpx;
@@ -467,10 +575,12 @@
 			}
 			.operation{
 				display: flex;
-				justify-content: space-between;
+				// justify-content: space-between;
 				align-items: center;
 				color: #999999;
 				margin-top: 20rpx;
+				padding-left: 75rpx;
+				box-sizing: border-box;
 				.btn{
 					display: flex;
 					align-items: center;
@@ -480,6 +590,16 @@
 				}
 				.btn.active{
 					color: #d03a28;
+				}
+				.commentBtn{
+					margin-left: 39rpx;
+					.iconfont{
+						padding-right: 7rpx;
+					}
+				}
+				.arrow_icon{
+					flex: 1;
+					text-align: right;
 				}
 			}
 		}
@@ -494,6 +614,12 @@
 		position: fixed;
 		bottom: 20rpx;
 		right: 20rpx;
+	}
+	.loadMore{
+		line-height: 71rpx;
+		font-size: 24rpx;
+		color: #999999;
+		text-align: center;
 	}
 }
 </style>

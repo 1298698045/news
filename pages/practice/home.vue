@@ -8,26 +8,12 @@
 				<div class="desc">坚持练习掌握优质内容</div>
 			</header>
 			<div class="cloumn">
-				<div class="itemBox">
+				<div class="itemBox" v-for="(item,index) in listData" :key="index" @click="handelDetail(item)">
 					<div class="imgs">
 						
 					</div>
-					<div class="itemTitle">每日答题</div>
+					<div class="itemTitle">{{item.Name.value || ''}}</div>
 					<div class="itemDesc">太阳每天都是新的</div>
-				</div>
-				<div class="itemBox">
-					<div class="imgs">
-						
-					</div>
-					<div class="itemTitle">转向答题</div>
-					<div class="itemDesc">术业有专攻，道叶有精论</div>
-				</div>
-				<div class="itemBox">
-					<div class="imgs">
-						
-					</div>
-					<div class="itemTitle">每周答题</div>
-					<div class="itemDesc">温故知新，持之以恒</div>
 				</div>
 			</div>
 		</div>
@@ -38,12 +24,34 @@
 	export default {
 		data() {
 			return {
-				
+				listData: []
 			}
 		},
+		onLoad(){
+			this.getQuery();
+		},
 		methods: {
-			
-		}
+			getQuery(){
+				var filterquery = '';
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data: {
+						objectTypeCode: 50713,
+						filterquery: filterquery
+					}
+				}).then(res=>{
+					console.log(res);
+					this.listData = res.returnValue.nodes;
+				})
+			},
+			handelDetail(item){
+				uni.navigateTo({
+					url:'../practice/practiceClass/practiceClass?id='+item.id
+				})
+			},
+		},
+		
 	}
 </script>
 
@@ -67,6 +75,7 @@
 		margin: 30rpx 0;
 		justify-content: space-between;
 		text-align: center;
+		flex-wrap: wrap;
 		.itemBox{
 			width: 31%;
 			height: 300rpx;
@@ -74,6 +83,7 @@
 			border-radius: 10rpx;
 			padding: 0 20rpx;
 			box-sizing: border-box;
+			margin-top: 25rpx;
 			.imgs{
 				width: 80rpx;
 				height: 80rpx;

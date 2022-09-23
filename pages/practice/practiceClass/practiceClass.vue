@@ -1,37 +1,15 @@
 <template>
 	<view class="wrapper">
 		<div class="listWrap">
-			<div class="itemBox">
+			<div class="itemBox" v-for="(item,index) in listData" :key="index">
 				<div class="title">
-					“全民国防教育日相关知识”专项答题
+					{{item.Name.value || ''}}
 				</div>
 				<div class="time">
 					2022/09/17
 				</div>
 				<div class="options">
 					<button class="btn">继续答题</button>
-				</div>
-			</div>
-			<div class="itemBox">
-				<div class="title">
-					“全民国防教育日相关知识”专项答题
-				</div>
-				<div class="time">
-					2022/09/17
-				</div>
-				<div class="options">
-					<button class="btn">开始答题</button>
-				</div>
-			</div>
-			<div class="itemBox">
-				<div class="title">
-					“全民国防教育日相关知识”专项答题
-				</div>
-				<div class="time">
-					2022/09/17
-				</div>
-				<div class="options">
-					<button class="btn">开始答题</button>
 				</div>
 			</div>
 		</div>
@@ -42,11 +20,60 @@
 	export default {
 		data() {
 			return {
-				
+				id: '',
+				listData: [],
+				isPage: false,
+				pageNumber: 1,
+				pageSize: 20
 			}
 		},
+		onLoad(options) {
+			this.id = options.id;
+			this.getQuery();
+		},
 		methods: {
-			
+			getQuery(){
+				var filterquery = '\nCategoryId\teq\t'+this.id;
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data: {
+						objectTypeCode: 50728,
+						filterquery: filterquery,
+						PageNumber: this.pageNumber,
+						PageSize: this.pageSize
+					}
+				}).then(res=>{
+					let total = res.returnValue.totalCount;
+					if(this.pageNumber * this.pageSize < total){
+						this.isPage = true;
+					}else {
+						this.isPage = false;
+					}
+					let result = [];
+					if(this.pageNumber==1){
+						result = res.returnValue.nodes;
+					}else {
+						result = this.listData.concat(res.returnValue.nodes);
+					}
+					this.listData = result;
+				})
+			},
+		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.pageNumber = 1;
+			this.getQuery()
+			wx.stopPullDownRefresh();
+		},
+		/**
+		 * 页面上拉触底事件的处理函数
+		 */
+		onReachBottom() {
+		   if(this.isPage){
+			   this.pageNumber++;
+			   this.getQuery()
+		   }
 		}
 	}
 </script>
