@@ -1,14 +1,14 @@
 <template>
 	<view class="wrapper">
+		<div class="box">
+			<image :src="pathUrl+'/vx/images/loginBG.png'" class="imgBg" lazy-load="true"></image>
+		</div>
 		<div class="container">
-			<div class="logo">
-				
-			</div>
+			<h3 class="title">智慧党建平台</h3>
 			<div class="content">
-				<h3 class="title">党建云登录</h3>
 				<form action="">
 					<van-field
-						label="账号:"
+						label="账号"
 						label-class="label"
 					    :value="userNumber"
 					    placeholder="请输入用户名"
@@ -16,14 +16,23 @@
 					    @change="changeUserNumber"
 					  />
 					  <van-field
-					  	  label="密码:"
+					  	  label="密码"
 						  label-class="label"
-						  type="password"
+						  :type="isPassword?'text':'password'"
 					      :value="password"
 					      placeholder="请输入用户名"
 					      :border="true"
 					      @change="changePassWord"
-					    />
+					    >
+							<div slot="right-icon">
+								<p v-if="!isPassword" @click="handleShowPas">
+									<i class="iconfont icon-mimayincang2"></i>
+								</p>
+								<p v-else  @click="handleShowPas">
+									<i class="iconfont icon-mimaxianshi"></i>
+								</p>
+							</div>
+						</van-field>
 						<div class="loginBtn">
 							<van-button type="default" :block="true" :round="true" :disabled="disabled" color="#d03a28" @click.stop="handleLogin">登录</van-button>
 						</div>
@@ -43,7 +52,9 @@
 					avatarUrl:'',
 					nickName: ''
 				},
-				code:''
+				code:'',
+				isPassword: false,
+				pathUrl: 'http://112.126.75.65:10002'
 			}
 		},
 		computed:{
@@ -76,6 +87,9 @@
 			})
 		},
 		methods: {
+			handleShowPas(){
+				this.isPassword = !this.isPassword;
+			},
 			changeUserNumber(e){
 				this.userNumber = e.detail;
 			},
@@ -154,15 +168,35 @@ page{
 	background: #FFFFFF;
 }
 .wrapper{
+	.box{
+		width: 100%;
+		position: relative;
+		.imgBg{
+			position: absolute;
+			top: 0;
+			width: 100%;
+			height: 100vh;
+		}
+	}
 	.container{
+		width: 100%;
+		position: absolute;
+		top: 30%;
+		.title{
+			font-size: 47rpx;
+			color: #333333;
+			text-align: center;
+			font-weight: bold;
+		}
 		.logo{
 			width: 100rpx;
 			height: 100rpx;
 			border-radius: 50%;
 			background: #d03a28;
-			margin: 100rpx auto 0;
+			margin: 0 auto 0;
 		}
 		.content{
+			margin-top: 83rpx;
 			padding: 0 50rpx;
 			.van-cell__title{
 				min-width: 100rpx!important;
@@ -173,17 +207,26 @@ page{
 			.label{
 				min-width: 80rpx;
 			}
-			.title{
-				text-align: center;
-				font-size: 32rpx;
-				color: #333333;
-				font-weight: bold;
-				padding: 30rpx 0;
-			}
 			.loginBtn{
 				margin-top: 100rpx;
 			}
+			.van-button{
+				height: 88rpx !important;
+				line-height: 88rpx !important;
+				border-radius: 13rpx !important;
+				font-size: 32rpx !important;
+			}
 		}
+	}
+	.van-cell{
+		background: initial !important;
+	}
+	.label{
+		font-size: 34rpx;
+		color: #333333;
+	}
+	.van-cell__value{
+		font-size: 34rpx;
 	}
 }
 </style>

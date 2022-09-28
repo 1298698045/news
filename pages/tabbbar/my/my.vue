@@ -1,17 +1,21 @@
 <template>
 	<view class="wrapper">
-		<view class="header" @click="gotoInfo">
-			<view class="headPortrait" @click="!isLogin&&getLogin()">
-				<image class="img" v-if="isLogin" :src="userInfo.avatarUrl" mode="widthFix" />
+		<div class="custom-header-container">
+			<image src="/static/images/myNav.png" class="bgImg"></image>
+			<view class="custom-header-status-bar" :style="{height:getStausBarHeight}"></view>
+			<view class="custom-header-title" :style="titleStyle">
+				我的
 			</view>
-			<view class="userInfo">
-				<view class="name">{{isLogin?userInfo.nickName:'登录'}}</view>
-				<view class="tag">党员认证</view>
+			<view class="header" @click="gotoInfo" :style="{top:navInfoTop}">
+				<view class="headPortrait" @click="!isLogin&&getLogin()">
+					<image class="img" v-if="isLogin" :src="userInfo.avatarUrl" mode="widthFix" />
+				</view>
+				<view class="userInfo">
+					<view class="name">{{isLogin?userInfo.nickName:'登录'}}</view>
+					<view class="tag">党员认证</view>
+				</view>
 			</view>
-			<view class="arrow_icon">
-				<tui-icon name="arrowright" color="#ffffff"></tui-icon>
-			</view>
-		</view>
+		</div>
 		<view class="row">
 			<view class="box">
 				<view class="icon">
@@ -36,50 +40,68 @@
 			<div class="panelBox">
 				<tui-list-view color="#777">
 					<tui-list-cell class="cell" arrow>
-						<image src="../../../static/images/news/2-a.png" mode="widthFix"></image>
+						<i class="iconfont icon-wodekecheng"></i>
 						<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
-						<view class="text">
-							我的历程
-						</view>
-					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
-						<image src="../../../static/images/news/2-b.png" mode="widthFix"></image>
-						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
-						<view class="text">
-							党员承诺
-						</view>
-					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
-						<image src="../../../static/images/news/2-c.png" mode="widthFix"></image>
-						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
-						<view class="text">
-							在线客服
-						</view>
-					</tui-list-cell>
-					<tui-list-cell class="cell" arrow @click="handleIntegral">
-						<image src="../../../static/images/news/2-d.png" mode="widthFix"></image>
-						<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
-						<view class="text">
-							学习积分
-						</view>
-					</tui-list-cell>
-					<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
-						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
-						<!-- <tui-icon name="evaluate" color="#C70C15" size="24"></tui-icon> -->
-						<view class="text">
-							我要留言
-						</view>
-					</tui-list-cell>
-					<tui-list-cell class="cell" arrow @click="gotoMystudy">
-						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
 						<view class="text">
 							我的课程
 						</view>
 					</tui-list-cell>
 					<tui-list-cell class="cell" arrow>
-						<image src="../../../static/images/news/2-e.png" mode="widthFix"></image>
+						<i class="iconfont icon-wodekaoshi"></i>
+						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
 							我的考试
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<i class="iconfont icon-wodehuodong"></i>
+						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的活动
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow @click="handleIntegral">
+						<i class="iconfont icon-wodewenjuan"></i>
+						<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的问卷
+						</view>
+					</tui-list-cell>
+				</tui-list-view>
+			</div>
+			<div class="panelBox">
+				<tui-list-view color="#777">
+					<tui-list-cell class="cell" arrow @click="handleIntegral">
+						<i class="iconfont icon-wodejifen"></i>
+						<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的积分
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<i class="iconfont icon-wodezhibu"></i>
+						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的支部
+						</view>
+					</tui-list-cell>
+					<tui-list-cell class="cell" arrow>
+						<i class="iconfont icon-wodejiaofei"></i>
+						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我的缴费
+						</view>
+					</tui-list-cell>
+				</tui-list-view>
+			</div>
+			<div class="panelBox">
+				<tui-list-view color="#777">
+					<tui-list-cell class="cell" arrow @click="handleLeavingMessage">
+						<i class="iconfont icon-woyaoliuyan"></i>
+						<!-- <image src="../../../static/images/news/2-a.png" mode="widthFix"></image> -->
+						<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
+						<view class="text">
+							我要留言
 						</view>
 					</tui-list-cell>
 				</tui-list-view>
@@ -110,6 +132,22 @@
 				this.userInfo.avatarUrl = JSON.parse(userInfo.rawData).avatarUrl;
 				this.isLogin = true;
 			}
+		},
+		computed: {
+		    getStausBarHeight(){
+		    	try {
+		    		const res = uni.getSystemInfoSync();
+		    		return res.statusBarHeight + 'px';
+		    	} catch (e) {
+		    	}
+		    },
+			titleStyle(){
+				const menuButtonInfo = uni.getMenuButtonBoundingClientRect();
+				return 'height:'+menuButtonInfo.height + 'px;' + 'line-height:'+menuButtonInfo.height+'px';
+			},
+			navInfoTop(){
+				return uni.getSystemInfoSync().statusBarHeight + uni.getMenuButtonBoundingClientRect().height + 32 + 'px';
+			},
 		},
 		methods: {
 			gotoInfo(){
@@ -171,16 +209,36 @@
 <style lang="scss">
 .wrapper{
 	font-size: 24rpx;
-	.header{
+	.custom-header-container{
 		width: 100%;
-		padding: 30rpx 20rpx;
-		background: #d03a28;
+		height: 418rpx;
+		position: relative;
+		overflow: hidden;
+		.bgImg{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+		}
+		.custom-header-title{
+			width: 100%;
+			text-align: center;
+			color: #fff;
+			position: absolute;
+			font-size: 34rpx;
+			font-weight: bold;
+		}
+	}
+	.header{
+		position: absolute;
+		width: 100%;
+		padding: 0 64rpx;
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
 		.headPortrait{
-			width: 100rpx;
-			height: 100rpx;
+			width: 128rpx;
+			height: 128rpx;
 			border-radius: 50%;
 			background: #fff;
 			.img{
@@ -191,11 +249,20 @@
 		}
 		.userInfo{
 			flex: 1;
-			padding-left: 20rpx;
+			padding-left: 31rpx;
 			color: #fff;
 			.name{
 				color: #fff;
-				font-weight: bold;
+				font-size: 36rpx;
+			}
+			.tag{
+				display: inline-block;
+				background: rgba(0, 0, 0, 0.2);
+				border-radius: 20rpx;
+				color: #fff;
+				font-size: 24rpx;
+				margin-top: 28rpx;
+				padding: 2rpx 22rpx;
 			}
 		}
 	}
@@ -220,10 +287,11 @@
 		}
 	}
 	.content{
-		padding: 0 20rpx;
+		// padding: 0 20rpx;
 		.panelBox{
 			background: #fff;
-			border-radius: 20rpx;
+			// border-radius: 20rpx;
+			margin-top: 16rpx;
 			.tui-list-cell{
 				display: flex;
 				align-items: center;
@@ -233,6 +301,10 @@
 				}
 				.text{
 					padding-left: 20rpx;
+				}
+				.iconfont{
+					color: #D93731;
+					font-size: 35rpx;
 				}
 			}
 		}

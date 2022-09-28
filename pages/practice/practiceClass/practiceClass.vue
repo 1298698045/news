@@ -3,13 +3,13 @@
 		<div class="listWrap">
 			<div class="itemBox" v-for="(item,index) in listData" :key="index">
 				<div class="title">
-					{{item.Name.value || ''}}
+					{{item.Name || ''}}
 				</div>
 				<div class="time">
-					2022/09/17
+					{{item.CreatedOn || ''}}
 				</div>
-				<div class="options">
-					<button class="btn">继续答题</button>
+				<div class="options" @click="[0,1].includes(item.StatusCode) && gotoExam(item)">
+					<button class="btn">{{item.StatusCode == 0 ? '开始答题' : item.StatusCode == 1 ? '继续答题' : '已完成'}}</button>
 				</div>
 			</div>
 		</div>
@@ -32,19 +32,23 @@
 			this.getQuery();
 		},
 		methods: {
+			gotoExam(item){
+				uni.navigateTo({
+					url:'../../examination/subject/subject?id='+item.TestId
+				})
+			},
 			getQuery(){
-				var filterquery = '\nCategoryId\teq\t'+this.id;
+				// var filterquery = '\nCategoryId\teq\t'+this.id;
 				this.$httpWX({
-					url: '/entity/fetchall',
-					method: 'post',
+					url: '/learningtest/get',
+					method: 'get',
 					data: {
-						objectTypeCode: 50728,
-						filterquery: filterquery,
+						categoryId: this.id,
 						PageNumber: this.pageNumber,
 						PageSize: this.pageSize
 					}
 				}).then(res=>{
-					let total = res.returnValue.totalCount;
+					let total = res.total;
 					if(this.pageNumber * this.pageSize < total){
 						this.isPage = true;
 					}else {
@@ -52,9 +56,9 @@
 					}
 					let result = [];
 					if(this.pageNumber==1){
-						result = res.returnValue.nodes;
+						result = res.returnValue;
 					}else {
-						result = this.listData.concat(res.returnValue.nodes);
+						result = this.listData.concat(res.returnValue);
 					}
 					this.listData = result;
 				})

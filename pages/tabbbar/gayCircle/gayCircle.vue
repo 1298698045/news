@@ -26,6 +26,7 @@
 				</view>
 				<view class="content">
 					<view class="desc">
+						<span v-if="item.SubjectIdName">#{{item.SubjectIdName || ''}}</span>
 						{{item.Description}}
 					</view>
 					<view class="imgTemplate">
@@ -435,7 +436,8 @@
 		.panelBox{
 			background: #fff;
 			padding: 32rpx;
-			margin-top: 20rpx;
+			// margin-top: 20rpx;
+			border-bottom: 1rpx solid #e2e3e5;
 			.head{
 				display: flex;
 				align-items: center;
@@ -473,7 +475,7 @@
 				}
 			}
 			.content{
-				padding-left: 75rpx;
+				padding-left: 95rpx;
 				box-sizing: border-box;
 				.desc{					
 					font-size: 32rpx;
@@ -487,6 +489,11 @@
 					word-wrap: break-word;
 					white-space: normal !important;
 					padding: 10rpx 0;
+					span{
+						font-size: 30rpx;
+						color: #d93731;
+						padding-right: 10rpx;
+					}
 				}
 				.imgTemplate{
 					.max_img{
@@ -579,7 +586,7 @@
 				align-items: center;
 				color: #999999;
 				margin-top: 20rpx;
-				padding-left: 75rpx;
+				padding-left: 95rpx;
 				box-sizing: border-box;
 				.btn{
 					display: flex;

@@ -383,12 +383,15 @@
 			const { windowWidth, windowHeight } = uni.getSystemInfoSync();  
 			this.windowWidth = windowWidth
 			this.windowHeight = windowHeight
-			this.getQueryColumn().then(res=>{
-				this.getQueryList();
-			})
+			// this.getQueryColumn().then(res=>{
+			// 	this.getQueryList();
+			// })
 			
 		},
 		onShow() {
+			this.getQueryColumn().then(res=>{
+				this.getQueryList();
+			})
 			this.getChannle();
 		},
 		mounted(){
@@ -973,11 +976,17 @@
 	}
 	.tui-news-picbox.right_picbox{
 		margin-left: 20rpx;
+		background: #f2f2f2;
+		border-radius: 5rpx;
+		border: 1rpx solid #e2e3e5;
+		box-sizing: border-box;
 	}
 	.tui-news-picbox image{
 		width: 110px !important;
 		height: 81px !important;
 		object-fit: contain;
+		border-radius: 5rpx;
+		
 	}
 	.fack_item{
 		flex: 0 0 33%;

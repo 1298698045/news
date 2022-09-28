@@ -23,6 +23,7 @@
 			</div>
 			<div class="detailContent">				
 				<div class="desc">
+					<span class="theme" v-if="detail.SubjectIdName">{{detail.SubjectIdName || ''}}</span>
 					{{detail.Description}} 
 				</div>
 				<view class="imgTemplate">
@@ -695,6 +696,11 @@
 				font-size: 30rpx;
 				color: #333333;
 				line-height: 1.5;
+				.theme{
+					font-size: 30rpx;
+					color: #d93731;
+					padding-right: 10rpx;
+				}
 			}
 			.imgTemplate{
 				margin-top: 30rpx;

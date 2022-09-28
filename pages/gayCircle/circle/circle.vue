@@ -1,13 +1,13 @@
 <template>
 	<view class="wrapper">
 		<div class="container">
-			<div class="leftNav" :style="{height:windowHeight+'px'}">
+			<!-- <div class="leftNav" :style="{height:windowHeight+'px'}">
 				<div class="tab" :class="{'active':currIdx==index}" v-for="(item,index) in listData" :key="index" @click="handleTab(item,index)">
 					{{item.Name}}
 				</div>
-			</div>
+			</div> -->
 			<div class="rightContent">
-				<view v-if="currIdx==index" v-for="(item,index) in listData" :key="index">					
+				<!-- <view v-if="currIdx==index" v-for="(item,index) in listData" :key="index">					
 					<div class="empty" v-if="item.examClassSubjectBases==''">
 						<div class="emptyImg">
 							
@@ -24,12 +24,25 @@
 								</div>
 								<div class="info">
 									<p class="name">{{row.Name}}</p>
-									<!-- <p class="fans">{{row.fansNums}}</p> -->
+									<p class="fans">{{row.fansNums}}</p>
 								</div>
 							</div>
 						</div>
 					</block>
-				</view>
+				</view> -->
+				<block v-for="(row,idx) in listData" :key="idx">
+					<div class="content">
+						<div class="row" @click="handleChoice(row)">
+							<div class="radius">
+								
+							</div>
+							<div class="info">
+								<p class="name">{{row.Name.value || ''}}</p>
+								<!-- <p class="fans">{{row.fansNums}}</p> -->
+							</div>
+						</div>
+					</div>
+				</block>
 			</div>
 		</div>
 	</view>
@@ -197,7 +210,8 @@
 			console.log(this.$store.state.circle.circle)
 		},
 		onLoad() {
-			this.getQuery();
+			// this.getQuery();
+			this.getNewQuery();
 		},
 		methods: {
 			getQuery(){
@@ -207,10 +221,22 @@
 					this.listData = res.returnValue;
 				})
 			},
+			getNewQuery(){
+				this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data: {
+						objectTypeCode: 6002
+					}
+				}).then(res=>{
+					console.log(res);
+					this.listData = res.returnValue.nodes;
+				})
+			},
 			handleTab(item,index){
 				this.currIdx = index;
 			},
-			handleChoice(item,row){
+			handleChoice(row){
 				this.$store.commit('setCircle',row)
 				uni.navigateBack({
 					delta:1

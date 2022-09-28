@@ -1,21 +1,22 @@
 <template>
 	<view class="wrapper">
 		<div class="header">
-			<view class="tui-reason"><tui-icon name='clock' size="20"></tui-icon><text class="tui-reason-text">倒计时</text>
+		<!-- 	<view class="tui-reason"><tui-icon name='clock' size="20"></tui-icon><text class="tui-reason-text">倒计时</text>
 				<tui-countdown :time="countDown" @end="changeEnd" color="#333333" colonColor="#333" borderColor="transparent"
 				 backgroundColor="transparent"></tui-countdown>
-			</view>
+			</view> -->
 			<view class="cu-bar bg-white solid-bottom">
 				<view class="action text-black">
-					<text v-if="currentType===2">问答题</text>
+			<!-- 		<text v-if="currentType===2">问答题</text>
 					<text v-else-if="currentType===0">单选题</text>
-					<text v-else-if="currentType===1">多选题</text>
+					<text v-else-if="currentType===1">多选题</text> -->
 					<!-- <text v-else-if="currentType===4">填空题</text>
 					<text v-else-if="currentType===5">问答题</text> -->
+					<text>{{currentName || ''}}</text>
 				</view>
-				<view class="action">
+				<!-- <view class="action">
 					<button class="cu-btn bg-green shadow" @tap="showCardModal" data-target="modalCard">答题卡</button>
-				</view>
+				</view> -->
 			</view>
 		</div>
 		<view class="cu-modal" :class="modalCard=='modalCard'?'show':''" @tap="hideCardModal">
@@ -45,35 +46,35 @@
 											
 						<view class="cu-bar bg-white solid-bottom">
 							<view class="action text-black">
-								<text class="cuIcon-title text-red"></text>{{subject.question}}
+								<text class="cuIcon-title text-red"></text>{{subject.Heading}}
 							</view>
 						</view>
 						<view>
 			
-							<radio-group class="block"  @change="RadioboxChange" v-if="subject.questionType==0">
-								<view class="cu-form-group" v-for="option in subject.optionList">
-									<radio :value="option.answerOptionId" :checked="subject.userAnswer.indexOf(option.answerOptionId) > -1?true:false"></radio>
-									<view class="title text-black">{{option.id}}.{{option.name}}</view>
+							<radio-group class="block"  @change="RadioboxChange" v-if="subject.CommonName=='multiple_choice_radio'">
+								<view class="cu-form-group" v-for="option in subject.LearningQuestionAnswerOptionRows">
+									<radio :value="option.AnswerOptionRowNumber" :checked="subject.userAnswer == option.AnswerOptionRowNumber?true:false"></radio>
+									<view class="title text-black">{{option.AnswerOptionRowNumber}}.{{option.Name}}</view>
 								</view>
 							</radio-group>
 			
-							<checkbox-group class="block"  @change="CheckboxChange" v-else-if="subject.questionType===1">
-								<view class="cu-form-group" v-for="option in subject.optionList">
-									<checkbox :value="option.answerOptionId" :class="subject.userAnswer.indexOf(option.answerOptionId) > -1?'checked':''" :checked="subject.userAnswer.indexOf(option.answerOptionId) > -1?true:false"></checkbox>
-									<view class="title  text-black">{{option.id}}.{{option.name}}</view>
+							<checkbox-group class="block"  @change="CheckboxChange" v-else-if="subject.CommonName=='multiple_choice_checkbox'">
+								<view class="cu-form-group" v-for="option in subject.LearningQuestionAnswerOptionRows">
+									<checkbox :value="option.AnswerOptionRowNumber" :class="subject.userAnswer.indexOf(option.AnswerOptionRowNumber) > -1?'checked':''" :checked="subject.userAnswer.indexOf(option.AnswerOptionRowNumber) > -1?true:false"></checkbox>
+									<view class="title  text-black">{{option.AnswerOptionRowNumber}}.{{option.Name}}</view>
 								</view>
 							</checkbox-group>
 			
-							<!-- <view v-else-if="subject.type===4">
+							<view v-else-if="subject.CommonName==='single_textbox'">
 								<view class="cu-form-group solid-bottom">
 									<view class="title  text-black">
 										答：
 									</view>
 									<input placeholder="文本输入框" name="input" v-model="subject.userAnswer" @blur="textInput" ></input>
 								</view>
-							</view> -->
+							</view>
 			
-							<view v-else-if="subject.questionType==2">
+							<view v-else-if="subject.CommonName=='comment_box'">
 								<view class="cu-bar cu-bar-title bg-white margin-top">
 									<view class="action  text-black">
 										答：
@@ -101,7 +102,7 @@
 							<view class="text-content padding  text-grey">
 								{{subject.explain}}
 							</view>
-						</view>
+					multiple_choice_checkbox	</view>
 			
 						</view>
 					</swiper-item>
@@ -123,12 +124,12 @@
 				<view class="text-gray">下一题</view>
 			</view>
 		
-			<view class="action" @click="FavorSubject">
+		<!-- 	<view class="action" @click="FavorSubject">
 				<view class="cuIcon-cu-image">
 					<text class="lg cuIcon-favor" :class="[userFavor?'text-red':'text-gray']"></text>
 				</view>
 				<view  :class="[userFavor?'text-red':'text-gray']">收藏</view>
-			</view>
+			</view> -->
 		
 			<!-- <view class="action" @click="ShowAnswerChange">
 				<view class="cuIcon-cu-image">
@@ -142,13 +143,13 @@
 				</view>
 				<view class="text-gray">纠错</view>
 			</view> -->
-			<view class="action" @tap="showErrorModal"  data-target="modalError">
+		<!-- 	<view class="action" @tap="showErrorModal"  data-target="modalError">
 				<view class="cuIcon-cu-image">
 					<text data-v-075e343a="" class="lg text-gray cuIcon-cascades"></text>
 				</view>
 				<view class="text-gray">{{subjectIndex+1}}/{{subjectList.length}}</view>
-			</view>
-			<view class="action" @tap="handleSubmit"  data-target="modalError">
+			</view> -->
+			<view class="action" v-if="isAnswer" @tap="handleSubmit"  data-target="modalError">
 				<view class="cuIcon-cu-image">
 					<text class="lg text-gray cuIcon-form"></text>
 				</view>
@@ -317,7 +318,12 @@
 				   modalCard: null ,//显示答题卡
 				   modalError:null , //纠错卡
 				   errorList:['题目不完整','答案不正确','含有错别字','图片不存在','解析不完整','其他错误'],
-				   ContactId: '' // 个人试卷id
+				   ContactId: '', // 个人试卷id
+				   nextQuestion: [],
+				   previousQuestion: [],
+				   index: 1,
+				   testEmployeeId: '',
+				   isAnswer: false
 			}
 		},	
 		onReady() {
@@ -358,34 +364,82 @@
 				}
 			});
 		},
-		onLoad(options) {
-			this.id = options.id;
-			this.getQueryPaper().then(res=>{
-				let ValueId = res.returnValue.personPaperValueId;
-				this.ContactId = ValueId;
-				this.countDown = res.returnValue.answerTime * 60 * 60;
-				this.getPersonPaper(ValueId);
-				this.startPaper();
-			})
-			// this.currentType = this.subjectList[0].type;
-			uni.setNavigationBarTitle({
-				title: this.title
-			});			
-			
-			//添加用户显示答案字段
-			for (var i = 0; i < this.subjectList.length; i++) {		
-				this.$set(this.subjectList[i],"showAnswer",false);				
+		computed:{
+			currentName(){
+				return this.currentType == 'single_textbox' ? '问答题' :
+				this.currentType == 'comment_box' ? '简答题' : this.currentType == 'multiple_choice_radio' ? '单选题'
+				: this.currentType == 'multiple_choice_checkbox' ? '多选题' : '填空题';
+			},
+			userId(){
+				return uni.getStorageSync('userId')
 			}
 		},
+		// watch:{
+		// 	nextQuestion:{
+		// 		handler(newVal,oldVal){
+		// 			console.log(newVal,'newVal')
+		// 			if(newVal==null){
+		// 				this.isAnswer = true;
+		// 			}else {
+		// 				this.isAnswer = false;
+		// 			}
+		// 		},
+		// 		deep: true
+		// 	}
+		// },
+		onLoad(options) {
+			this.id = options.id;
+			this.getQueryPaper();
+			uni.setNavigationBarTitle({
+				title: this.title
+			});
+		},
 		methods: {
-			async getQueryPaper(){
-				let response 
-				await this.$http.getExamSubjectPaper({
-					ExamSubject:this.id
+			getQueryPaper(){
+				// await this.$http.getExamSubjectPaper({
+				// 	ExamSubject:this.id
+				// }).then(res=>{
+				// 	response = res;
+				// })
+				this.$httpWX({
+					url: '/testcourse/generate',
+					method: 'get',
+					data:{
+						testId: this.id,
+						index: this.index
+					}
 				}).then(res=>{
-					response = res;
+					let { previousQuestion, question, nextQuestion, testEmployeeId } = res.returnValue;
+					this.previousQuestion = previousQuestion;
+					this.nextQuestion = nextQuestion;
+					this.subjectList = [question];
+					this.currentType = this.subjectList[0].CommonName;
+					this.testEmployeeId = testEmployeeId;
+					let ResponseText = '';
+					let valueId = '';
+					let selectList = [];
+					if(this.currentType=='single_textbox'||this.currentType=='comment_box'){
+						if(question.TestEmployeeResponses && question.TestEmployeeResponses.length > 0){
+							ResponseText = question.TestEmployeeResponses[0].ResponseText;
+							valueId = question.TestEmployeeResponses[0].ValueId;
+						}
+					}else if(this.currentType=='multiple_choice_radio'){
+						valueId = question.TestEmployeeResponses.length > 0 ? question.TestEmployeeResponses[0].ValueId : '';
+						ResponseText = question.TestEmployeeResponses.length > 0 ? question.TestEmployeeResponses[0].AnswerOptionRowNumber : '';
+						console.log('ResponseText',ResponseText)
+					}else if(this.currentType=='multiple_choice_checkbox'){
+						valueId = question.TestEmployeeResponses.length > 0 ? question.TestEmployeeResponses[0].ValueId : '';
+						ResponseText = question.TestEmployeeResponses.map(item=>item.AnswerOptionRowNumber)
+						selectList = question.TestEmployeeResponses;
+					}
+					//添加用户显示答案字段
+					for (var i = 0; i < this.subjectList.length; i++) {		
+						this.$set(this.subjectList[i],"showAnswer",false);		
+						this.$set(this.subjectList[i],"userAnswer", ResponseText);
+						this.$set(this.subjectList[i],'valueId',valueId);
+						this.$set(this.subjectList[i],'selectList',selectList);
+					}
 				})
-				return response;
 			},
 			getPersonPaper(id){
 				this.$http.getExamPersonPaper({
@@ -408,14 +462,23 @@
 			},
 			// 结束考试
 			endPaper(){
-				this.$http.examEndPaper({
-					ValueId: this.ContactId
-				}).then(res=>{
-					if(res.returnValue){						
-						uni.navigateBack({
-							delta:1
-						})
+				// this.$http.examEndPaper({
+				// 	ValueId: this.ContactId
+				// }).then(res=>{
+				// 	if(res.returnValue){						
+				// 		uni.navigateBack({
+				// 			delta:1
+				// 		})
+				// 	}
+				// })
+				this.$httpWX({
+					url: '/learningtest/submit',
+					method:'post',
+					data:{
+						testId: this.id
 					}
+				}).then(res=>{
+					console.log(res);
 				})
 			},
 			// 倒计时结束时间回调
@@ -446,40 +509,50 @@
 				let index = e.target.current;
 				
 				if (index != undefined) {
-					this.subjectIndex = index;
+					// this.subjectIndex = index;
 					this.currentType = this.subjectList[index].questionType;
 					// this.userFavor = this.subjectList[index].userFavor;
 				}								
 			},			
 			RadioboxChange : function(e) { //单选选中
 				console.log(e,this.subjectIndex);
-				var items = this.subjectList[this.subjectIndex].optionList;
+				var items = this.subjectList[0].LearningQuestionAnswerOptionRows;
 				var values = e.detail.value;
-				this.subjectList[this.subjectIndex].userAnswer = values;
-				let item = items.find(item=>item.answerOptionId==values);
-				this.subjectList[this.subjectIndex].optionsNumber = item.position;
+				this.subjectList[0].userAnswer = values;
+				// let item = items.find(item=>item.OptionRowNumber==values);
+				// this.subjectList[0].OptionRowNumber = item.position;
 				// if(this.autoRadioNext && this.subjectIndex < this.subjectList.length - 1){
 				// 	this.subjectIndex += 1;						
 				// 	};
 				
 			},
 			CheckboxChange: function(e) { //复选选中
-			
-				var items = this.subjectList[this.subjectIndex].optionList;
+				console.log(e);
 				var values = e.detail.value;
-				this.subjectList[this.subjectIndex].userAnswer = [];
-				this.subjectList[this.subjectIndex].optionsNumber = [];
-				for (var i = 0, lenI = items.length; i < lenI; ++i) {
-					for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
-						if (items[i].answerOptionId == values[j]) {
-							this.subjectList[this.subjectIndex].optionsNumber.push(items[i].position)
-							this.subjectList[this.subjectIndex].userAnswer.push(items[i].answerOptionId);
-							break
-						}
-					}
-				}
-				this.subjectList[this.subjectIndex].optionsNumber = this.subjectList[this.subjectIndex].optionsNumber.join(',')
-				this.subjectList[this.subjectIndex].userAnswer = this.subjectList[this.subjectIndex].userAnswer.join(',')
+				var items = this.subjectList[this.subjectIndex].LearningQuestionAnswerOptionRows;
+				var temp = items.filter(item=>{
+					return values.find(l=>{
+						return l == item.AnswerOptionRowNumber
+					})
+				})
+				console.log(temp,'temp')
+				this.subjectList[0].userAnswer = temp.map(item=>item.AnswerOptionRowNumber);
+				this.subjectList[0].selectList = temp;
+				// var items = this.subjectList[this.subjectIndex].LearningQuestionAnswerOptionRows;
+				// var values = e.detail.value;
+				// this.subjectList[this.subjectIndex].userAnswer = [];
+				// this.subjectList[this.subjectIndex].QuestionNumber = [];
+				// for (var i = 0, lenI = items.length; i < lenI; ++i) {
+				// 	for (var j = 0, lenJ = values.length; j < lenJ; ++j) {
+				// 		if (items[i].answerOptionId == values[j]) {
+				// 			this.subjectList[this.subjectIndex].QuestionNumber.push(items[i].position)
+				// 			this.subjectList[this.subjectIndex].userAnswer.push(items[i].answerOptionId);
+				// 			break
+				// 		}
+				// 	}
+				// }
+				// this.subjectList[this.subjectIndex].QuestionNumber = this.subjectList[this.subjectIndex].QuestionNumber.join(',')
+				// this.subjectList[this.subjectIndex].userAnswer = this.subjectList[this.subjectIndex].userAnswer.join(',')
 				// this.subjectList[this.subjectIndex].userAnswer.slice(1,this.subjectList[this.subjectIndex].userAnswer.length)
 			},
 			textInput : function(e) { //填空题
@@ -521,37 +594,137 @@
 					})
 				}				
 			},
-			
-			MoveSubject: function(e) { //上一题、下一题
-				if(this.subjectList[this.subjectIndex].userAnswer==''){
-					this.$tui.toast({
-						text: '请答题!'
-					})
-					return false;
+			// 切换
+			MoveSubject: function(e) {
+				if (e === -1 && this.previousQuestion) {
+					this.index = this.previousQuestion && this.previousQuestion.Postion;
+					// this.submitRowSubject().then(res=>{
+					// 	this.getQueryPaper();
+					// });
 				}
-				else 
-				if (e === -1 && this.subjectIndex != 0) {
-					this.subjectIndex -= 1;
+				if(e==1 && this.nextQuestion){
+					this.index = this.nextQuestion && this.nextQuestion.Postion || '';
+					// this.submitRowSubject().then(res=>{
+					// 	this.getQueryPaper();
+					// });
 				}
-				if (e === 1 && this.subjectIndex < this.subjectList.length - 1) {
-					let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
-					this.$http.examSinglePaper({
-						PaperId: this.id,
-						ContactId: this.ContactId,
-						QuestionId: questionId,
-						QuestionType: questionType,
-						QuestionNumber: questionNumber,
-						AnswerOptionId: this.currentType != 2 ? userAnswer : null,
-						OptionNumber: this.currentType != 2 ? optionsNumber : null,
-						AnswerText: this.currentType == 2 ? userAnswer : null
-					}).then(res=>{
-						if(res.returnValue){
-							this.subjectIndex += 1;
+				this.submitRowSubject().then(res=>{
+					if(this.subjectList[this.subjectIndex].userAnswer==''){
+						this.$tui.toast({
+							text: '请答题!'
+						})
+						return false;
+					}else {						
+						if(e==1 && this.nextQuestion){
+							this.getQueryPaper();
 						}
-					})
-				}
+						if(e === -1 && this.previousQuestion){
+							this.getQueryPaper();
+						}
+					}
+				});
+				//上一题、下一题
+				// if(this.subjectList[this.subjectIndex].userAnswer==''){
+				// 	this.$tui.toast({
+				// 		text: '请答题!'
+				// 	})
+				// 	return false;
+				// }else {
+				// 	if (e === -1 && this.previousQuestion) {
+				// 		this.index = this.previousQuestion.Postion;
+				// 		this.submitRowSubject().then(res=>{
+				// 			this.getQueryPaper();
+				// 		});
+				// 	}
+				// 	if(e==1){
+				// 		this.index = this.nextQuestion.Postion;
+				// 		this.submitRowSubject().then(res=>{
+				// 			this.getQueryPaper();
+				// 		});
+				// 	}
+				// }
+				// else 
+				// if (e === -1 && this.subjectIndex != 0) {
+				// 	this.subjectIndex -= 1;
+				// }
+				// if (e === 1 && this.subjectIndex < this.subjectList.length - 1) {
+				// 	let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
+				// 	this.$http.examSinglePaper({
+				// 		PaperId: this.id,
+				// 		ContactId: this.ContactId,
+				// 		QuestionId: questionId,
+				// 		QuestionType: questionType,
+				// 		QuestionNumber: questionNumber,
+				// 		AnswerOptionId: this.currentType != 2 ? userAnswer : null,
+				// 		OptionNumber: this.currentType != 2 ? optionsNumber : null,
+				// 		AnswerText: this.currentType == 2 ? userAnswer : null
+				// 	}).then(res=>{
+				// 		if(res.returnValue){
+				// 			this.subjectIndex += 1;
+				// 		}
+				// 	})
+				// }
 			},
-			
+			// 单个题提交
+			async submitRowSubject(){
+				let  {Heading,QuestionId,QuestionNumber,AnswerOptionRowNumber='',userAnswer,valueId='',CommonName,TestEmployeeResponses,selectList} = this.subjectList[0];
+				let ResponseList = '';
+				if(CommonName!='multiple_choice_checkbox'){					
+					ResponseList = [{
+						TestEmployeeId: this.testEmployeeId,
+						EmployeeId: this.userId,
+						Name: Heading,
+						QuestionId: QuestionId,
+						QuestionNumber: QuestionNumber || '',
+						AnswerOptionRowNumber: CommonName == 'multiple_choice_radio' ? userAnswer : AnswerOptionRowNumber,
+						valueId: valueId,
+						ResponseText: CommonName != 'multiple_choice_radio' ? userAnswer : ''
+					}];
+				}else {
+					if(userAnswer && selectList.length>0){
+						ResponseList = [];
+						selectList.forEach(item=>{							
+							ResponseList.push({
+								TestEmployeeId:this.testEmployeeId,
+								EmployeeId:this.userId,
+								Name:item.Name,
+								QuestionId:item.QuestionId,
+								QuestionNumber:item.QuestionNumber,
+								AnswerOptionRowNumber:item.AnswerOptionRowNumber,
+								valueId:item.ValueId
+							})
+						})
+						// ResponseList = userAnswer.map(item=>{
+						// 	var TestEmployeeId = this.testEmployeeId
+						// 	var EmployeeId = this.userId
+						// 	var Name = item.Name
+						// 	var QuestionId = QuestionId
+						// 	var QuestionNumber = item.QuestionNumber
+						// 	var AnswerOptionRowNumber = item.AnswerOptionRowNumber
+						// 	var valueId = item.valueId
+						// 	return item;
+						// })
+					}
+				}
+				let response;
+				await this.$httpWX({
+					url: '/testquestionresponse/edit',
+					method: 'post',
+					data:{
+						testId: this.id,
+						ResponseList: JSON.stringify(ResponseList)
+					}
+				}).then(res=>{
+					console.log(res,'单个题提交')
+					if(this.nextQuestion==null && res.returnValue){
+						this.isAnswer = true;
+					}else {
+						this.isAnswer = false;
+					}
+					response = res;
+				})
+				return response;
+			},
 			AppointedSubject: function(e) { //题卡指定
 				
 					this.modalCard = null;
@@ -564,21 +737,21 @@
 			},
 			async handleSubmit(){
 				console.log(this.subjectList) 
-				let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
-				let response 
-				await this.$http.examSinglePaper({
-					PaperId: this.id,
-					ContactId: this.ContactId,
-					QuestionId: questionId,
-					QuestionType: questionType,
-					QuestionNumber: questionNumber,
-					AnswerOptionId: this.currentType != 2 ? userAnswer : null,
-					OptionNumber: this.currentType != 2 ? optionsNumber : null,
-					AnswerText: this.currentType == 2 ? userAnswer : null
-				}).then(res=>{
-					response = res;
-				})
-				this.isDown = false;
+				// let { questionId , questionType , questionNumber , userAnswer , optionsNumber } = this.subjectList[this.subjectIndex]
+				// let response 
+				// await this.$http.examSinglePaper({
+				// 	PaperId: this.id,
+				// 	ContactId: this.ContactId,
+				// 	QuestionId: questionId,
+				// 	QuestionType: questionType,
+				// 	QuestionNumber: questionNumber,
+				// 	AnswerOptionId: this.currentType != 2 ? userAnswer : null,
+				// 	OptionNumber: this.currentType != 2 ? optionsNumber : null,
+				// 	AnswerText: this.currentType == 2 ? userAnswer : null
+				// }).then(res=>{
+				// 	response = res;
+				// })
+				// this.isDown = false;
 				var that = this;
 				const callback = function(e){
 					console.log(e);
