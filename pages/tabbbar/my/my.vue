@@ -245,6 +245,7 @@
 <style lang="scss">
 .wrapper{
 	font-size: 24rpx;
+	padding-bottom: 100rpx;
 	.custom-header-container{
 		width: 100%;
 		height: 418rpx;

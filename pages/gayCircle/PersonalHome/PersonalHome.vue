@@ -387,7 +387,6 @@
 		.cover{
 			width: 100%;
 			height: 200px;
-			background: url(../../../static/images/news/banner_3.jpg) no-repeat;
 			background-size: cover;
 		}
 		.infoWrap{
