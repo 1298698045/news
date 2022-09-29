@@ -39,28 +39,28 @@
 		<div class="content">
 			<div class="panelBox">
 				<tui-list-view color="#777">
-					<tui-list-cell class="cell" arrow>
+					<tui-list-cell class="cell" arrow @click="handleMyCourse">
 						<i class="iconfont icon-wodekecheng"></i>
 						<!-- <tui-icon name="send" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
 							我的课程
 						</view>
 					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
+					<tui-list-cell class="cell" arrow @click="handleMyExam">
 						<i class="iconfont icon-wodekaoshi"></i>
 						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
 							我的考试
 						</view>
 					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
+					<tui-list-cell class="cell" arrow @click="handleMyActivity">
 						<i class="iconfont icon-wodehuodong"></i>
 						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
 							我的活动
 						</view>
 					</tui-list-cell>
-					<tui-list-cell class="cell" arrow @click="handleIntegral">
+					<tui-list-cell class="cell" arrow @click="handleMyQuestion">
 						<i class="iconfont icon-wodewenjuan"></i>
 						<!-- <tui-icon name="redpacket" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
@@ -78,14 +78,14 @@
 							我的积分
 						</view>
 					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
+					<tui-list-cell class="cell" arrow @click="handleMyBranch">
 						<i class="iconfont icon-wodezhibu"></i>
 						<!-- <tui-icon name="people" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
 							我的支部
 						</view>
 					</tui-list-cell>
-					<tui-list-cell class="cell" arrow>
+					<tui-list-cell class="cell" arrow @click="handleMyPartyCost">
 						<i class="iconfont icon-wodejiaofei"></i>
 						<!-- <tui-icon name="kefu" color="#C70C15" size="24"></tui-icon> -->
 						<view class="text">
@@ -150,6 +150,42 @@
 			},
 		},
 		methods: {
+			// 我的课程
+			handleMyCourse(){
+				uni.navigateTo({
+					url:'../../my/myStudy/myStudy'
+				})
+			},
+			// 我的活动
+			handleMyActivity(){
+				uni.navigateTo({
+					url:'../../my/myActivity/myActivity'
+				})
+			},
+			// 我的问卷
+			handleMyQuestion(){
+				uni.navigateTo({
+					url:'../../my/myQuestion/myQuestion'
+				})
+			},
+			// 我的缴费
+			handleMyPartyCost(){
+				uni.navigateTo({
+					url:"../../partyCost/partyCost"
+				})
+			},
+			// 我的支部
+			handleMyBranch(){
+				uni.navigateTo({
+					url:'/pages/my/myBranch/myBranch'
+				})
+			},
+			// 我的考试
+			handleMyExam(){
+				uni.navigateTo({
+					url:'/pages/my/myExamination/myExamination'
+				})
+			},
 			gotoInfo(){
 				uni.navigateTo({
 					url:'/pages/my/userInfo/userInfo'

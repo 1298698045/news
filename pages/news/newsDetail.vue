@@ -43,15 +43,22 @@
 			</view>
 
 			<!-- <view class="tui-news-source">消息参考来源：{{detail.KeyWords || ''}}</view> -->
-			
+			<div class="tagPanel filesPanel">
+				<div class="label">附件</div>
+				<div class="files">
+					<div class="fileItem" v-for="(item,index) in files" :key="index" @click="handleOpenFile(item)">
+						<i class="iconfont icon-fujian2"></i>
+						<span class="fileName">
+							{{item.Name || ''}}.{{item.FileExtension || ''}}
+						</span>
+					</div>
+				</div>
+			</div>
 			<div class="tagPanel">
 				<div class="label">标签</div>
 				<div class="tabList">
-					<div class="tagBtn">
-						院办
-					</div>
-					<div class="tagBtn">
-						院办
+					<div class="tagBtn" v-for="item in detail.KeyWords && detail.KeyWords.split(',')">
+						{{item}}
 					</div>
 				</div>
 			</div>
@@ -136,15 +143,15 @@
 				<view class="tui-operation-right tui-right-flex tui-col-5">
 					<view class="operation-item" hover-class="tui-opcity" :hover-stay-time="150" @tap="cmtAll">
 						<view class="pinglun">
-							<i class="iconfont icon-pinglun" style="color:#a4a4a4;"></i>
+							<i class="iconfont icon-pinglun1" style="color:#a4a4a4;"></i>
 							<span class="badge">{{ total || 0 }}</span>
 						</view>
 						<!-- <tui-icon name="message" :size="30" color="#444"></tui-icon> -->
 						<!-- <tui-badge absolute type="white_primary" :scaleRatio="0.7">{{ total || 0 }}</tui-badge> -->
 					</view>
 					<view class="operation-item" @tap="collection">
-						<i class="iconfont icon-a-shoucang" style="color:#d03a28;" v-if="isCollection"></i>
-						<i class="iconfont icon-a-shoucang" style="color:#a4a4a4;" v-else></i>
+						<i class="iconfont icon-shoucang1" style="color:#d03a28;" v-if="isCollection"></i>
+						<i class="iconfont icon-shoucang" style="color:#a4a4a4;" v-else></i>
 						<!-- <tui-icon :name="isCollection ? 'star-fill' : 'star'" :size="29" :color="isCollection ? '#d03a28' : '#444'"></tui-icon> -->
 					</view>
 					<view class="operation-item" @click="btnFabulous()">
@@ -192,6 +199,7 @@
 </template>
 
 <script>
+import getOpenFiles from '@/utils/openFiles';
 export default {
 	data() {
 		return {
@@ -249,7 +257,9 @@ export default {
 			total:'',
 			currentTab: 1,
 			commentTotal: 0,
-			showActionSheet: false
+			showActionSheet: false,
+			files: [],
+			pathUrl: 'http://112.126.75.65:10002'
 		}
 	},
 	computed: {
@@ -271,6 +281,15 @@ export default {
 		},
 		timeStr(){
 			return this.detail.modifiedOn ? this.formDateStr(this.detail.modifiedOn) : ''
+		},
+		openImgs(){
+			let temp = [];
+			this.files.forEach(item=>{
+				if(item.FileExtension.indexOf('jpg')!=-1||item.FileExtension.indexOf('png')!=-1||item.FileExtension.indexOf('webp')!=-1){
+					temp.push(this.pathUrl + item.DownloadLinkUrl);
+				}
+			})
+			return temp;
 		}
 	},
 	onLoad(options) {
@@ -283,8 +302,27 @@ export default {
 		const curren = getCurrentPages();
 		console.log(curren,'====')
 		this.getCmtsList();
+		this.getFiles();
 	},
 	methods: {
+		handleOpenFile(item){
+			item.link = this.pathUrl + item.DownloadLinkUrl;
+			item.fileExtension = item.FileExtension;
+			let openImgs = JSON.stringify(this.openImgs);
+			getOpenFiles(item,openImgs);
+		},
+		getFiles(){
+			this.$httpWX({
+				url: '/NewsContent/file/get',
+				method: 'get',
+				data:{
+					id: this.id
+				}
+			}).then(res=>{
+				console.log(res);
+				this.files = res.returnValue.listData;
+			})
+		},
 		handleDelNews(){
 			var that = this;
 			const callback = function(e){
@@ -553,7 +591,35 @@ page {
 		}
 	}
 }
-
+.filesPanel{
+	.files{
+		.fileItem{
+			display: inline-block;
+			background: #f5f5f5;
+			height: 76rpx;
+			line-height: 76rpx;
+			border-radius: 9rpx;
+			display: flex;
+			align-items: center;
+			padding: 0 20rpx;
+			margin: 32rpx 0;
+			.iconfont{
+				color: #ff6666;
+				font-size: 25rpx;
+			}
+			.fileName{
+				display: inline-block;
+				flex: 1;
+				margin-left: 12rpx;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+				color: #333333;
+				font-size: 28rpx;
+			}
+		}
+	}
+}
 .tui-article {
 	/* text-indent: 2em; */
 	font-size: 34rpx;

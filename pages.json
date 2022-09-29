@@ -260,6 +260,42 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/myActivity/myActivity",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/myQuestion/myQuestion",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的问卷",
+                "enablePullDownRefresh": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/myBranch/myBranch",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的支部",
+                "enablePullDownRefresh": true
+            }
+            
+        }
+        ,{
+            "path" : "pages/my/myExamination/myExamination",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的考试",
+                "enablePullDownRefresh": true
+            }
+            
+        }
     ],
 	"subPackages": [{
 		"root":"pages/news",

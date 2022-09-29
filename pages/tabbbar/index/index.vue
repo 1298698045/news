@@ -54,7 +54,7 @@
 		</div>
 		<div class="noticeBar">
 			<i class="iconfont icon-gonggao"></i>
-			<span class="weight">公共</span>
+			<span class="weight">公告</span>
 			<span class="split">|</span>
 			<span class="text">开展党员干部革命传统教育活动，奋斗百年路开展党员干部革命传统教育活动</span>
 		</div>
@@ -65,208 +65,186 @@
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">在线考试</p>
+						<p class="text">支部活动</p>
 					</div>
-					<div class="box" @click="handleHref(1)">
+					<div class="box" @click="handleHref(2)">
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">党史学习</p>
+						<p class="text">新闻动态</p>
 					</div>
-					<div class="box" @click="handleHref(1)">
+					<div class="box" @click="handleHref(3)">
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">党费收缴</p>
+						<p class="text">课程学习</p>
 					</div>
-					<div class="box" @click="handleHref(1)">
+					<div class="box" @click="handleHref(4)">
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">问卷调查</p>
+						<p class="text">考试答题</p>
 					</div>
 				</swiper-item>
 				<swiper-item class="swiperItem">
-					<div class="box" @click="handleHref(1)">
+					<div class="box" @click="handleHref(6)">
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">在线考试</p>
+						<p class="text">党支部</p>
 					</div>
 					<div class="box" @click="handleHref(1)">
 						<div class="icon">
 							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
 						</div>
-						<p class="text">党史学习</p>
+						<p class="text">考评</p>
 					</div>
-					<div class="box" @click="handleHref(1)">
-						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
-						</div>
-						<p class="text">党费收缴</p>
-					</div>
-					<div class="box" @click="handleHref(1)">
-						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
-						</div>
-						<p class="text">问卷调查</p>
-					</div>
+					<div class="fake_item"></div>
+					<div class="fake_item"></div> 
+					<div class="fake_item"></div>
 				</swiper-item>
 			</swiper>
 		</div>
-		<div class="panelWrap">
+		<!-- 课程 -->
+		<div class="panelWrap" v-if="CourseList!=''&&CourseList.length>0">
 			<div class="panelHead">
-				<div class="leftTitle">党史学习</div>
-				<div class="moreText">更多</div>
+				<div class="leftTitle">课程</div>
+				<div class="moreText" @click="handleMore('CourseList')">更多</div>
 			</div>
 			<div class="panelBd">
 				<scroll-view class="scrollView" :scroll-x="true">
-					<view class="viewItem">
+					<view class="viewItem" v-for="(item,index) in CourseList" :key="index" @click="handleCourse(item)">
 						<view class="imgs">
 							
 						</view>
 						<view class="title">
-							在坚定历史自信中弘扬伟大的历史主动
-							在坚定历史自信中弘扬伟大的历史主动
+							{{item.Name || ''}}
 						</view>
 						<view class="author">
-							金伟 金妮
-						</view>
-						<view class="btn">免费获取</view>
-					</view>
-					<view class="viewItem">
-						<view class="imgs">
-							
-						</view>
-						<view class="title">
-							在坚定历史自信中弘扬伟大的历史主动
-						</view>
-						<view class="author">
-							金伟 金妮
-						</view>
-						<view class="btn">免费获取</view>
-					</view>
-					<view class="viewItem">
-						<view class="imgs">
-							
-						</view>
-						<view class="title">
-							在坚定历史自信中弘扬伟大的历史主动
-						</view>
-						<view class="author">
-							金伟 金妮
+							{{item.Writer || '暂无作者'}}
 						</view>
 						<view class="btn">免费获取</view>
 					</view>
 				</scroll-view>
 			</div>
 		</div>
-		<div class="panelWrap">
+		<!-- 考试 -->
+		<div class="panelWrap" v-if="LeaningTestList!=''&&LeaningTestList.length>0">
+			<div class="panelHead">
+				<div class="leftTitle">考试</div>
+				<div class="moreText" @click="handleMore('LeaningTestList')">更多</div>
+			</div>
+			<div class="panelBd">
+				<scroll-view class="scrollView" :scroll-x="true">
+					<view class="viewItem" v-for="(item,index) in LeaningTestList" :key="index" @click="handleSubject(item)">
+						<view class="imgs">
+							
+						</view>
+						<view class="title">
+							{{item.Name || ''}}
+						</view>
+						<!-- <view class="author">
+							金伟 金妮
+						</view> -->
+						<view class="btn">开始考试</view>
+					</view>
+				</scroll-view>
+			</div>
+		</div>
+		<!-- 问卷调查 -->
+		<div class="panelWrap" v-if="SurveyList!=''&&SurveyList.length>0">
 			<div class="panelHead">
 				<div class="leftTitle">问卷调查</div>
 				<div class="moreText">更多</div>
 			</div>
 			<div class="panelBd">
 				<scroll-view :scroll-x="true" class="questionView">
-					<view class="questionItem">
+					<view class="questionItem" v-for="(item,index) in SurveyList" :key="index">
 						<view class="questionTitle">
-							党建工作问卷调查
+							{{item.Name || ''}}
 						</view>
 						<view class="desc">
-							为更好地开展好本校的党建工作，日前学校党总支在全体党员中进行了一次“党建工作问卷调
-							为更好地开展好本校的党建工作，日前学校党总支在全体党员中进行了一次“党建工作问卷调
+							{{item.Description || '暂无描述'}}
 						</view>
 						<view class="questionOptions">
-							<view class="num">19题 | 已参与424</view>
-							<view class="borderBtn">参与</view>
-						</view>
-					</view>
-					<view class="questionItem">
-						<view class="questionTitle">
-							党建工作问卷调查
-						</view>
-						<view class="desc">
-							为更好地开展好本校的党建工作，日前学校党总支在全体党员中进行了一次“党建工作问卷调
-							为更好地开展好本校的党建工作，日前学校党总支在全体党员中进行了一次“党建工作问卷调
-						</view>
-						<view class="questionOptions">
-							<view class="num">19题 | 已参与424</view>
+							<view class="num">{{item.QuestionCount || 0}}题 | 已参与{{item.NumOfResponses || 0}}</view>
 							<view class="borderBtn">参与</view>
 						</view>
 					</view>
 				</scroll-view>
 			</div>
 		</div>
-		<div class="panelWrap">
+		<!-- 活动 -->
+		<div class="panelWrap" v-if="CampaignList!=''&&CampaignList.length>0">
 			<div class="panelHead">
 				<div class="leftTitle">党建活动</div>
 				<div class="moreText">更多</div>
 			</div>
 			<div class="panelBd">
 				<scroll-view :scroll-x="true" class="questionView">
-					<view class="questionItem">
+					<view class="questionItem" v-for="(item,index) in CampaignList" :key="index" @click="handleActivity(item)">
 						<view class="questionTitle">
-							社区开展“喜迎二十大、廉洁守初心”理论宣讲活动
+							{{item.Name || ''}}
 						</view>
 						<view class="desc">							
 							<view class="time">
-								活动时间：2022-09-18  09:00
+								活动时间：{{item.ActualStart || ''}}
 							</view>
 							<view class="time">
-								报名截止时间：2022-09-20  18:30
+								报名截止时间：{{item.ActualEnd || ''}}
 							</view>
 						</view>
 						<view class="questionOptions">
-							<view class="num">已参与424</view>
-							<view class="borderBtn">参与</view>
-						</view>
-					</view>
-					<view class="questionItem">
-						<view class="questionTitle">
-							社区开展“喜迎二十大、廉洁守初心”理论宣讲活动
-						</view>
-						<view class="desc">
-							<view class="time">
-								活动时间：2022-09-18  09:00
-							</view>
-							<view class="time">
-								报名截止时间：2022-09-20  18:30
-							</view>
-						</view>
-						<view class="questionOptions">
-							<view class="num">已参与424</view>
-							<view class="borderBtn">参与</view>
+							<view class="num">已参与{{item.NumOfPeople || 0}}</view>
+							<view class="borderBtn" @click="handleActivity(item)">参与</view>
 						</view>
 					</view>
 				</scroll-view>
 			</div>
 		</div>
-		<div class="panelWrap">
+		<!-- 党务通知 -->
+		<div class="panelWrap" v-if="PartyAffairsContentList!=''&&PartyAffairsContentList.length>0">
 			<div class="panelHead">
-				<div class="leftTitle">党建资讯</div>
-				<div class="moreText">更多</div>
+				<div class="leftTitle">党务通知</div>
+				<div class="moreText" @click="handleMore('PartyAffairsContentList')">更多</div>
 			</div>
 			<div class="panelBd">
 				<div class="news">
-					<div class="newsItem">
+					<div class="newsItem" v-for="(item,index) in PartyAffairsContentList" :key="index" @click="handleNewsDetail(item)">
 						<div class="left">
-							<div class="newsTitle">党建引领服务社群，结对共建促进发展党建引领服务社群，结对共建促进发展</div>
+							<div class="newsTitle">{{item.Title || ''}}</div>
 							<div class="newsInfo">
-								<span>2022年9月18日</span>
-								<span>287阅读</span>
+								<span>{{item.CreatedOn || ''}}</span>
+								<span>{{item.ReadCount || 0}}阅读</span>
+								<span>{{item.CommentCount || 0}}评论</span>
+							</div>
+						</div>
+						<div class="right" v-if="item.ImageUrl">
+							<image :src="item.ImageUrl" mode="aspectFill"></image>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 党办通知 -->
+		<div class="panelWrap" v-if="PartyContentList!=''&&PartyContentList.length>0">
+			<div class="panelHead">
+				<div class="leftTitle">党办通知</div>
+				<div class="moreText" @click="handleMore('PartyContentList')">更多</div>
+			</div>
+			<div class="panelBd">
+				<div class="news">
+					<div class="newsItem" v-for="(item,index) in PartyContentList" :key="index" @click="handleNewsDetail(item)">
+						<div class="left">
+							<div class="newsTitle">{{item.Title || ''}}</div>
+							<div class="newsInfo">
+								<span>{{item.CreatedOn || ''}}</span>
+								<span>{{item.ReadCount || 0}}阅读</span>
 								<span>71评论</span>
 							</div>
 						</div>
-						<div class="right"></div>
-					</div>
-					<div class="newsItem">
-						<div class="left">
-							<div class="newsTitle">党建引领服务社群，结对共建促进发展党建引领服务社群，结对共建促进发展</div>
-							<div class="newsInfo">
-								<span>2022年9月18日</span>
-								<span>287阅读</span>
-								<span>71评论</span>
-							</div>
+						<div class="right" v-if="item.ImageUrl">
+							<image :src="item.ImageUrl" mode="aspectFill"></image>
 						</div>
 					</div>
 				</div>
@@ -328,7 +306,13 @@
 				temp:[],
 				copyArr:[],
 				code:'',
-				current: 0
+				current: 0,
+				CampaignList: [], // 活动
+				CourseList: [], // 课程
+				LeaningTestList: [], // 考试
+				PartyAffairsContentList: [], // 党务通知
+				PartyContentList: [], // 党办通知
+				SurveyList: [] // 问卷调查
 			}
 		},
 		onLoad() {
@@ -336,8 +320,71 @@
 			// console.log(this.arr,this.arr.length)
 			// const copyArr = this.recursionFun(this.arr);
 			// console.log(copyArr,copyArr.length)
+			this.getDetail();
 		},
 		methods: {
+			handleCourse(item){
+				uni.navigateTo({
+					url:'../../study/study?courseId='+item.CourseId
+				})
+			},
+			handleMore(str){
+				if(str=='CourseList'){
+					uni.navigateTo({
+						url:'../../study/home'
+					})
+				}else if(str=='LeaningTestList'){
+					uni.navigateTo({
+						url:'/pages/practice/home'
+					})
+				}else if(str == 'SurveyList'){
+					uni.navigateTo({
+						url:'../../questionnaire/questionnaire'
+					})
+				}else if(str == 'CampaignList'){
+					uni.navigateTo({
+						url: '../../activity/activity'
+					})
+				}else if(str == 'PartyAffairsContentList' || str == 'PartyContentList'){
+					uni.switchTab({
+						url:'../news/news'
+					})
+				}
+			},
+			// 考试详情
+			handleSubject(item){
+				uni.navigateTo({
+					url:'/pages/examination/subject/subject?id='+item.TestId
+				})
+			},
+			// 参与活动
+			handleActivity(item){
+				uni.navigateTo({
+					url:'../../activity/activityDetail?id='+item.CampaignId
+				})
+			},
+			handleNewsDetail(item){
+				uni.navigateTo({
+					url:'../../news/newsDetail?id='+item.ContentId
+				})
+			},
+			getDetail(){
+				this.$httpWX({
+					url: "/partyhome/get",
+					method: 'get',
+					data:{
+						
+					}
+				}).then(res=>{
+					console.log(res);
+					this.CampaignList = res.CampaignList || '';
+					this.CourseList = res.CourseList || '';
+					this.LeaningTestList = res.LeaningTestList || '';
+					this.PartyAffairsContentList = res.PartyAffairsContentList || '';
+					this.PartyContentList = res.PartyContentList || '';
+					this.SurveyList = res.SurveyList || '';
+				})
+			},
 			getLogin(){
 				var that = this;
 				uni.login({
@@ -385,22 +432,23 @@
 			handleHref(i){
 				switch(i){
 					case 1:
-						uni.navigateTo({
-							url:'../../examination/examination'
-						})
+						// uni.navigateTo({
+						// 	url:'../../examination/examination'
+						// })
 						break;
 					case 2:
-						uni.navigateTo({
-							url:'../../study/home'
+						uni.switchTab({
+							url:'../news/news'
 						})
 						break;
 					case 3:
 						uni.navigateTo({
-							url: '../../partyCost/partyCost'
+							url: '/pages/study/home'
 						})
+						break;
 					case 4:
 						uni.navigateTo({
-							url:'../../questionnaire/questionnaire'
+							url: '/pages/practice/home'
 						})
 						break;
 					case 5:
@@ -778,6 +826,11 @@
 						height: 150rpx;
 						border-radius: 8rpx;
 						background: #d93731;
+						image{
+							width: 100%;
+							height: 100%;
+							border-radius: 8rpx;
+						}
 					}
 				}
 			}

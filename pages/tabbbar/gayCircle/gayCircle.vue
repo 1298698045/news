@@ -1,5 +1,14 @@
 <template>
 	<view class="wrapper" v-cloak>
+		<view class="columnNav">
+			<scroll-view class="tabs" scroll-x="true" @scroll="scroll" :scroll-left="scrollLeft">
+					<view class="tab" @click="handleTab(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
+						<span>
+							{{item.Name.value || ''}}
+						</span>
+					</view>
+			</scroll-view>
+		</view>
 		<view class="container">
 			<view class="panelBox" v-for="(item,index) in listData" :key="index" @click="handleDetail(item)">
 				<view class="head">
@@ -197,7 +206,11 @@
 				},
 				listData:[],
 				chatterId:'',
-				IsCollect: false
+				IsCollect: false,
+				currentIdx: 0,
+				tabs: [],
+				scrollLeft: 0,
+				subjectId: ''
 			}
 		},
 		computed:{
@@ -206,7 +219,11 @@
 			}
 		},
 		onShow(){
-			this.getQuery();
+			this.getCategory().then(res=>{
+				this.tabs = res.returnValue.nodes;
+				this.subjectId = this.tabs[0].id;
+				this.getQuery();
+			});
 		},
 		watch:{
 			IsCollect:{
@@ -220,9 +237,29 @@
 			}
 		},
 		methods: {
+			async getCategory(){
+				let response;
+				await this.$httpWX({
+					url: '/entity/fetchall',
+					method: 'post',
+					data: {
+						objectTypeCode: 6002
+					}
+				}).then(res=>{
+					response = res;
+				})
+				return response;
+			},
+			handleTab(item,index){
+				this.page.pageNum = 1;
+				this.currentIdx = index;
+				this.subjectId = item.id;
+				this.getQuery();
+			},
 			getQuery(){
 				this.$http.getGayCircleList({
 					token:this.token,
+					SubjectId: this.subjectId,
 					Pagenum:this.page.pageNum,
 					Pagesize:this.page.pageSize
 				}).then(res=>{
@@ -432,6 +469,52 @@
 
 .wrapper{
 	font-size: 24rpx;
+	.columnNav{
+		display: flex;
+		font-size: 28rpx;
+		// background: rgba(199, 12, 21,.5);
+		background: #fff;
+		border-bottom: 1rpx solid #F4F4F4;
+		.tabs{
+			width: calc(100% - 60rpx);
+			white-space: nowrap;
+			overflow: hidden;
+			.tab{
+				padding: 0 20rpx;
+				text-align: center;
+				line-height: 80rpx;
+				color: #333;
+				display: inline-block;
+				box-sizing: border-box;
+				span{
+					padding-bottom: 16rpx;
+					border-bottom: 5rpx solid transparent;
+					font-size: 32rpx;
+				}
+			}
+			.tab.active{
+				color: #d03a28;
+				font-weight: bold;
+			}
+			.tab.active span{
+				border-bottom: 5rpx solid #d03a28;
+			}
+		}
+		.more{
+			width: 82rpx;
+			height: 82rpx;
+			line-height: 82rpx;
+			text-align: center;
+			// background: rgba(0,0,0,.3);
+			// box-shadow: 1rpx 0 0 0 rgba(0,0,0,.5);
+			background: rgba(255,255,255,.3);
+			box-shadow: 1rpx 0 0 0 rgba(255,255,255,.5);
+			.tui-icon{
+				background: initial !important;
+				color: #333;
+			}
+		}
+	}
 	.container{
 		.panelBox{
 			background: #fff;

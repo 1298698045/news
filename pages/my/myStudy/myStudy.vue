@@ -3,7 +3,26 @@
 		<div class="center">
 			<div class="container">
 				<div class="panel">
-					<CourseBox :list="recommendList" @clickIn="handleClickIn" />
+					<div class="box" v-for="(item,index) in recommendList" :key="index" @click="handleClick(item,index)">
+						<div class="left_cover">
+							<image class="img" width="100%" height="100%" :src="pathUrl+item.ImageUrl.value" mode="aspectFill"></image>
+						</div>
+						<div class="right_info">
+							<h3 class="title">
+								{{item.CourseId.lookupValue.displayName || ''}}
+							</h3>
+							<div class="position">
+								<span class="tag">{{item.Writer.textValue || ''}}</span>
+							</div>
+							<div class="nums">
+								<span class="color">免费</span>
+								<span class="num">{{item.StudyPeopleCount.value || ''}}人学习</span>
+							</div>
+							<!-- <div class="desc">
+								{{item.Description.textValue || ''}}
+							</div> -->
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -34,7 +53,7 @@
 					method: 'post',
 					data:{
 						objectTypeCode: 50711,
-						filterquery: '\nCourseId\teq-userid',
+						filterquery: '\nuserid\teq-userid',
 						PageNumber: this.pageNumber,
 						PageSize: this.pageSize
 					}
@@ -55,10 +74,10 @@
 					this.recommendList = result;
 				})
 			},
-			handleClickIn(item,index){
+			handleClick(item,index){
 				uni.navigateTo({
 					// url:'study?courseId='+item.id
-					url:'../../study/study?courseId='+item.id
+					url:'/pages/study/study?courseId='+item.CourseId.lookupValue.value
 				})
 			}
 		},
@@ -81,6 +100,9 @@
 </script>
 
 <style lang="scss">
+	page{
+		background: #fff;
+	}
 .container{
 	padding: 0 30rpx;
 	box-sizing: border-box;
@@ -100,6 +122,64 @@
 		display: block;
 		border-radius: 5rpx;
 		margin-right: 10rpx;
+	}
+	.box{
+		display: flex;
+		margin-top: 30rpx;
+		.left_cover{
+			width: 120rpx;
+			height: 180rpx;
+			// background: #C70C15;
+			border-radius: 10rpx;
+			background: #f2f2f2;
+			.img{
+				width: 100%;
+				height: 100%;
+			}
+		}
+		.right_info{
+			flex: 1;
+			margin-left: 30rpx;
+			.title{
+				font-size: 28rpx;
+				color: #333333;
+				font-weight: bold;
+				display: flex;
+				align-items: center;
+				margin-bottom: 20rpx;
+			}
+			.position{
+				.tag{
+					background: #f1f1f1;
+					display: inline-block;
+					padding: 5rpx;
+					font-size: 24rpx;
+					color: #767676;
+					margin-right: 10rpx;
+				}
+			}
+			.nums{
+				padding: 10rpx 0;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 24rpx;
+				.color{
+					color: #C70C15;
+				}
+				.num{
+					color: #666;
+				}
+			}
+			.desc{
+				font-size: 24rpx;
+				line-height: 1.5;
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+			}
+		}
 	}
 }
 </style>
