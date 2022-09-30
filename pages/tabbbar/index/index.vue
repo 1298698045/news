@@ -49,7 +49,7 @@
 		
 		<div class="banner">
 			<div class="banerItem">
-				<image src="/static/images/banner.png" mode="aspectFill"></image>
+				<image :src="pathUrl+'/vx/images/banner.png'" mode="aspectFill"></image>
 			</div>
 		</div>
 		<div class="noticeBar">
@@ -312,7 +312,8 @@
 				LeaningTestList: [], // 考试
 				PartyAffairsContentList: [], // 党务通知
 				PartyContentList: [], // 党办通知
-				SurveyList: [] // 问卷调查
+				SurveyList: [], // 问卷调查
+				pathUrl: 'http://112.126.75.65:10002'
 			}
 		},
 		onLoad() {

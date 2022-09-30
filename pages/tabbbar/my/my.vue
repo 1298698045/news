@@ -1,7 +1,7 @@
 <template>
 	<view class="wrapper">
 		<div class="custom-header-container">
-			<image src="/static/images/myNav.png" class="bgImg"></image>
+			<image :src="pathUrl+'/vx/images/myNav.png'" class="bgImg"></image>
 			<view class="custom-header-status-bar" :style="{height:getStausBarHeight}"></view>
 			<view class="custom-header-title" :style="titleStyle">
 				我的
@@ -121,7 +121,8 @@
 				userInfo:{
 					avatarUrl:'',
 					nickName: ''
-				}
+				},
+				pathUrl: 'http://112.126.75.65:10002'
 			}
 		},
 		onShow(){
