@@ -300,7 +300,7 @@
             "path" : "pages/study/takeNotes",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "记笔记",
                 "enablePullDownRefresh": false
             }
             

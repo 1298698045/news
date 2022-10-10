@@ -50,7 +50,7 @@
 					</p>
 					<p class="name">讨论(20)</p>
 				</div>
-				<div class="box">
+				<div class="box" @click="handleTakeNotes">
 					<p class="icon">
 						<van-icon name="wap-nav" size="20" />
 					</p>
@@ -247,6 +247,11 @@
 					console.log(res)
 					this.likeId = res.returnValue.Id;
 					this.isLike = res.returnValue.IsLike;
+				})
+			},
+			handleTakeNotes(){
+				uni.navigateTo({
+					url:'./takeNotes'
 				})
 			}
 		}

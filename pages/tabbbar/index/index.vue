@@ -63,19 +63,19 @@
 				<swiper-item class="swiperItem">
 					<div class="box" @click="handleHref(1)">
 						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+							<image src="../../../static/images/news/0-5.png" mode="widthFix"></image>
 						</div>
 						<p class="text">支部活动</p>
 					</div>
 					<div class="box" @click="handleHref(2)">
 						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+							<image src="../../../static/images/news/0-8.png" mode="widthFix"></image>
 						</div>
 						<p class="text">新闻动态</p>
 					</div>
 					<div class="box" @click="handleHref(3)">
 						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+							<image src="../../../static/images/news/0-2.png" mode="widthFix"></image>
 						</div>
 						<p class="text">课程学习</p>
 					</div>
@@ -89,13 +89,13 @@
 				<swiper-item class="swiperItem">
 					<div class="box" @click="handleHref(6)">
 						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+							<image src="../../../static/images/news/0-6.png" mode="widthFix"></image>
 						</div>
 						<p class="text">党支部</p>
 					</div>
 					<div class="box" @click="handleHref(1)">
 						<div class="icon">
-							<image src="../../../static/images/news/0-1.png" mode="widthFix"></image>
+							<image src="../../../static/images/news/0-9.png" mode="widthFix"></image>
 						</div>
 						<p class="text">考评</p>
 					</div>
@@ -155,7 +155,7 @@
 		<div class="panelWrap" v-if="SurveyList!=''&&SurveyList.length>0">
 			<div class="panelHead">
 				<div class="leftTitle">问卷调查</div>
-				<div class="moreText">更多</div>
+				<div class="moreText" @click="handleMore('SurveyList')">更多</div>
 			</div>
 			<div class="panelBd">
 				<scroll-view :scroll-x="true" class="questionView">
@@ -178,7 +178,7 @@
 		<div class="panelWrap" v-if="CampaignList!=''&&CampaignList.length>0">
 			<div class="panelHead">
 				<div class="leftTitle">党建活动</div>
-				<div class="moreText">更多</div>
+				<div class="moreText" @click="handleMore('CampaignList')">更多</div>
 			</div>
 			<div class="panelBd">
 				<scroll-view :scroll-x="true" class="questionView">
@@ -349,6 +349,14 @@
 				}else if(str == 'PartyAffairsContentList' || str == 'PartyContentList'){
 					uni.switchTab({
 						url:'../news/news'
+					})
+				}else if(str=='SurveyList'){
+					uni.navigateTo({
+						url:'../../questionnaire/questionnaire'
+					})
+				}else if(str=='CampaignList'){
+					uni.navigateTo({
+						url:'../../activity/activity'
 					})
 				}
 			},

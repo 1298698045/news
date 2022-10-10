@@ -80,9 +80,11 @@
 		</div>
 		<view id="foot-box" class="cu-bar tabbar bg-white shadow foot">
 			<view class="icon" @click="FavorSubject">
-				<view class="cuIcon-cu-image">
+				<i class="iconfont icon-shoucang" style="color:#a4a4a4;" v-if="!IsFavorite"></i>
+				<i class="iconfont icon-shoucang1" style="color:#d03a28;" v-else></i>
+				<!-- <view class="cuIcon-cu-image">
 					<text class="lg cuIcon-favor" :class="[IsFavorite?'text-red':'text-gray']" style="font-size: 20px;"></text>
-				</view>
+				</view> -->
 				<view  :class="[IsFavorite?'text-red':'text-gray']">{{IsFavorite?'取消收藏':'收藏'}}</view>
 			</view>
 			<div class="submit">
