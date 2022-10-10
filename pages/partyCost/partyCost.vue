@@ -1,14 +1,21 @@
 <template>
 	<view>
 		<div class="wrapper">
-			<tui-table>
-				<tui-tr>
-					<tui-td bold v-for="(item,index) in header" :key="index" :span="8">{{item.title}}</tui-td>
-				</tui-tr>
-				<tui-tr v-for="(item, index) in listData" :key="index">
-					<tui-td :span="8" v-for="(obj, idx) in header" :key="idx">{{obj.key == 'EmployeeId' ? item[obj.key].userValue.DisplayName : item[obj.key].value}}</tui-td>
-				</tui-tr>
-			</tui-table>
+			<picker mode="date" fields="year" @change="changeYear">
+				<view class="picker">
+					选择年份：{{ year }} 年
+				</view>
+			</picker>
+			<div class="container">				
+				<tui-table class="table">
+					<tui-tr>
+						<tui-td bold v-for="(item,index) in header" :key="index" :span="8">{{item.title}}</tui-td>
+					</tui-tr>
+					<tui-tr v-for="(item, index) in listData" :key="index">
+						<tui-td :span="8" v-for="(obj, idx) in header" :key="idx">{{obj.key == 'EmployeeId' ? item[obj.key].userValue.DisplayName : item[obj.key].value}}</tui-td>
+					</tui-tr>
+				</tui-table>
+			</div>
 		</div>
 	</view>
 </template>
@@ -41,13 +48,19 @@
 						cost: '100'
 					}
 				],
-				userId: uni.getStorageSync('userId')
+				userId: uni.getStorageSync('userId'),
+				year: new Date().getFullYear()
 			}
 		},
 		onLoad() {
 			this.getQuery();
 		},
 		methods: {
+			changeYear(e){
+				console.log(e);
+				this.year = e.detail.value;
+				this.getQuery();
+			},
 			getQuery(){
 				// this.$http.getPartyCostList({
 					
@@ -59,7 +72,7 @@
 					method:"post",
 					data:{
 						objectTypeCode: 31301,
-						filterquery: "\nemployeeid\teq-userid"
+						filterquery: "\nemployeeid\teq-userid" + "\nYearNumber\teq\t" + this.year
 					}
 				}).then(res=>{
 					console.log(res,'res')
@@ -71,5 +84,17 @@
 </script>
 
 <style lang="scss">
-
+	.picker{
+		background: #fff;
+		border-radius: 10rpx;
+		margin: 20rpx;
+		display: inline-block;
+		padding: 20rpx 30rpx;
+	}
+	.container{
+		margin: 0 20rpx;
+		.table{
+			border-radius: 10rpx;
+		}
+	}
 </style>

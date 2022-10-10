@@ -21,7 +21,7 @@
 		</view>
 		<view class="columnNav">
 			<scroll-view class="tabs" scroll-x="true" @scroll="scroll" :scroll-left="scrollLeft">
-					<view class="tab" @click="getQueryList(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
+					<view class="tab" @click="handleTabColumn(item,index)" :class="{'active':currentIdx==index}" v-for="(item,index) in tabs" :key="index">
 						<span>
 							{{item.Name}}
 						</span>
@@ -54,9 +54,9 @@
 							<view class="tui-news-title" :class="[(!item.isVideo && item.CoverDisplay=='LeftTitle')|| item.CoverDisplay=='LeftTitle'?'':'tui-pt20']">{{item.Title}}</view>
 							<!-- <view class="tui-time">{{item.modifiedOn.replace(/T/g,' ')}}</view> -->
 							<view class="tui-sub-box" :class="[!item.isVideo && item.CoverDisplay=='LeftTitle'?'':'tui-pt20']">
-								<view class="tui-sub-source">{{item.KeyWords}} {{item.ModifiedOn.replace(/T/g,' ')}}</view>
+								<view class="tui-sub-source">{{item.KeyWords || ''}} {{item.ModifiedOn ? item.ModifiedOn.replace(/T/g,' ') : ''}}</view>
 								<view class="tui-sub-cmt">
-									<view>{{item.CommentCount}}评论</view>
+									<view>{{item.CommentCount || ''}}评论</view>
 									<view class="tui-scale">
 										<tui-tag padding="10rpx 24rpx" type="gray"  shape="circleRight" v-if="item.IsTop">置顶</tui-tag>
 									</view>
@@ -162,7 +162,7 @@
 		},
 		data() {
 			return {
-				pathurl:"http://112.126.75.65:10002",
+				pathurl:"http://182.92.221.64:10002",
 				searchVal:"",
 				hotSearch: [
 					"早安D站",
@@ -390,7 +390,7 @@
 		},
 		onShow() {
 			this.getQueryColumn().then(res=>{
-				this.getQueryList();
+				this.getNotList();
 			})
 			this.getChannle();
 		},
@@ -402,6 +402,33 @@
 			})
 		},
 		methods: {
+			getNotList(){
+				this.$httpWX({
+					url:'/NewsContent/ContentSearch/UnreadContent',
+					method: 'get',
+					data:{
+						Token: this.token,
+						TypeId: this.typeId,
+						SearchValue: this.searchVal,
+						Pagenum: this.page.pageNum,
+						Pagesize: this.page.pageSize
+					}
+				}).then(res=>{
+					let total =  res.returnValue.Total;
+					if(this.page.pageNum*this.page.pageSize<total){
+						this.page.isPage = true;
+					}else {
+						this.page.isPage = false;
+					}
+					let temp = [];
+					if(this.page.pageNum==1){
+						temp = res.returnValue.ContentBaseList || [];
+					}else {
+						temp = this.newsList.concat(res.returnValue.ContentBaseList)
+					}
+					this.newsList = temp;
+				})
+			},
 			onSearch(e){
 				this.searchVal = e.detail;
 				this.getQueryList();
@@ -428,18 +455,27 @@
 					Token:this.token
 				}).then(res=>{
 					this.tabs = res.returnValue;
+					this.tabs.unshift({
+						Name: '未读',
+						ItemId: ''
+					})
 					this.typeId = this.tabs[0].ItemId;
 					response = res;
 				})
 				return response;
 			},
-			// 列表
-			getQueryList(item,index){
-				if(item){
-					this.typeId = item.ItemId;
-					this.currentIdx = index;
-					this.page.pageNum = 1;
+			handleTabColumn(item,index){
+				this.typeId = item.ItemId;
+				this.currentIdx = index;
+				this.page.pageNum = 1;
+				if(index==0){
+					this.getNotList();
+				}else {
+					this.getQueryList();
 				}
+			},
+			// 列表
+			getQueryList(){
 				this.$http.getNewsList({
 					Token: this.token,
 					TypeId: this.typeId,
@@ -447,7 +483,7 @@
 					Pagenum: this.page.pageNum,
 					Pagesize: this.page.pageSize
 				}).then(res=>{
-					let total =  res.returnValue.total;
+					let total =  res.returnValue.Total;
 					if(this.page.pageNum*this.page.pageSize<total){
 						this.page.isPage = true;
 					}else {
@@ -541,7 +577,7 @@
 				// if (this.newsList[index].isVideo) {
 				// 	url = "/pages/news/newsVideo";
 				// }
-				let url = '../../news/newsDetail?id='+item.ContentId
+				let url = '../../news/newsDetail?id='+item.ContentId + '&typeId=' + this.typeId
 				uni.navigateTo({
 					url: url
 				})
@@ -615,7 +651,11 @@
 			// 	this.$refs.toast.showTips(options);
 			// }, 300);
 			this.page.pageNum = 1;
-			this.getQueryList();
+			if(this.typeId==''){
+				this.getNotList();
+			}else {
+				this.getQueryList();
+			}
 			uni.stopPullDownRefresh();
 		},
 
@@ -625,7 +665,11 @@
 			this.loadding = true;
 			if(this.page.isPage){
 				this.page.pageNum++;
-				this.getQueryList();
+				if(this.typeId==''){
+					this.getNotList();
+				}else {
+					this.getQueryList();
+				}
 			}
 			this.loadding = false;
 			// if (this.pageIndex == 3) {
@@ -657,6 +701,7 @@
 			width: calc(100% - 60rpx);
 			white-space: nowrap;
 			overflow: hidden;
+			height: 82rpx;
 			.tab{
 				padding: 0 20rpx;
 				text-align: center;

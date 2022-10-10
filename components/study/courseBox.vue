@@ -50,7 +50,7 @@
 		name: 'CourseBox',
 		data(){
 			return {
-				pathUrl:'http://112.126.75.65:10002'
+				pathUrl:'http://182.92.221.64:10002'
 			}
 		},
 		methods:{

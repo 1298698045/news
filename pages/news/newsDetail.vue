@@ -259,7 +259,7 @@ export default {
 			commentTotal: 0,
 			showActionSheet: false,
 			files: [],
-			pathUrl: 'http://112.126.75.65:10002'
+			pathUrl: 'http://182.92.221.64:10002'
 		}
 	},
 	computed: {
@@ -295,6 +295,10 @@ export default {
 	onLoad(options) {
 		console.log(options,'options')
 		this.id = options.id;
+		this.typeId = options.typeId;
+		if(this.typeId==''){
+			this.setNot();
+		}
 		this.getDetail();
 		this.getCmtsList(); 
 	},
@@ -305,6 +309,18 @@ export default {
 		this.getFiles();
 	},
 	methods: {
+		setNot(){
+			this.$httpWX({
+				url:'/NewsContent/Content/Read',
+				method: 'get',
+				data:{
+					Token: this.token,
+					contentId: this.id
+				}
+			}).then(res=>{
+				console.log(res);
+			})
+		},
 		handleOpenFile(item){
 			item.link = this.pathUrl + item.DownloadLinkUrl;
 			item.fileExtension = item.FileExtension;

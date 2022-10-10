@@ -313,7 +313,7 @@
 				PartyAffairsContentList: [], // 党务通知
 				PartyContentList: [], // 党办通知
 				SurveyList: [], // 问卷调查
-				pathUrl: 'http://112.126.75.65:10002'
+				pathUrl: 'http://182.92.221.64:10002'
 			}
 		},
 		onLoad() {

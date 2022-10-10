@@ -2,9 +2,9 @@
 let baseUrl;
 
 if (process.env.NODE_ENV === 'development') {
- baseUrl = 'http://112.126.75.65:10002/api'    // 开发环境
+ baseUrl = 'http://182.92.221.64:10002/api'    // 开发环境
 } else {
- baseUrl = 'http://112.126.75.65:10002/api'    // 生产环境
+ baseUrl = 'http://182.92.221.64:10002/api'    // 生产环境
 }
 
 export function https(config) {

@@ -73,19 +73,19 @@
 		<div class="commentWrap">
 			<div class="tabContainer">
 				<div class="tabs">
-					<div class="tab" :class="{'active':currentTab==1}" :style="{'--left':leftTab1}" @click="handleTab(1)">
+					<!-- <div class="tab" :class="{'active':currentTab==1}" :style="{'--left':leftTab1}" @click="handleTab(1)">
 						<p class="tabName">
 							点赞 <span class="num">{{detail.NumOfLike || 0}}</span>
 						</p>
 						<span class="xian" v-if="currentTab==1"></span>
-					</div>
+					</div> -->
 					<div class="tab" :class="{'active':currentTab==2}" :style="{'--left':leftTab2}" @click="handleTab(2)">
 						<p class="tabName">
-							评论 <span class="num">0</span>
+							评论 <span class="num">{{ commentTotal || 0}}</span>
 						</p>
 						<span class="xian" v-if="currentTab==2"></span>
 					</div>
-					<div class="tab" :class="{'active':currentTab==3}" :style="{'--left':leftTab3}" @click="handleTab(3)">
+					<div class="tab" :class="{'active':currentTab==3}" :style="{'--left':leftTab3}">
 						<p class="tabName">
 							阅读 <span class="num">0</span>
 						</p>
@@ -187,7 +187,7 @@
 		mixins:[shareMixins,shareWechat],
 		data() {
 			return {
-				pathUrl: 'http://112.126.75.65:10002',
+				pathUrl: 'http://182.92.221.64:10002',
 				isPhoneX:this.$tui.isPhoneX(), // 判断是否是iPhoneX以上机型
 				isCollect:false, // 是否收藏
 				isFllow: false, // 是否关注
@@ -264,7 +264,7 @@
 					text: "删除",
 					color: "#d03a28"
 				}],
-				currentTab: 1,
+				currentTab: 2,
 				leftTab1: '',
 				leftTab2: '',
 				leftTab3: ''

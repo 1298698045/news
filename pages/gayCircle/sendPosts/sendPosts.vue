@@ -78,6 +78,7 @@
 </template>
 
 <script>
+	import { messageToast } from '@/utils/messageToast.js';
 	export default {
 		data() {
 			return {
@@ -133,7 +134,7 @@
 				let that = this;
 				for(let i=0; i < that.fileList.length; i++){
 					wx.uploadFile({
-						url: 'http://112.126.75.65:10002/api/MomentsContent/Moments/contentreleasepic',
+						url: 'http://182.92.221.64:10002/api/MomentsContent/Moments/contentreleasepic',
 						filePath: that.fileList[i].url,
 						name: 'file',
 						formData: { 
@@ -151,15 +152,22 @@
 							const data = JSON.parse(res.data);
 							console.log(data);
 							if(i==that.fileList.length-1 && data.returnValue){
-								const callback = () =>{
-									uni.navigateBack({
-										delta:1
-									})
-								}
-								that.$tui.toast({
-									text:'发送成功',
-									success:res=>{
-										callback();
+								// const callback = () =>{
+								// 	uni.navigateBack({
+								// 		delta:1
+								// 	})
+								// }
+								// that.$tui.toast({
+								// 	text:'发送成功',
+								// 	success:res=>{
+								// 		callback();
+								// 	}
+								// })
+								messageToast({
+									title: '发送成功',
+									delta: 1,
+									success:()=>{
+										
 									}
 								})
 							}
@@ -226,6 +234,14 @@
 							})
 							if(this.fileList.length>0){
 								this.uploadFile(chatId)
+							}else {
+								messageToast({
+									title: '发送成功',
+									delta: 1,
+									success:()=>{
+										
+									}
+								})
 							}
 						}
 					})
