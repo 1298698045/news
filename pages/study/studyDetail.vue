@@ -251,7 +251,7 @@
 			},
 			handleTakeNotes(){
 				uni.navigateTo({
-					url:'./takeNotes'
+					url:'./takeNotes?courseId'+this.courseId + '&chapterId=' + this.chapterId + '&name='+ this.record.Name.value
 				})
 			}
 		}

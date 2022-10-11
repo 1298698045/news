@@ -19,12 +19,78 @@
 				formData: {
 					
 				},
-				content: ''
+				content: '',
+				courseId: '',
+				chapterId: '',
+				name: '',
+				takeId: ''
 			}
 		},
+		onLoad(options) {
+			this.name = options.name;
+			this.courseId = options.courseId;
+			this.chapterId = options.chapterId;
+			this.getDetail();
+		},
 		methods: {
+			getDetail(){
+				this.$httpWX({
+					url: "/entity/fetchall",
+					method:'post',
+					data:{
+						objectTypeCode: 50714,
+						filterQuery: '\nChapterId\teq\t' + this.chapterId
+					}
+				}).then(res=>{
+					console.log(res);
+					if(res.returnValue.nodes && res.returnValue.nodes.length>0){						
+						this.content = res.returnValue.nodes[0].Body.value;
+						this.takeId = res.returnValue.nodes[0].id;
+					}
+				})
+			},
 			onSave(e){
-				console.log('onSave',e);
+				this.content = e.html;
+				console.log('onSave',e,this.content);
+				this.submitSave().then(res=>{
+					console.log('res',res)
+					uni.showToast({
+						title: '保存成功',
+						icon: 'success',
+						duration: 2000
+					})
+				})
+			},
+			async submitSave(){
+				var obj = {
+					params:{
+						recordRep: {
+							objTypeCode: 50714,
+							id: this.takeId,
+							fields: {
+								Name: this.name,
+								CourseId: {
+									Id: this.courseId
+								},
+								ChapterId: {
+									Id: this.chapterId
+								},
+								body: this.content
+							}
+						}
+					}
+				}
+				let response;
+				await this.$httpWX({
+					url: '/entity/save',
+					method: 'post',
+					data: {
+						message: JSON.stringify(obj)
+					}
+				}).then(res=>{
+					response = res;
+				})
+				return response;
 			},
 			onUploadBefore(e){
 				console.log('onUploadBefore',e);

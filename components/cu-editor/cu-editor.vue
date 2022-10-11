@@ -811,10 +811,10 @@
 						console.log(res)
 						res.html = handleHtmlImage(res.html, true)
 						this.$emit('save', res)
-						uni.showToast({
-							title: '保存成功',
-							icon: 'none'
-						})
+						// uni.showToast({
+						// 	title: '保存成功',
+						// 	icon: 'none'
+						// })
 					},
 					complete: res => {
 						console.log('getContents complete')
