@@ -1,11 +1,11 @@
 const tui = {
 	toast: function(options={}) {
 		let text,icon, duration,deltaTime,success;
-		text = options.text;
-		icon = options.icon || 'none';
-		duration = options.duration || 2000
-		success = options.success;
-		deltaTime = options.deltaTime || 1
+		text = options.text; // 提示标题
+		icon = options.icon || 'none'; // 提示icon图标
+		duration = options.duration || 2000 // 提示的延迟时间
+		success = options.success; // 成功的回调函数
+		deltaTime = options.deltaTime || 1 // 返回上级页面的时候定时器几秒返回
 		uni.showToast({
 			title: text || "出错啦~",
 			icon: icon,
@@ -24,13 +24,13 @@ const tui = {
 	},
 	modal:function(title, content, showCancel, callback, confirmColor, confirmText, cancelColor, cancelText){
 		uni.showModal({
-			title: title || '提示',
-			content: content,
-			showCancel: showCancel,
-			cancelColor: "#555",
-			confirmColor: confirmColor || "#5677fc",
-			confirmText: confirmText || "确定",
-			cancelText: cancelText || '取消',
+			title: title || '提示', // 弹框标题
+			content: content, // 弹框提示内容
+			showCancel: showCancel, // 是否显示取消按钮
+			cancelColor: "#555", // 取消按钮文字颜色
+			confirmColor: confirmColor || "#5677fc", // 确认按钮文字颜色
+			confirmText: confirmText || "确定", // 确认按钮文字
+			cancelText: cancelText || '取消', // 取消按钮文字
 			success(res) {
 				if (res.confirm) {
 					callback && callback(true)
